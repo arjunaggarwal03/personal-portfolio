@@ -1,0 +1,78 @@
+---
+title: 'Exploring 3D Rendering with Platonic Rotation'
+publishedAt: '2021-06-24'
+summary: 'Discover how matrix multiplication transforms 3D points into 2D coordinates using OpenCV, demonstrated through the rotation of platonic solids.'
+---
+
+3D rendering is a fundamental aspect of computer graphics, involving the transformation of three-dimensional points into two-dimensional coordinates. My project, Platonic Rotation, visualizes this process by applying projection and rotation matrices to four platonic solids: cube, octahedron, icosahedron, and dodecahedron. This visualization was developed using OpenCV during UMD's Bitcamp Hackathon.
+
+## The Concept Behind Platonic Rotation
+
+At the root of 3D rendering is matrix multiplication, which converts three-dimensional coordinates (x, y, z) into two-dimensional coordinates (x, y). Understanding matrix multiplication is essential to grasp the math behind this project. Using OpenCV, I created a visualization that applies projection and rotation matrices to four platonic solids, showcasing their rotations in real-time.
+
+## What Platonic Rotation Does
+
+Using OpenCV's built-in functions `line(...)` and `circle(...)`, along with the `Mat` array class, I developed a visualization that demonstrates the rotation of platonic solids. The following animation provides an example of the rotations:
+
+<div align="center">
+  <img src="https://media.giphy.com/media/f8c7qyFPRbzmIUBNEd/giphy.gif" height="300" width="300" hspace="20"/>
+</div>
+
+## The Math Behind the Magic
+
+### Step One: Rotation
+
+To rotate the 3D coordinates, each x-y-z coordinate is converted into a 1x3 matrix and then multiplied by the rotation matrices. Here are the rotation matrices used:
+
+These matrices, along with the three-dimensional coordinate matrix, are represented in my code as two-dimensional vectors:
+
+```cpp
+vector<vector<float>> rotationX{{1,0,0},{0,cos(angle),-sin(angle)},{0,sin(angle),cos(angle)}};
+vector<vector<float>> rotationY{{cos(angle),0,-sin(angle)},{0,1,0},{sin(angle),0,cos(angle)}};
+vector<vector<float>> rotationZ{{cos(angle),-sin(angle),0},{sin(angle),cos(angle),0},{0,0,1}};
+```
+
+The order of multiplication affects the rotation animation. In my code, the rotation sequence is first along the Y axis, then the X axis, and finally the Z axis:
+
+```cpp
+vector<vector<float>> rotated = matmul(rotationY, points[i]); // rotates along Y axis
+rotated = matmul(rotationX, rotated); // then rotates along X axis
+rotated = matmul(rotationZ, rotated); // finally rotates along Z axis
+```
+
+### Step Two: Orthographic Projection
+
+Finally, the 1x3 x-y-z coordinate matrix is converted into two-dimensional coordinates using the orthographic projection matrix:
+
+The orthogonal projection matrix is represented in my code as follows:
+
+```cpp
+vector<vector<float>> projection{{1,0,0},{0,1,0}};
+```
+
+## Running the Code (for Mac/Linux)
+
+To run the code, you need to have OpenCV set up on your personal computer. Refer to [this guide](https://medium.com/@jaskaranvirdi/setting-up-opencv-and-c-development-environment-in-xcode-b6027728003) for OpenCV installation instructions. Ensure that your `opencv.pc` file is located in your `pkgconfig` folder.
+
+Compile the code by navigating to the cloned repository in the terminal and running:
+
+```sh
+g++ $(pkg-config --cflags --libs opencv) -std=c++11 [name of file].cpp -o run
+```
+
+Then, run the program with:
+
+```sh
+./run
+```
+
+## Conclusion
+
+Platonic Rotation offers a fascinating look into the application of matrix multiplication in 3D rendering, demonstrating the rotations of various platonic solids. This project highlights the importance of understanding matrix operations in computer graphics and provides a visual representation of these mathematical concepts.
+
+Explore the source code and contribute to the project on [GitHub](https://github.com/arjunaggarwal03/platonic-rotation).
+
+## Sources
+
+- [Rotation Matrix](https://en.wikipedia.org/wiki/Rotation_matrix)
+- [3D Projection](https://en.wikipedia.org/wiki/3D_projection)

@@ -1,0 +1,21 @@
+---
+title: 'Introducing Hermes: A Developer’s Communication Tool'
+publishedAt: '2024-04-08'
+summary: 'Discover Hermes, a powerful CLI tool designed for developers to message code snippets and communicate efficiently via the terminal.'
+---
+
+In the fast-paced world of software development, efficient communication is crucial. Enter Hermes, a CLI tool I designed to streamline communication among developers by allowing them to message code snippets and chat directly via the terminal. This tool aims to expedite the development process by integrating messaging with development workflows.
+
+## Features and Implementation
+
+Hermes leverages a robust backend built with Python and FastAPI, coupled with MongoDB for storing chat data. The API, deployed on an AWS EC2 instance, uses WebSockets to facilitate real-time messaging. To enhance search functionality, messages are encoded using BERT embeddings and stored in a Pinecone vector database, enabling semantic search capabilities.
+
+The frontend, crafted with TypeScript and ReactJS, offers a user-friendly interface for various CRUD operations and onboarding flows. Additionally, Hermes includes payment options implemented via the Stripe API, ensuring a seamless user experience.
+
+## Hosting and Deployment
+
+Thanks to a $1,000 award in credits from AWS Activate, Hermes is hosted reliably on AWS infrastructure. This support has enabled the deployment of both the API and the website, ensuring high availability and scalability for users.
+
+## Conclusion
+
+Hermes represents a significant step forward in integrating communication tools directly into the development environment. By facilitating real-time messaging and semantic search, Hermes helps developers stay focused and efficient, ultimately leading to faster development cycles and better collaboration.

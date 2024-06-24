@@ -4,16 +4,23 @@ export default function Page() {
   return (
     <section>
       <h1 className="mb-8 text-2xl font-semibold tracking-tighter">
-        hi, i'm arjun 🌆
+        Hi, I'm Arjun 🌆
       </h1>
       <p className="mb-4">
-        {`i'm an honors cs + math major at umd with experience at capital one, bank of america, and currently amazon.
-        outside of work and school, you can find me busy with alpha kappa psi events, watching some a24 movie, or building an obscure spotify playlist.
-        also, i've been building `}
-        <a href="https://platoportal.com/" target="_blank" rel="noopener noreferrer">
-          plato
+        {`I'm an Honors CS + Math major at the University of Maryland with dev experience at Capital One, Bank of America, and currently Amazon Web Services.`}
+        {` In my free time, I've been building `}
+        <a
+          href="https://platoportal.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            fontFamily: 'Poppins, sans-serif',
+            color: '#7828FF',
+          }}
+        >
+          <strong className="text-neutral-900 dark:text-neutral-100 tracking-tight hover:text-[#7828FF]">Plato</strong>
         </a>
-        {` with my friend rohan. give it a look and let me know what you think 😁 `}
+        {` with my friend Rohan. Here's some other stuff I've done:`}
       </p>
       <div className="my-8">
         <BlogPosts />
