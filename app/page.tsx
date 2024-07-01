@@ -18,7 +18,7 @@ export default function Page() {
             color: '#7828FF',
           }}
         >
-          <strong className="text-neutral-900 dark:text-neutral-100 tracking-tight hover:text-[#7828FF]">Plato</strong>
+          <strong className="text-neutral-900 dark:text-neutral-100 tracking-tight hover:text-[#7828FF]">plato</strong>
         </a>
         {` with my friend Rohan. Here's some other stuff I've done:`}
       </p>

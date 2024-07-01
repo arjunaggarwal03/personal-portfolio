@@ -4,23 +4,19 @@ publishedAt: '2022-06-24'
 summary: 'Discover ByteSize, a tool that enables users to search documents using phrases and related terms instead of requiring verbatim matches. Created during UMD\'s Bitcamp Hackathon.'
 ---
 
-In the era of information overload, finding specific details within documents can be a daunting task, especially when relying on traditional search methods that demand exact matches. ByteSize revolutionizes this process by allowing users to find information in documents using phrases and related terms, making searches more intuitive and effective.
+Discovering precise details within documents can be difficult, especially when using traditional search methods that need verbatim matches. ByteSize improves this process by allowing users to find information in documents using related terms, making searches easier and more effective.
 
 ## The Concept Behind ByteSize
 
-ByteSize was created during UMD's Bitcamp Hackathon, with the goal of enhancing document search functionality. Traditional methods like Command-F require verbatim matches, which can be limiting. ByteSize leverages semantic understanding, enabling users to search using phrases and related terms, thus broadening the scope and accuracy of search results.
+I developed ByteSize at UMD's Bitcamp Hackathon, a great experience where I learned a lot more about full-stack development and semantic search. The idea came to me when I was trying to parse through a new document using Command-F, which requires phrases to be searched verbatim as they appear in the document. This whole process was very restrictive and inefficient. ByteSize utilizes semantic understanding, allowing users to search using phrases and related concepts, extending the scope and accuracy of search results.
 
 ## How ByteSize Works
 
-ByteSize uses a semantic similarity model, which compares the meaning of the search input with the content of the documents. This model, inspired by the [Semantic Similarity model](https://towardsdatascience.com/semantic-similarity-using-transformers-8f3cb5bf66d6), allows for more flexible and context-aware searches.
+ByteSize employs a semantic similarity model that compares the meaning of the search term to the content of the pages. This methodology, based on this [Semantic Similarity model](https://towardsdatascience.com/semantic-similarity-using-transformers-8f3cb5bf66d6), enables more flexible and context-aware searches.
 
-In the image above, the user's text is entered in the top left element, while the paraphrased search key is in the element below. The results, displayed on the right, show the relevant sentences along with the scores given by the model, indicating how closely each sentence matches the search query.
+![ByteSize Demo](/bytesize_page.png "ByteSize Interface")
 
-## Features and Demo
-
-ByteSize offers a user-friendly interface where users can input their search queries and view results in real-time. The model evaluates and scores each sentence in the document based on its relevance to the search key. This approach ensures that users get the most relevant information, even if the exact words don't match.
-
-Check out the demo [here](https://github.com/arjunaggarwal03/bytesize).
+Our page is shown in the image above. The user's text is inputted in the top left element, and the paraphrased search key is entered in the field below. The results, displayed on the right, show the relevant sentences as well as the model's scores, which indicate how well each sentence matches the natural language search query. The code can be further explored [here](https://github.com/arjunaggarwal03/bytesize).
 
 ## Areas for Improvement
 
@@ -31,8 +27,4 @@ While ByteSize is a powerful tool, there are areas that can be refined:
 
 ## Conclusion
 
-ByteSize represents a significant advancement in document search technology, offering a more flexible and effective way to find information. By leveraging semantic understanding, ByteSize goes beyond traditional search methods, providing users with relevant results based on meaning rather than exact word matches.
-
-We invite you to explore ByteSize and contribute to its development. Check out the [repository on GitHub](https://github.com/arjunaggarwal03/bytesize) for more details and to see how you can get involved.
-
-Whether you're a student, researcher, or professional, ByteSize can simplify your document search process, saving you time and effort in finding the information you need.
+At the time of this project, famous LLM models like ChatGPT were not available, so this was a captivating introduction to the world of Natural Language Processing (NLP) and semantic search. Nowadays, it's interesting to see how companies like Glean are scaling these capabilities to work on an enterprise level.

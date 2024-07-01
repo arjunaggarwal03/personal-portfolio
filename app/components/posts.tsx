@@ -22,7 +22,7 @@ export function BlogPosts() {
             href={`/blog/${post.slug}`}
           >
             <div className="w-full flex flex-col md:flex-row space-x-0 md:space-x-2">
-              <p className="text-neutral-900 dark:text-neutral-100 tracking-tight hover:text-[#f78c58]">
+              <p className="text-neutral-900 dark:text-neutral-100 tracking-tight hover:text-[#f78c58] hover:font-bold">
                 {post.metadata.title}
               </p>
             </div>
