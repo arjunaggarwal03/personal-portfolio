@@ -56,7 +56,7 @@ export default function Footer() {
             target="_blank"
             href="https://github.com/arjunaggarwal03/personal-portfolio"
           >
-            <p className="ml-2 h-7">⚙️ Source Code</p>
+            <p className="ml-2 h-7">⚙️ Source</p>
           </a>
         </li>
       </ul>
