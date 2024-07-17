@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Lateef:wght@200;300;400;500;600;700;800&display=swap');
+@import 'tailwindcss';
 
 ::selection {
   background-color: #47a3f3;
@@ -33,10 +32,24 @@
 html {
   min-width: 360px;
 }
+
+body {
+  margin: 0; /* Ensure no default margin is applied */
+  padding: 0; /* Ensure no default padding is applied */
+}
+
 .container {
-  max-width: 800px; /* Set the maximum width for the container */
+  max-width: 750px; /* Set the maximum width for the container */
   margin: 0 auto; /* Center the container */
-  padding: 0 1rem; /* Add some padding for better appearance */
+  padding: 1rem; /* Add some padding for better appearance */
+}
+
+header {
+  margin-bottom: 2rem; /* Add space below the header */
+}
+
+.prose {
+  margin-bottom: 2rem; /* Add space below the main content */
 }
 
 .prose .anchor {
@@ -54,7 +67,7 @@ html {
 }
 
 .prose a {
-  @apply underline transition-all decoration-neutral-400 dark:decoration-neutral-600 underline-offset-2 decoration-[0.1em];
+  @apply underline transition-all hover:decoration-neutral-600 underline-offset-2 decoration-[0.1em];
 }
 
 .prose .anchor:after {
@@ -114,11 +127,11 @@ html {
 }
 
 .prose ul {
-  @apply list-disc pl-6;
+  @apply list-disc pl-6 my-4;
 }
 
 .prose ol {
-  @apply list-decimal pl-6;
+  @apply list-decimal pl-6 my-4;
 }
 
 .prose > :first-child {
@@ -153,4 +166,13 @@ table {
 
 .title {
   text-wrap: balance;
+}
+
+/* Add spacing for the footer links */
+footer ul {
+  @apply flex justify-center space-x-4;
+}
+
+footer ul li {
+  @apply inline-block;
 }
