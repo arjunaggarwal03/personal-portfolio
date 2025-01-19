@@ -7,20 +7,7 @@ export default function Page() {
         Hi, I'm Arjun 🌆
       </h1>
       <p className="mb-4">
-        {`I'm an Honors CS + Math major at the University of Maryland with dev experience at Capital One, Bank of America, and currently Amazon Web Services.`}
-        {` In my free time, I've been building `}
-        <a
-          href="https://platoportal.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            fontFamily: 'Poppins, sans-serif',
-            color: '#7828FF',
-          }}
-        >
-          <strong className="text-neutral-900 dark:text-neutral-100 tracking-tight hover:text-[#7828FF]">plato</strong>
-        </a>
-        {` with my friend Rohan. Here's some other stuff I've done:`}
+        {`I'm an Honors CS + Math major at the University of Maryland with dev experience at Amazon Web Services, Capital One, and Bank of America. I am currently seeking new grad software developer opportunities. Here's some other stuff I've done:`}
       </p>
       <div className="my-8">
         <BlogPosts />
