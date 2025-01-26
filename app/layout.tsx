@@ -5,6 +5,10 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import Footer from './components/footer';
 import { baseUrl } from './sitemap';
+import SocialLinks from './components/social-links';
+import CarouselControls from './components/carousel-controls';
+import Background from './components/background';
+import { BackgroundProvider } from './context/BackgroundContext'
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -34,8 +38,6 @@ export const metadata: Metadata = {
   },
 };
 
-const cx = (...classes) => classes.filter(Boolean).join(' ');
-
 export default function RootLayout({
   children,
 }: {
@@ -44,21 +46,56 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={cx(
-        'text-black bg-white dark:text-white dark:bg-black',
-      )}
+      className="text-black bg-white dark:text-white dark:bg-[#111]"
     >
       <head>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" />
       </head>
-      <body className="antialiased mx-4 mt-8 lg:mx-auto font-sans">
-        <main className="flex-auto min-w-0 mt-6 flex flex-col px-2 md:px-0 container">
-          <Navbar />
-          {children}
-          <Footer />
-          <Analytics />
-          <SpeedInsights />
-        </main>
+      <body className="min-h-screen">
+        <BackgroundProvider>
+          <div className="relative min-h-screen pb-24">
+            <Background />
+
+            {/* Top Navigation Bar - Mobile */}
+            <div className="md:hidden fixed top-0 left-0 right-0 z-30 p-4 bg-white/30 dark:bg-white/10 backdrop-blur-md border-b border-white/20">
+              <div className="flex justify-between items-center">
+                <Navbar />
+                <SocialLinks />
+              </div>
+            </div>
+
+            {/* Navigation Blob - Top Left - Desktop */}
+            <div className="hidden md:block absolute top-6 left-6 z-20">
+              <div className="rounded-2xl bg-white/30 dark:bg-white/10 backdrop-blur-md border border-white/20 dark:border-white/10 px-6 py-3 shadow-lg">
+                <Navbar />
+              </div>
+            </div>
+
+            {/* Social Links Blob - Top Right - Desktop */}
+            <div className="hidden md:block absolute top-6 right-6 z-20">
+              <div className="rounded-2xl bg-white/30 dark:bg-white/10 backdrop-blur-md border border-white/20 dark:border-white/10 px-6 py-3 shadow-lg">
+                <SocialLinks />
+              </div>
+            </div>
+
+            {/* Content Blob - Center */}
+            <main className="relative flex items-center justify-center z-10 p-4 md:p-8 min-h-[calc(100vh-8rem)] mt-16 md:mt-0">
+              <div className="rounded-3xl bg-white/30 dark:bg-white/10 backdrop-blur-md border border-white/20 dark:border-white/10 p-6 md:p-8 max-w-2xl w-full shadow-lg">
+                {children}
+              </div>
+            </main>
+
+            {/* Carousel Controls - Bottom Center */}
+            <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-20">
+              <div className="rounded-2xl bg-white/30 dark:bg-white/10 backdrop-blur-md border border-white/20 dark:border-white/10 px-3 py-2 shadow-lg">
+                <CarouselControls />
+              </div>
+            </div>
+
+            <Analytics />
+            <SpeedInsights />
+          </div>
+        </BackgroundProvider>
       </body>
     </html>
   );
