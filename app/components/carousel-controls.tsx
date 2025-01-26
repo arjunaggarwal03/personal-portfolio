@@ -1,20 +1,28 @@
 'use client'
 
 import { useState } from 'react'
+import { useBackground } from 'app/context/BackgroundContext'
 
 export default function CarouselControls() {
   const [isAnimating, setIsAnimating] = useState(false)
   const [direction, setDirection] = useState<'left' | 'right' | null>(null)
+  const { previousBackground, nextBackground, currentIndex, backgrounds } = useBackground()
 
   const handleClick = (dir: 'left' | 'right') => {
     if (isAnimating) return
     setIsAnimating(true)
     setDirection(dir)
-    // Reset animation state after animation completes
+    
+    if (dir === 'left') {
+      previousBackground()
+    } else {
+      nextBackground()
+    }
+
     setTimeout(() => {
       setIsAnimating(false)
       setDirection(null)
-    }, 300) // Match this with CSS transition duration
+    }, 300)
   }
 
   return (
@@ -27,25 +35,16 @@ export default function CarouselControls() {
         ←
       </button>
       <div className="flex items-center space-x-3 px-2">
-        <div 
-          className={`w-1.5 h-1.5 rounded-full bg-neutral-400 dark:bg-neutral-600 transition-all duration-300
-            ${isAnimating && direction === 'left' ? 'transform -translate-x-1 opacity-0' : ''}
-            ${isAnimating && direction === 'right' ? 'scale-125 opacity-100' : ''}
-          `}
-        />
-        <div 
-          className={`w-2 h-2 rounded-full bg-neutral-800 dark:bg-white transition-all duration-300
-            ${isAnimating ? 'transform scale-100' : 'scale-125'}
-            ${direction === 'left' ? 'translate-x-1' : ''}
-            ${direction === 'right' ? '-translate-x-1' : ''}
-          `}
-        />
-        <div 
-          className={`w-1.5 h-1.5 rounded-full bg-neutral-400 dark:bg-neutral-600 transition-all duration-300
-            ${isAnimating && direction === 'right' ? 'transform translate-x-1 opacity-0' : ''}
-            ${isAnimating && direction === 'left' ? 'scale-125 opacity-100' : ''}
-          `}
-        />
+        {backgrounds.map((_, index) => (
+          <div 
+            key={index}
+            className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+              index === currentIndex 
+                ? 'bg-neutral-800 dark:bg-white scale-125' 
+                : 'bg-neutral-400 dark:bg-neutral-600'
+            }`}
+          />
+        ))}
       </div>
       <button
         className="text-xl font-light transition-all hover:text-neutral-800 dark:hover:text-neutral-200"

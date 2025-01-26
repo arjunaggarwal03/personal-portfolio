@@ -1,26 +1,16 @@
 'use client'
 
-interface BackgroundImage {
-  url: string;
-  alt: string;
-}
-
-// Array of background images
-const backgrounds: BackgroundImage[] = [
-  {
-    url: '/background-1.jpeg',
-    alt: 'Abstract sunset with floating figures'
-  }
-  // Add more backgrounds as needed
-]
+import { useBackground } from 'app/context/BackgroundContext'
 
 export default function Background() {
+  const { currentIndex, backgrounds } = useBackground()
+
   return (
     <div className="fixed inset-0 w-full h-full z-0 bg-[#111] overflow-hidden">
       <img
-        src={backgrounds[0].url}
-        alt={backgrounds[0].alt}
-        className="absolute w-full h-full object-cover object-center select-none"
+        src={backgrounds[currentIndex].url}
+        alt={backgrounds[currentIndex].alt}
+        className="absolute w-full h-full object-cover object-center select-none transition-opacity duration-500"
         style={{
           objectFit: 'cover',
           objectPosition: 'center 40%', // Adjust this value to control vertical positioning
