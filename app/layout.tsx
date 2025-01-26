@@ -5,6 +5,8 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import Footer from './components/footer';
 import { baseUrl } from './sitemap';
+import SocialLinks from './components/social-links';
+import CarouselControls from './components/carousel-controls';
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -34,8 +36,6 @@ export const metadata: Metadata = {
   },
 };
 
-const cx = (...classes) => classes.filter(Boolean).join(' ');
-
 export default function RootLayout({
   children,
 }: {
@@ -44,21 +44,45 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={cx(
-        'text-black bg-white dark:text-white dark:bg-black',
-      )}
+      className="text-black bg-white dark:text-white dark:bg-[#111]"
     >
       <head>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" />
       </head>
-      <body className="antialiased mx-4 mt-8 lg:mx-auto font-sans">
-        <main className="flex-auto min-w-0 mt-6 flex flex-col px-2 md:px-0 container">
-          <Navbar />
-          {children}
-          <Footer />
+      <body className="min-h-screen">
+        {/* Main container with relative positioning */}
+        <div className="relative min-h-screen">
+          {/* Navigation Blob - Top Left */}
+          <div className="absolute top-6 left-6 z-20">
+            <div className="rounded-2xl bg-white/30 dark:bg-white/10 backdrop-blur-md border border-white/20 dark:border-white/10 px-6 py-3 shadow-lg">
+              <Navbar />
+            </div>
+          </div>
+
+          {/* Social Links Blob - Top Right */}
+          <div className="absolute top-6 right-6 z-20">
+            <div className="rounded-2xl bg-white/30 dark:bg-white/10 backdrop-blur-md border border-white/20 dark:border-white/10 px-6 py-3 shadow-lg">
+              <SocialLinks />
+            </div>
+          </div>
+
+          {/* Content Blob - Center */}
+          <main className="flex min-h-screen items-center justify-center p-8">
+            <div className="rounded-3xl bg-white/30 dark:bg-white/10 backdrop-blur-md border border-white/20 dark:border-white/10 p-8 max-w-2xl w-full shadow-lg">
+              {children}
+            </div>
+          </main>
+
+          {/* Carousel Controls - Bottom Center */}
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20">
+            <div className="rounded-2xl bg-white/30 dark:bg-white/10 backdrop-blur-md border border-white/20 dark:border-white/10 px-6 py-3 shadow-lg">
+              <CarouselControls />
+            </div>
+          </div>
+
           <Analytics />
           <SpeedInsights />
-        </main>
+        </div>
       </body>
     </html>
   );

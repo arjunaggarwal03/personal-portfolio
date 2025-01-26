@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-export default function Footer() {
+export default function SocialLinks() {
   return (
     <ul className="flex items-center justify-center space-x-4">
       <li className="flex-shrink-0">
@@ -53,4 +53,4 @@ export default function Footer() {
       </li>
     </ul>
   )
-}
+} 
