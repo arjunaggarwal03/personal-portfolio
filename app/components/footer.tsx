@@ -3,8 +3,8 @@ import Image from 'next/image';
 export default function Footer() {
   return (
     <footer className="mb-16">
-      <ul className="font-sm mt-8 flex flex-col items-center justify-center space-x-0 space-y-2 text-neutral-600 md:flex-row md:space-x-4 md:space-y-0 dark:text-neutral-300">
-        <li>
+      <ul className="flex items-center justify-center space-x-4">
+        <li className="flex-shrink-0">
           <a
             className="flex items-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
             rel="noopener noreferrer"
@@ -14,13 +14,13 @@ export default function Footer() {
             <Image
               src="/linkedin.png"
               alt="LinkedIn"
-              width={20} // Adjust the width as necessary
-              height={20} // Adjust the height as necessary
+              width={20}
+              height={20}
               className="h-5 w-5"
             />
           </a>
         </li>
-        <li>
+        <li className="flex-shrink-0">
           <a
             className="flex items-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
             rel="noopener noreferrer"
@@ -30,13 +30,13 @@ export default function Footer() {
             <Image
               src="/github.png"
               alt="GitHub"
-              width={20} // Adjust the width as necessary
-              height={20} // Adjust the height as necessary
+              width={20}
+              height={20}
               className="h-5 w-5"
             />
           </a>
         </li>
-        <li>
+        <li className="flex-shrink-0">
           <a
             className="flex items-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
             rel="noopener noreferrer"
@@ -46,8 +46,8 @@ export default function Footer() {
             <Image
               src="/source.png"
               alt="Source"
-              width={20} // Adjust the width as necessary
-              height={20} // Adjust the height as necessary
+              width={20}
+              height={20}
               className="h-5 w-5"
             />
           </a>
