@@ -19,12 +19,20 @@ const BackgroundContext = createContext<BackgroundContextType | undefined>(undef
 export function BackgroundProvider({ children }: { children: React.ReactNode }) {
   const backgrounds = [
     {
-      url: '/background-1.jpeg',
+      url: '/water-lillies.jpg',
       alt: 'Abstract sunset with floating figures'
     },
     {
-      url: '/background-2.jpg',
-      alt: 'Abstract sunset with floating figures'
+        url: '/van-gogh.jpg',
+        alt: 'Abstract sunset with floating figures'
+    },
+    {
+        url: '/okeefe-lake-george.jpg',
+        alt: 'Abstract sunset with floating figures'
+    },
+    {
+        url: '/warhol-crash.jpg',
+        alt: 'Abstract sunset with floating figures'
     }
   ]
 

@@ -87,7 +87,7 @@ export default function RootLayout({
 
             {/* Carousel Controls - Bottom Center */}
             <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-20">
-              <div className="rounded-2xl bg-white/30 dark:bg-white/10 backdrop-blur-md border border-white/20 dark:border-white/10 px-6 py-3 shadow-lg">
+              <div className="rounded-2xl bg-white/30 dark:bg-white/10 backdrop-blur-md border border-white/20 dark:border-white/10 px-3 py-2 shadow-lg">
                 <CarouselControls />
               </div>
             </div>
