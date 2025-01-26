@@ -1,15 +1,44 @@
 'use client'
 
 import { useBackground } from 'app/context/BackgroundContext'
+import { useState, useEffect } from 'react'
 
 export default function Background() {
   const { currentIndex, backgrounds } = useBackground()
+  const [isLoading, setIsLoading] = useState(true)
+  const [displayIndex, setDisplayIndex] = useState(0)
+
+  useEffect(() => {
+    // Get the initial index from localStorage on mount
+    const saved = localStorage.getItem('backgroundIndex')
+    if (saved !== null) {
+      const parsedIndex = parseInt(saved)
+      if (!isNaN(parsedIndex) && parsedIndex >= 0 && parsedIndex < backgrounds.length) {
+        setDisplayIndex(parsedIndex)
+      }
+    }
+    setIsLoading(false)
+  }, [])
+
+  // Update displayIndex when currentIndex changes
+  useEffect(() => {
+    if (!isLoading) {
+      setDisplayIndex(currentIndex)
+    }
+  }, [currentIndex, isLoading])
+
+  // Don't render anything until we have loaded the initial state
+  if (isLoading) {
+    return (
+      <div className="fixed inset-0 w-full h-full z-0 bg-[#111]" />
+    )
+  }
 
   return (
     <div className="fixed inset-0 w-full h-full z-0 bg-[#111] overflow-hidden">
       <img
-        src={backgrounds[currentIndex].url}
-        alt={backgrounds[currentIndex].alt}
+        src={backgrounds[displayIndex].url}
+        alt={backgrounds[displayIndex].alt}
         className="absolute w-full h-full object-cover object-center select-none transition-opacity duration-500"
         style={{
           objectFit: 'cover',
