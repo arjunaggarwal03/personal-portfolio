@@ -7,6 +7,7 @@ import Footer from './components/footer';
 import { baseUrl } from './sitemap';
 import SocialLinks from './components/social-links';
 import CarouselControls from './components/carousel-controls';
+import Background from './components/background';
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -50,8 +51,10 @@ export default function RootLayout({
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" />
       </head>
       <body className="min-h-screen">
-        {/* Main container with relative positioning */}
-        <div className="relative min-h-screen">
+        <div className="relative min-h-screen pb-24">
+          {/* Background Component */}
+          <Background />
+
           {/* Navigation Blob - Top Left */}
           <div className="absolute top-6 left-6 z-20">
             <div className="rounded-2xl bg-white/30 dark:bg-white/10 backdrop-blur-md border border-white/20 dark:border-white/10 px-6 py-3 shadow-lg">
@@ -67,14 +70,14 @@ export default function RootLayout({
           </div>
 
           {/* Content Blob - Center */}
-          <main className="flex min-h-screen items-center justify-center p-8">
+          <main className="relative flex min-h-[calc(100vh-8rem)] items-center justify-center p-8 z-10">
             <div className="rounded-3xl bg-white/30 dark:bg-white/10 backdrop-blur-md border border-white/20 dark:border-white/10 p-8 max-w-2xl w-full shadow-lg">
               {children}
             </div>
           </main>
 
           {/* Carousel Controls - Bottom Center */}
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20">
+          <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-20">
             <div className="rounded-2xl bg-white/30 dark:bg-white/10 backdrop-blur-md border border-white/20 dark:border-white/10 px-6 py-3 shadow-lg">
               <CarouselControls />
             </div>
