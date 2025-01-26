@@ -16,29 +16,43 @@ interface BackgroundContextType {
 
 const BackgroundContext = createContext<BackgroundContextType | undefined>(undefined)
 
-export function BackgroundProvider({ children }: { children: React.ReactNode }) {
-  const backgrounds = [
-    {
-      url: '/water-lillies.jpg',
-      alt: 'Abstract sunset with floating figures'
-    },
-    {
-      url: '/van-gogh.jpg',
-      alt: 'Abstract sunset with floating figures'
-    },
-    {
-      url: '/okeefe-lake-george.jpg',
-      alt: 'Abstract sunset with floating figures'
-    },
-    {
-      url: '/warhol-crash.jpg',
-      alt: 'Abstract sunset with floating figures'
-    }
-  ]
+const allBackgrounds = [
+  {
+    url: '/water-lillies.jpg',
+    alt: 'Abstract sunset with floating figures'
+  },
+  {
+    url: '/van-gogh.jpg',
+    alt: 'Abstract sunset with floating figures'
+  },
+  {
+    url: '/okeefe-lake-george.jpg',
+    alt: 'Abstract sunset with floating figures'
+  },
+  {
+    url: '/warhol-crash.jpg',
+    alt: 'Abstract sunset with floating figures'
+  }
+]
 
-  // Start with 0 and update after hydration
+export function BackgroundProvider({ children }: { children: React.ReactNode }) {
+  const [backgrounds] = useState(allBackgrounds)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isHydrated, setIsHydrated] = useState(false)
+
+  // Preload remaining images after initial render
+  useEffect(() => {
+    const preloadImages = async () => {
+      // Skip the first image as it's already loaded
+      const imagesToPreload = backgrounds.slice(1)
+      imagesToPreload.forEach(bg => {
+        const img = new Image()
+        img.src = bg.url
+      })
+    }
+    
+    preloadImages()
+  }, [])
 
   // Handle hydration and localStorage
   useEffect(() => {
