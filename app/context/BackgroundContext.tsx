@@ -42,11 +42,11 @@ const allBackgrounds = [
     alt: 'Abstract sunset with floating figures'
   },
   {
-    url: '/warhol-crash.jpg',
+    url: '/warhol-kiku.jpeg',
     alt: 'Abstract sunset with floating figures'
   },
   {
-    url: '/warhol-flower.jpg',
+    url: '/warhol-crash.jpg',
     alt: 'Abstract sunset with floating figures'
   }
 ]
