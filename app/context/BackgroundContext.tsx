@@ -32,6 +32,10 @@ const allBackgrounds = [
   {
     url: '/warhol-crash.jpg',
     alt: 'Abstract sunset with floating figures'
+  },
+  {
+    url: '/hussain-horses.jpeg',
+    alt: 'Abstract sunset with floating figures'
   }
 ]
 
