@@ -38,11 +38,11 @@ const allBackgrounds = [
     alt: 'Abstract sunset with floating figures'
   },
   {
-    url: '/picasso-charnel.jpg',
+    url: '/picasso-marie.jpg',
     alt: 'Abstract sunset with floating figures'
   },
   {
-    url: '/warhol-kiku.jpeg',
+    url: '/warhol-chair.jpg',
     alt: 'Abstract sunset with floating figures'
   },
   {
