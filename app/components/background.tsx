@@ -6,10 +6,8 @@ import { useState, useEffect, useRef } from 'react'
 export default function Background() {
   const { currentIndex, backgrounds } = useBackground()
   const [isLoading, setIsLoading] = useState(true)
-  const [displayIndex, setDisplayIndex] = useState(0)
   const [isMobile, setIsMobile] = useState(false)
-  const [isTransitioning, setIsTransitioning] = useState(false)
-  const imageCache = useRef<Map<string, HTMLImageElement>>(new Map())
+  const preloadedImages = useRef<HTMLImageElement[]>([])
 
   // Detect mobile device
   useEffect(() => {
@@ -21,102 +19,67 @@ export default function Background() {
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
-  // Preload and cache images
+  // Preload images based on device
   useEffect(() => {
-    const preloadImage = async (url: string) => {
-      if (imageCache.current.has(url)) return
-
-      const img = new Image()
-      
-      return new Promise((resolve, reject) => {
-        img.onload = () => {
-          imageCache.current.set(url, img)
-          resolve(img)
-        }
-        img.onerror = reject
-        
-        if (isMobile) {
-          const optimizedUrl = new URL(url, window.location.origin)
-          optimizedUrl.searchParams.set('q', '75')
-          optimizedUrl.searchParams.set('w', '1200')
-          img.src = optimizedUrl.toString()
-        } else {
-          img.src = url
-        }
-      })
-    }
-
-    // Preload current, next, and previous images
-    const preloadImages = async () => {
-      const currentImg = backgrounds[currentIndex].url
-      const nextImg = backgrounds[(currentIndex + 1) % backgrounds.length].url
-      const prevImg = backgrounds[(currentIndex - 1 + backgrounds.length) % backgrounds.length].url
-
+    const preloadAllImages = async () => {
       try {
-        await Promise.all([
-          preloadImage(currentImg),
-          preloadImage(nextImg),
-          preloadImage(prevImg)
-        ])
+        preloadedImages.current = await Promise.all(
+          backgrounds.map(bg => {
+            return new Promise<HTMLImageElement>((resolve, reject) => {
+              const img = new Image()
+              img.onload = () => resolve(img)
+              img.onerror = reject
+
+              // Create smaller image URLs for mobile
+              if (isMobile) {
+                const url = new URL(bg.url, window.location.origin)
+                url.searchParams.set('w', '800') // Smaller width for mobile
+                url.searchParams.set('q', '80') // Slightly reduced quality
+                img.src = url.toString()
+              } else {
+                img.src = bg.url
+              }
+            })
+          })
+        )
+        setIsLoading(false)
       } catch (error) {
         console.error('Failed to preload images:', error)
+        setIsLoading(false)
       }
     }
 
-    preloadImages()
-  }, [currentIndex, isMobile])
-
-  // Handle image transitions
-  useEffect(() => {
-    if (!isLoading) {
-      setIsTransitioning(true)
-      const timer = setTimeout(() => {
-        setDisplayIndex(currentIndex)
-        setIsTransitioning(false)
-      }, 100)
-      return () => clearTimeout(timer)
-    }
-  }, [currentIndex, isLoading])
+    preloadAllImages()
+  }, [isMobile, backgrounds])
 
   if (isLoading) {
     return <div className="fixed inset-0 w-full h-full z-0 bg-[#111]" />
   }
 
+  const currentImage = backgrounds[currentIndex]
+  const imageUrl = isMobile 
+    ? `${currentImage.url}?w=800&q=80`
+    : currentImage.url
+
   return (
     <div className="fixed inset-0 w-full h-full z-0 bg-[#111] overflow-hidden">
       <img
-        key={backgrounds[displayIndex].url}
-        src={backgrounds[displayIndex].url}
-        alt={backgrounds[displayIndex].alt}
-        className={`
-          absolute w-full h-full object-cover object-center select-none
-          transition-all duration-300 ease-in-out
-          ${isTransitioning ? 'opacity-0' : 'opacity-100'}
-          ${isMobile ? 'quality-75' : ''}
-        `}
-        sizes={isMobile ? "(max-width: 768px) 100vw" : "100vw"}
+        key={imageUrl}
+        src={imageUrl}
+        alt={currentImage.alt}
+        className="absolute w-full h-full object-cover object-center select-none"
         style={{
           objectFit: 'cover',
           objectPosition: 'center 40%',
           minHeight: '100%',
           minWidth: '100%',
-          transform: isMobile ? 'none' : 'translate3d(0, 0, 0)',
-          willChange: isMobile ? 'auto' : 'transform',
         }}
         draggable="false"
         loading="eager"
-        decoding={isMobile ? "sync" : "async"}
+        decoding="sync"
         fetchPriority="high"
       />
-      <div 
-        className={`
-          absolute inset-0 
-          ${isMobile ? 'bg-black/10' : 'bg-black/5'}
-          ${isMobile ? 'backdrop-blur-[0.5px]' : 'backdrop-blur-[1px]'}
-          transition-opacity duration-300
-          ${isTransitioning ? 'opacity-100' : 'opacity-90'}
-        `} 
-      />
+      <div className="absolute inset-0 bg-black/5" />
     </div>
   )
 } 
