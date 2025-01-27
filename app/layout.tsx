@@ -61,7 +61,7 @@ export default function RootLayout({
           <div className="relative min-h-screen pb-24">
             {/* Main content first */}
             <main className="relative flex items-center justify-center z-10 p-4 md:p-8 min-h-[calc(100vh-8rem)] mt-16 md:mt-0">
-              <div className="rounded-3xl bg-white/30 dark:bg-white/10 backdrop-blur-md border border-white/20 dark:border-white/10 p-6 md:p-8 max-w-2xl w-full shadow-lg">
+              <div className="rounded-3xl bg-white/50 dark:bg-white/20 backdrop-blur-md border border-white/20 dark:border-white/10 p-6 md:p-8 max-w-2xl w-full shadow-lg">
                 {children}
               </div>
             </main>

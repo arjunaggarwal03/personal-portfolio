@@ -18,6 +18,10 @@ const BackgroundContext = createContext<BackgroundContextType | undefined>(undef
 
 const allBackgrounds = [
   {
+    url: '/rembrandt-bridge.jpg',
+    alt: 'Abstract sunset with floating figures'
+  },
+  {
     url: '/water-lillies.jpg',
     alt: 'Abstract sunset with floating figures'
   },
@@ -30,11 +34,19 @@ const allBackgrounds = [
     alt: 'Abstract sunset with floating figures'
   },
   {
+    url: '/hussain-horses.jpeg',
+    alt: 'Abstract sunset with floating figures'
+  },
+  {
+    url: '/picasso-charnel.jpg',
+    alt: 'Abstract sunset with floating figures'
+  },
+  {
     url: '/warhol-crash.jpg',
     alt: 'Abstract sunset with floating figures'
   },
   {
-    url: '/hussain-horses.jpeg',
+    url: '/warhol-flower.jpg',
     alt: 'Abstract sunset with floating figures'
   }
 ]
