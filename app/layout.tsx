@@ -51,8 +51,10 @@ export default function RootLayout({
       <head>
         <link 
           rel="preload" 
-          href="/water-lillies.jpg" 
+          href="/rembrandt-bridge.jpg"
           as="image"
+          fetchPriority="high"
+          type="image/jpeg"
         />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" />
       </head>

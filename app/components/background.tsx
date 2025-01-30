@@ -8,6 +8,19 @@ export default function Background() {
   const [isLoading, setIsLoading] = useState(true)
   const [isMobile, setIsMobile] = useState(false)
   const preloadedImages = useRef<HTMLImageElement[]>([])
+  const firstImageLoaded = useRef(false)
+
+  // Load first image immediately
+  useEffect(() => {
+    if (!firstImageLoaded.current) {
+      const img = new Image()
+      img.onload = () => {
+        firstImageLoaded.current = true
+        setIsLoading(false)
+      }
+      img.src = backgrounds[0].url
+    }
+  }, [])
 
   // Detect mobile device
   useEffect(() => {
