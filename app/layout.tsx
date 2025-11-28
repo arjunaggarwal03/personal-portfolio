@@ -7,6 +7,7 @@ import Footer from './components/footer';
 import { baseUrl } from './sitemap';
 import SocialLinks from './components/social-links';
 import CarouselControls from './components/carousel-controls';
+import CarouselArrows from './components/carousel-arrows';
 import Background from './components/background';
 import { BackgroundProvider } from './context/BackgroundContext'
 
@@ -63,13 +64,13 @@ export default function RootLayout({
           <div className="relative min-h-screen pb-24">
             {/* Main content first */}
             <main className="relative flex items-center justify-center z-10 p-4 md:p-8 min-h-[calc(100vh-8rem)] mt-16 md:mt-0">
-              <div className="rounded-3xl bg-white/50 dark:bg-white/20 backdrop-blur-md border border-white/20 dark:border-white/10 p-6 md:p-8 max-w-2xl w-full shadow-lg">
+              <div className="rounded-3xl bg-white/95 dark:bg-stone-900/90 backdrop-blur-sm border border-white/20 dark:border-white/10 p-6 md:p-8 max-w-2xl w-full shadow-2xl">
                 {children}
               </div>
             </main>
 
             {/* Top Navigation Bar - Mobile */}
-            <div className="md:hidden fixed top-0 left-0 right-0 z-30 p-4 bg-white/30 dark:bg-white/10 backdrop-blur-md border-b border-white/20">
+            <div className="md:hidden fixed top-0 left-0 right-0 z-30 p-4 bg-white/95 dark:bg-stone-900/90 backdrop-blur-sm border-b border-white/20">
               <div className="flex justify-between items-center">
                 <Navbar />
                 <SocialLinks />
@@ -78,24 +79,27 @@ export default function RootLayout({
 
             {/* Navigation Blob - Top Left - Desktop */}
             <div className="hidden md:block absolute top-6 left-6 z-20">
-              <div className="rounded-2xl bg-white/30 dark:bg-white/10 backdrop-blur-md border border-white/20 dark:border-white/10 px-6 py-3 shadow-lg">
+              <div className="rounded-2xl bg-white/95 dark:bg-stone-900/90 backdrop-blur-sm border border-white/20 dark:border-white/10 px-6 py-3 shadow-xl">
                 <Navbar />
               </div>
             </div>
 
             {/* Social Links Blob - Top Right - Desktop */}
             <div className="hidden md:block absolute top-6 right-6 z-20">
-              <div className="rounded-2xl bg-white/30 dark:bg-white/10 backdrop-blur-md border border-white/20 dark:border-white/10 px-6 py-3 shadow-lg">
+              <div className="rounded-2xl bg-white/95 dark:bg-stone-900/90 backdrop-blur-sm border border-white/20 dark:border-white/10 px-6 py-3 shadow-xl">
                 <SocialLinks />
               </div>
             </div>
 
-            {/* Carousel Controls - Bottom Center */}
+            {/* Artwork Caption - Bottom Center */}
             <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-20">
-              <div className="rounded-2xl bg-white/30 dark:bg-white/10 backdrop-blur-md border border-white/20 dark:border-white/10 px-3 py-2 shadow-lg">
+              <div className="rounded-2xl bg-white/95 dark:bg-stone-900/90 backdrop-blur-sm border border-white/20 dark:border-white/10 px-4 py-3 shadow-xl">
                 <CarouselControls />
               </div>
             </div>
+
+            {/* Carousel Arrows - Left and Right */}
+            <CarouselArrows />
 
             {/* Background last */}
             <Background />

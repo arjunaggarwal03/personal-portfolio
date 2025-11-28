@@ -4,19 +4,28 @@ export default function Page() {
   return (
     <div className="flex flex-col gap-6">
       <h1 className="text-2xl font-semibold tracking-tighter">
-        Hi, I'm Arjun 🌆
+        Hi, I'm Arjun 👋🏽
       </h1>
       <p>
-        I'm an incoming software engineer at{' '}
+        I'm currently an AI product engineer at{' '}
         <a 
-          href="https://youtu.be/xFBKXQILeqI?si=rStU-oCYDlbOQp20"
+          href="https://lightfield.app"
           target="_blank"
           rel="noopener noreferrer"
-          className="hover:text-[#FF0000] transition-colors duration-200"
+          className="hover:text-[#f78c58] transition-colors duration-200"
         >
-          YouTube
+          Lightfield
         </a>
-        . I'm also a fourth-year Honors CS + Math major at the University of Maryland with dev experience at Amazon Web Services, Capital One, and Bank of America. Here's some stuff I've worked on:
+        {' '}with previous experience at YouTube (
+        <a 
+          href="https://www.linkedin.com/posts/arjunaggarwal1_after-a-year-in-stealth-were-excited-to-activity-7394786703821000704-MlfE?utm_source=share&utm_medium=member_desktop&rcm=ACoAACqlRDUBDbuRLD5ncu1mgZInRkfx6-Lm2bU"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:text-[#f78c58] transition-colors duration-200"
+        >
+          it was brief
+        </a>
+        ), AWS, and Capital One. Here's some stuff I've worked on:
       </p>
       <div>
         <BlogPosts />

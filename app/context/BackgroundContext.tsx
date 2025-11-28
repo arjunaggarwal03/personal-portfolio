@@ -5,6 +5,9 @@ import { createContext, useContext, useState, useEffect } from 'react'
 interface BackgroundImage {
   url: string
   alt: string
+  title: string
+  artist: string
+  year: string
 }
 
 interface BackgroundContextType {
@@ -19,39 +22,66 @@ const BackgroundContext = createContext<BackgroundContextType | undefined>(undef
 const allBackgrounds = [
   {
     url: '/rembrandt-bridge.jpg',
-    alt: 'Abstract sunset with floating figures'
+    alt: 'Rembrandt bridge painting',
+    title: 'The Stone Bridge',
+    artist: 'Rembrandt van Rijn',
+    year: '1638'
   },
   {
     url: '/water-lillies.jpg',
-    alt: 'Abstract sunset with floating figures'
+    alt: 'Water lilies painting',
+    title: 'Water Lilies',
+    artist: 'Claude Monet',
+    year: '1919'
   },
   {
     url: '/van-gogh.jpg',
-    alt: 'Abstract sunset with floating figures'
+    alt: 'Van Gogh painting',
+    title: 'Starry Night',
+    artist: 'Vincent van Gogh',
+    year: '1889'
   },
   {
     url: '/okeefe-lake-george.jpg',
-    alt: 'Abstract sunset with floating figures'
+    alt: 'Georgia O\'Keeffe landscape',
+    title: 'Lake George',
+    artist: 'Georgia O\'Keeffe',
+    year: '1922'
   },
   {
     url: '/hussain-horses.jpeg',
-    alt: 'Abstract sunset with floating figures'
+    alt: 'Hussain horses painting',
+    title: 'Horses',
+    artist: 'M.F. Husain',
+    year: '1950s'
   },
   {
     url: '/picasso-marie.jpg',
-    alt: 'Abstract sunset with floating figures'
+    alt: 'Picasso portrait',
+    title: 'Portrait of Marie-Thérèse',
+    artist: 'Pablo Picasso',
+    year: '1937'
   },
   {
     url: '/warhol-chair.jpg',
-    alt: 'Abstract sunset with floating figures'
+    alt: 'Warhol electric chair',
+    title: 'Electric Chair',
+    artist: 'Andy Warhol',
+    year: '1964'
   },
   {
     url: '/warhol-crash.jpg',
-    alt: 'Abstract sunset with floating figures'
+    alt: 'Warhol car crash',
+    title: 'Orange Car Crash',
+    artist: 'Andy Warhol',
+    year: '1963'
   },
   {
     url: '/condo-faces.jpg',
-    alt: 'Abstract sunset with floating figures'
+    alt: 'Condo faces painting',
+    title: 'East Village Figures',
+    artist: 'George Condo',
+    year: '2000s'
   }
 ]
 
