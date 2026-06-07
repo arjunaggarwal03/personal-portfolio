@@ -8,6 +8,7 @@ import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import type { PluggableList } from 'unified'
 import { Callout, Aside, Quote, ImageWithCaption } from './prose'
 import { SystemDiagram } from './system-diagram'
+import { NewTabIndicator } from './external-link'
 
 const remarkPlugins: PluggableList = [remarkGfm]
 const rehypePlugins: PluggableList = [
@@ -31,7 +32,13 @@ function CustomLink(props: React.AnchorHTMLAttributes<HTMLAnchorElement>) {
   if (href.startsWith('#')) {
     return <a {...props} />
   }
-  return <a target="_blank" rel="noopener noreferrer" {...props} />
+  const { children, ...rest } = props
+  return (
+    <a target="_blank" rel="noopener noreferrer" {...rest}>
+      {children}
+      <NewTabIndicator />
+    </a>
+  )
 }
 
 function Code({ children, ...props }: { children?: string }) {

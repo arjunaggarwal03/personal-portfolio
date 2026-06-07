@@ -1,6 +1,7 @@
 import { experiments, experimentGroupOrder } from 'content/experiments'
 import { pageMetadata } from 'lib/seo'
 import { inlineLink } from 'lib/ui'
+import { ExternalLink } from 'app/components/external-link'
 
 export const metadata = pageMetadata({
   title: 'Early Experiments',
@@ -49,15 +50,13 @@ export default function ExperimentsPage() {
                     {exp.links && exp.links.length > 0 ? (
                       <p className="mt-1 flex gap-3 font-mono text-xs">
                         {exp.links.map((link) => (
-                          <a
+                          <ExternalLink
                             key={link.url}
                             href={link.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
                             className={`text-muted ${inlineLink}`}
                           >
-                            {link.label} →
-                          </a>
+                            {link.label}
+                          </ExternalLink>
                         ))}
                       </p>
                     ) : null}

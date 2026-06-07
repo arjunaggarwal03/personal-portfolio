@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import type { MediaItem } from 'lib/types'
 import { SpotifyEmbed } from './spotify-embed'
+import { NewTabIndicator } from './external-link'
 
 const IMAGE_SIZES = '(max-width: 760px) 100vw, 760px'
 const DEFAULT_ASPECT_RATIO = '16:9'
@@ -135,7 +136,10 @@ export function MediaEmbed({ item }: { item: MediaItem }) {
           rel="noopener noreferrer"
           className="block rounded-lg border border-border-soft bg-surface px-4 py-3 no-underline hover:border-accent"
         >
-          <span className="font-mono text-xs text-subtle">{item.url}</span>
+          <span className="font-mono text-xs text-subtle">
+            {item.url}
+            <NewTabIndicator />
+          </span>
           {item.caption ? (
             <span className="mt-1 block text-sm text-muted">{item.caption}</span>
           ) : null}

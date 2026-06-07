@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { social } from 'lib/site'
 import { pageMetadata } from 'lib/seo'
+import { ExternalLink } from 'app/components/external-link'
 
 export const metadata = pageMetadata({
   title: 'Resume',
@@ -15,10 +16,7 @@ export default function ResumePage() {
       <p className="mt-3 text-muted">
         Resume available on request. For current work history, see{' '}
         <Link href="/work">Work</Link> or{' '}
-        <a href={social.linkedin} target="_blank" rel="noopener noreferrer">
-          LinkedIn
-        </a>
-        .
+        <ExternalLink href={social.linkedin}>LinkedIn</ExternalLink>.
       </p>
     </section>
   )

@@ -12,7 +12,7 @@ export function Header() {
       <div className="flex flex-col gap-3 md:flex-row md:items-baseline md:justify-between">
         <Link
           href="/"
-          className="font-serif text-lg tracking-tight no-underline hover:text-accent"
+          className="-my-1 py-1 font-serif text-lg tracking-tight no-underline hover:text-accent"
         >
           {site.name}
         </Link>
@@ -24,11 +24,11 @@ export function Header() {
                 key={path}
                 href={path}
                 aria-current={active ? 'page' : undefined}
-                className={
+                className={`-my-1 py-1 ${
                   active
                     ? 'text-ink decoration-accent underline underline-offset-4'
                     : 'text-muted no-underline hover:text-accent'
-                }
+                }`}
               >
                 {label}
               </Link>

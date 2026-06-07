@@ -11,6 +11,7 @@ import { JsonLd } from 'app/components/json-ld'
 import { RatingBadge } from 'app/components/rating-badge'
 import { TagList } from 'app/components/tag-pill'
 import { MediaEmbed } from 'app/components/media-embed'
+import { ExternalLink } from 'app/components/external-link'
 
 export async function generateStaticParams() {
   return getLogWithDetailPages().map((entry) => ({ slug: entry.slug }))
@@ -118,9 +119,7 @@ export default async function LogDetail({
 
       {entry.url ? (
         <p className="mt-5">
-          <a href={entry.url} target="_blank" rel="noopener noreferrer">
-            {entry.source ?? 'Source'} →
-          </a>
+          <ExternalLink href={entry.url}>{entry.source ?? 'Source'}</ExternalLink>
         </p>
       ) : null}
 

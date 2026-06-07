@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { footerLinks, isExternal, site } from 'lib/site'
 import { inlineLink } from 'lib/ui'
+import { ExternalLink } from 'app/components/external-link'
 
 export function Footer() {
   return (
@@ -14,17 +15,12 @@ export function Footer() {
           <span className="flex flex-wrap items-center gap-x-2">
             {footerLinks.map((link, i) => (
               <span key={link.label} className="flex items-center gap-2">
-                {isExternal(link.href) ? (
-                  <a
-                    href={link.href}
-                    target={link.href.startsWith('http') ? '_blank' : undefined}
-                    rel={
-                      link.href.startsWith('http')
-                        ? 'noopener noreferrer'
-                        : undefined
-                    }
-                    className={inlineLink}
-                  >
+                {link.href.startsWith('http') ? (
+                  <ExternalLink href={link.href} className={inlineLink}>
+                    {link.label}
+                  </ExternalLink>
+                ) : isExternal(link.href) ? (
+                  <a href={link.href} className={inlineLink}>
                     {link.label}
                   </a>
                 ) : (

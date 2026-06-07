@@ -5,6 +5,7 @@ import { getFeaturedWriting, getFeaturedLog } from 'lib/content'
 import { formatDateShort } from 'lib/dates'
 import { externalLinks } from 'lib/site'
 import { homeGraph } from 'lib/seo'
+import { ExternalLink } from 'app/components/external-link'
 import { SectionHeader } from 'app/components/section-header'
 import { SystemDiagram } from 'app/components/system-diagram'
 import { IndexRow } from 'app/components/index-row'
@@ -36,9 +37,7 @@ export default function HomePage() {
         </h1>
         <p className="mt-4 max-w-prose text-md leading-relaxed">
           Founding engineer at{' '}
-          <a href={externalLinks.lightfield} target="_blank" rel="noopener noreferrer">
-            Lightfield
-          </a>
+          <ExternalLink href={externalLinks.lightfield}>Lightfield</ExternalLink>
           , building agentic CRM and customer-context infrastructure in San
           Francisco.
         </p>

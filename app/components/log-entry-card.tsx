@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { inlineLink, titleLink } from 'lib/ui'
+import { ExternalLink } from './external-link'
 import type { LogEntry } from 'lib/types'
 import { formatDateShort } from 'lib/dates'
 import { hasDetailPage } from 'lib/content'
@@ -50,14 +51,12 @@ export function LogEntryCard({ entry }: { entry: LogEntry }) {
 
       {entry.url ? (
         <p className="mt-1.5">
-          <a
+          <ExternalLink
             href={entry.url}
-            target="_blank"
-            rel="noopener noreferrer"
             className={`font-mono text-xs text-muted ${inlineLink}`}
           >
-            {entry.source ?? new URL(entry.url).hostname.replace('www.', '')} →
-          </a>
+            {entry.source ?? new URL(entry.url).hostname.replace('www.', '')}
+          </ExternalLink>
         </p>
       ) : null}
 

@@ -3,7 +3,7 @@ import { getPublishedWriting, getLogWithDetailPages } from 'lib/content'
 import { baseUrl, navItems } from 'lib/site'
 
 /** Routes not covered by nav items (home + secondary pages). */
-const EXTRA_ROUTES = ['', '/experiments', '/resume']
+const EXTRA_ROUTES = ['', '/experiments', '/resume', '/accessibility']
 
 /** Per-route crawl hints. Home is the canonical entity page, so highest. */
 const PRIORITY: Record<string, number> = {
@@ -12,6 +12,7 @@ const PRIORITY: Record<string, number> = {
   '/work': 0.8,
   '/about': 0.8,
   '/log': 0.7,
+  '/accessibility': 0.3,
 }
 
 const today = () => new Date().toISOString().split('T')[0]

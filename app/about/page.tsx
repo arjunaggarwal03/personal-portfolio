@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { externalLinks, person, site, socialLinks } from 'lib/site'
 import { pageMetadata } from 'lib/seo'
+import { ExternalLink } from 'app/components/external-link'
 
 export const metadata = pageMetadata({
   title: 'About',
@@ -41,9 +42,7 @@ export default function AboutPage() {
       <div className="article mt-8">
         <p>
           I&rsquo;m a founding engineer at{' '}
-          <a href={externalLinks.lightfield} target="_blank" rel="noopener noreferrer">
-            Lightfield
-          </a>{' '}
+          <ExternalLink href={externalLinks.lightfield}>Lightfield</ExternalLink>{' '}
           in San Francisco, where we&rsquo;re building an agentic CRM for companies
           built with their customers.
         </p>
@@ -88,13 +87,11 @@ export default function AboutPage() {
         <p className="flex flex-wrap gap-x-2 font-mono text-sm">
           {socialLinks.map((link, i) => (
             <span key={link.label}>
-              <a
-                href={link.href}
-                target={link.href.startsWith('http') ? '_blank' : undefined}
-                rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-              >
-                {link.label}
-              </a>
+              {link.href.startsWith('http') ? (
+                <ExternalLink href={link.href}>{link.label}</ExternalLink>
+              ) : (
+                <a href={link.href}>{link.label}</a>
+              )}
               {i < socialLinks.length - 1 ? (
                 <span aria-hidden="true" className="px-1 text-subtle">
                   ·
