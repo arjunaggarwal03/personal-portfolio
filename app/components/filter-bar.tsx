@@ -15,11 +15,14 @@ export function FilterBar({ query }: { query: LogQuery }) {
             key={filter.label}
             href={href}
             aria-current={active ? 'true' : undefined}
-            className={
+            // py-1.5 lifts each filter to a >=24px-tall tap target (WCAG 2.5.8
+            // Target Size, AA); the narrow labels clear the floor via the
+            // spacing exception thanks to the nav's gap.
+            className={`py-1.5 ${
               active
                 ? 'text-accent underline decoration-accent underline-offset-4'
                 : 'text-muted no-underline hover:text-accent'
-            }
+            }`}
           >
             {filter.label}
           </Link>

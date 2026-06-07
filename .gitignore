@@ -10,7 +10,12 @@
 
 # next.js
 /.next/
+/.next-prod/
 /out/
+
+# lighthouse ci
+/.lighthouseci/
+/.lighthouseci-local/
 
 # production
 /build

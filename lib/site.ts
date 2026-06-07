@@ -15,7 +15,7 @@ export const brand = {
   bg: '#f4ecd9',
   surface: '#fffdf8',
   ink: '#181713',
-  muted: '#6f6a60',
+  muted: '#625c50',
   accent: '#7c4a32',
   /** Brighter terracotta for solid brand marks (favicon tile), where the
    *  text-tuned `accent` reads too dark/muddy at small sizes. */

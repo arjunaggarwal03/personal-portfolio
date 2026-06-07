@@ -3,6 +3,12 @@ import { footerLinks, isExternal, site } from 'lib/site'
 import { inlineLink } from 'lib/ui'
 import { ExternalLink } from 'app/components/external-link'
 
+// inlineLink + py-1 lifts each footer link to a >=24px-tall tap target so it
+// clears the WCAG 2.5.8 (Target Size, AA) 24x24 floor. No negative margin here
+// (unlike the header): the footer links sit close together, so pulling the
+// padded hit areas back over each other trips axe's "partially obscured" check.
+const footerLink = `${inlineLink} py-1`
+
 export function Footer() {
   return (
     <footer className="mx-auto mt-24 w-full max-w-[760px] px-6 pb-16">
@@ -16,15 +22,15 @@ export function Footer() {
             {footerLinks.map((link, i) => (
               <span key={link.label} className="flex items-center gap-2">
                 {link.href.startsWith('http') ? (
-                  <ExternalLink href={link.href} className={inlineLink}>
+                  <ExternalLink href={link.href} className={footerLink}>
                     {link.label}
                   </ExternalLink>
                 ) : isExternal(link.href) ? (
-                  <a href={link.href} className={inlineLink}>
+                  <a href={link.href} className={footerLink}>
                     {link.label}
                   </a>
                 ) : (
-                  <Link href={link.href} className={inlineLink}>
+                  <Link href={link.href} className={footerLink}>
                     {link.label}
                   </Link>
                 )}

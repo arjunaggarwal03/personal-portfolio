@@ -10,10 +10,14 @@
   --color-surface-muted: #f1ece2;
 
   --color-ink: #181713;
-  --color-muted: #6f6a60;
+  /* WCAG AA: #625c50 on --color-bg (#f4ecd9) = 5.64:1, comfortably above the
+     4.5:1 floor for normal text (WCAG 1.4.3). The previous #6f6a60 sat at 4.569:1
+     — technically passing but borderline enough that stricter contrast engines
+     flagged it as a false negative. */
+  --color-muted: #625c50;
   /* WCAG AA: #6b6456 on --color-bg (#f4ecd9) = 4.98:1, clears the 4.5:1 floor
-     for normal text (WCAG 1.4.3). Still a touch lighter than --color-muted so
-     the de-emphasized hierarchy reads. */
+     for normal text (WCAG 1.4.3). Lighter than --color-muted so the
+     de-emphasized hierarchy reads (subtle is the least prominent text tier). */
   --color-subtle: #6b6456;
 
   --color-border: #ded7c9;

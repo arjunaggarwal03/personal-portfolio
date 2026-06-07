@@ -43,7 +43,11 @@ export default function AccessibilityPage() {
           <li>
             aims for text and non-text contrast that meets WCAG 2.2 Level AA;
           </li>
-          <li>respects the operating system&rsquo;s reduced-motion setting.</li>
+          <li>respects the operating system&rsquo;s reduced-motion setting;</li>
+          <li>
+            runs an automated accessibility audit on every change in continuous
+            integration, so regressions are caught before they ship.
+          </li>
         </ul>
 
         <h2>Conformance status</h2>
@@ -57,9 +61,12 @@ export default function AccessibilityPage() {
           conformance: Level A, Level AA, and Level AAA.
         </p>
         <p>
-          arjunaggarwal.dev is <strong>fully conformant</strong> with WCAG 2.2
-          Level AA. Fully conformant means that the content fully conforms to the
-          accessibility standard without any exceptions.
+          arjunaggarwal.dev is <strong>substantially conformant</strong> with
+          WCAG 2.2 Level AA. Substantially conformant means the site conforms to
+          the standard in nearly all respects, with the possible exception of
+          isolated issues &mdash; for example in third-party embeds or
+          newly-published content &mdash; that may not yet have been identified
+          or resolved.
         </p>
 
         <h2>Feedback</h2>
@@ -112,6 +119,13 @@ export default function AccessibilityPage() {
           <li>W3C Nu HTML Checker</li>
           <li>Manual keyboard and focus testing across the site</li>
         </ul>
+        <p>
+          Beyond this point-in-time review, every push and pull request runs an
+          automated Lighthouse accessibility audit (built on the same axe-core
+          engine) in continuous integration. A change cannot merge unless every
+          audited page keeps a perfect accessibility score, which keeps the
+          conformance claim above honest over time.
+        </p>
 
         <h2>Compatibility with browsers and assistive technology</h2>
         <p>

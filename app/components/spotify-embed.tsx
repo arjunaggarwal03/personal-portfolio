@@ -52,18 +52,37 @@ export function SpotifyEmbed({ url }: { url: string }) {
   useEffect(() => {
     let controller: { destroy: () => void } | undefined
     let cancelled = false
+    const placeholder = ref.current
+    // The IFrame API *replaces* the placeholder node with its <iframe>, so the
+    // frame lands in this surviving wrapper — observe/query it, not the
+    // placeholder (which gets detached).
+    const container = placeholder?.parentElement
+    let observer: MutationObserver | undefined
 
     loadSpotifyApi().then((api) => {
-      if (cancelled || !ref.current) return
+      if (cancelled || !placeholder || !container) return
+      // The injected <iframe> ships without a title, which fails WCAG 4.1.2 /
+      // "frames must have an accessible name". Give it one (it's a music player).
+      observer = new MutationObserver(() => {
+        const iframe = container.querySelector('iframe')
+        if (iframe) {
+          if (!iframe.getAttribute('title')) {
+            iframe.setAttribute('title', 'Spotify player')
+          }
+          observer?.disconnect()
+        }
+      })
+      observer.observe(container, { childList: true, subtree: true })
       // Let the IFrame API own sizing: it auto-resizes the iframe to fit content,
       // so playlists/albums render full-height with no empty gap.
-      api.createController(ref.current, { uri: toSpotifyUri(url) }, (c) => {
+      api.createController(placeholder, { uri: toSpotifyUri(url) }, (c) => {
         controller = c
       })
     })
 
     return () => {
       cancelled = true
+      observer?.disconnect()
       controller?.destroy()
     }
   }, [url])
