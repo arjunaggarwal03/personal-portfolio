@@ -47,9 +47,6 @@ const keywords: string[] = [
   ...person.knowsAbout,
 ]
 
-/** Optional Google Search Console verification token (set in Vercel env). */
-const googleSiteVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
-
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
@@ -101,9 +98,6 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  ...(googleSiteVerification
-    ? { verification: { google: googleSiteVerification } }
-    : {}),
 }
 
 export const viewport: Viewport = {
