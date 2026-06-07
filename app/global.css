@@ -1,178 +1,221 @@
 @import 'tailwindcss';
 
+@theme {
+  /* Warm editorial palette (doc section 6) */
+  --color-bg: #f8f5ee;
+  --color-surface: #fffdf8;
+  --color-surface-muted: #f1ece2;
+
+  --color-ink: #181713;
+  --color-muted: #6f6a60;
+  --color-subtle: #9a9285;
+
+  --color-border: #ded7c9;
+  --color-border-soft: #eae3d6;
+
+  --color-accent: #7c4a32;
+  --color-accent-hover: #633a26;
+  --color-accent-soft: #e8d8cb;
+
+  --color-code-bg: #efe7da;
+
+  /* Font families (CSS variables come from next/font in layout.tsx) */
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-serif: var(--font-newsreader), Georgia, serif;
+  --font-mono: var(--font-ibm-plex-mono), 'SFMono-Regular', monospace;
+
+  /* Type scale (doc section 6.2) */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-md: 1.0625rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 2rem;
+  --text-3xl: 2.75rem;
+}
+
 ::selection {
-  background-color: #47a3f3;
-  color: #fefefe;
-}
-
-:root {
-  --sh-class: #2d5e9d;
-  --sh-identifier: #354150;
-  --sh-sign: #8996a3;
-  --sh-string: #007f7a;
-  --sh-keyword: #e02518;
-  --sh-comment: #a19595;
-  --sh-jsxliterals: #6266d1;
-  --sh-property: #e25a1c;
-  --sh-entity: #e25a1c;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --sh-class: #4c97f8;
-    --sh-identifier: white;
-    --sh-keyword: #f47067;
-    --sh-string: #0fa295;
-  }
-  html {
-    color-scheme: dark;
-  }
+  background-color: var(--color-accent-soft);
+  color: var(--color-ink);
 }
 
 html {
-  min-width: 360px;
+  min-width: 320px;
+  /* sugar-high syntax tokens, tuned to the warm palette */
+  --sh-class: #7c4a32;
+  --sh-identifier: #181713;
+  --sh-sign: #9a9285;
+  --sh-string: #5b6b3a;
+  --sh-keyword: #9e3b2f;
+  --sh-comment: #9a9285;
+  --sh-jsxliterals: #5a5340;
+  --sh-property: #7c4a32;
+  --sh-entity: #7c4a32;
 }
 
 body {
-  margin: 0; /* Ensure no default margin is applied */
-  padding: 0; /* Ensure no default padding is applied */
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-.container {
-  max-width: 750px; /* Set the maximum width for the container */
-  margin: 0 auto; /* Center the container */
-  padding: 1rem; /* Add some padding for better appearance */
+/* Understated links by default (doc 6.6) */
+a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--color-border);
+  text-underline-offset: 3px;
+  transition: color 120ms ease, text-decoration-color 120ms ease;
 }
 
-header {
-  margin-bottom: 2rem; /* Add space below the header */
+a:hover {
+  color: var(--color-accent);
+  text-decoration-color: var(--color-accent);
 }
 
-.prose {
-  margin-bottom: 2rem; /* Add space below the main content */
+/* Respect reduced motion globally */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
-.prose .anchor {
-  @apply absolute invisible no-underline;
-
-  margin-left: -1em;
-  padding-right: 0.5em;
-  width: 80%;
-  max-width: 700px;
-  cursor: pointer;
+/* Long-form article typography (doc section 15.2) */
+.article {
+  font-size: var(--text-md);
+  line-height: 1.7;
+  color: var(--color-ink);
 }
 
-.anchor:hover {
-  @apply visible;
+.article > * + * {
+  margin-top: 1.25em;
 }
 
-.prose a {
-  @apply underline transition-all hover:decoration-neutral-600 underline-offset-2 decoration-[0.1em];
+.article h2 {
+  font-family: var(--font-serif);
+  font-size: var(--text-xl);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  margin-top: 2em;
+  margin-bottom: 0.5em;
 }
 
-.prose .anchor:after {
-  @apply text-neutral-300 dark:text-neutral-700;
-  content: '#';
+.article h3 {
+  font-family: var(--font-serif);
+  font-size: var(--text-lg);
+  margin-top: 1.75em;
+  margin-bottom: 0.5em;
 }
 
-.prose *:hover > .anchor {
-  @apply visible;
+.article p {
+  margin-bottom: 1.25em;
 }
 
-.prose pre {
-  @apply bg-neutral-50 dark:bg-neutral-900 rounded-lg overflow-x-auto border border-neutral-200 dark:border-neutral-900 py-2 px-3 text-sm;
+.article a {
+  text-decoration-color: var(--color-accent-soft);
 }
 
-.prose code {
-  @apply px-1 py-0.5 rounded-lg;
+/* Autolinked headings (rehype-autolink-headings, behavior: wrap) */
+.article h2 a,
+.article h3 a {
+  color: inherit;
+  text-decoration: none;
 }
 
-.prose pre code {
-  @apply p-0;
-  border: initial;
+.article h2 a:hover,
+.article h3 a:hover {
+  color: var(--color-accent);
+}
+
+/* GFM tables */
+.article table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+  margin: 1.5em 0;
+}
+
+.article th,
+.article td {
+  border: 1px solid var(--color-border-soft);
+  padding: 0.5em 0.75em;
+  text-align: left;
+}
+
+.article th {
+  background-color: var(--color-surface-muted);
+  font-weight: 500;
+}
+
+.article del {
+  color: var(--color-subtle);
+}
+
+.article ul {
+  list-style: disc;
+  padding-left: 1.4em;
+}
+
+.article ol {
+  list-style: decimal;
+  padding-left: 1.4em;
+}
+
+.article li + li {
+  margin-top: 0.4em;
+}
+
+.article blockquote {
+  border-left: 2px solid var(--color-border);
+  padding-left: 1em;
+  color: var(--color-muted);
+  font-style: italic;
+}
+
+.article img {
+  border-radius: 0.5rem;
+  border: 1px solid var(--color-border-soft);
+}
+
+.article pre {
+  background-color: var(--color-code-bg);
+  border: 1px solid var(--color-border-soft);
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  overflow-x: auto;
+  font-size: var(--text-sm);
   line-height: 1.5;
 }
 
-.prose code span {
-  @apply font-medium;
+.article pre code {
+  font-family: var(--font-mono);
+  background: none;
+  padding: 0;
 }
 
-.prose img {
-  /* Don't apply styles to next/image */
-  @apply m-0;
+.article code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background-color: var(--color-code-bg);
+  padding: 0.1em 0.35em;
+  border-radius: 0.3rem;
 }
 
-.prose p {
-  @apply my-4 text-neutral-800 dark:text-neutral-200;
-}
-
-.prose h1 {
-  @apply text-4xl font-medium tracking-tight mt-6 mb-2;
-}
-
-.prose h2 {
-  @apply text-xl font-medium tracking-tight mt-6 mb-2;
-}
-
-.prose h3 {
-  @apply text-xl font-medium tracking-tight mt-6 mb-2;
-}
-
-.prose h4 {
-  @apply text-lg font-medium tracking-tight mt-6 mb-2;
-}
-
-.prose strong {
-  @apply font-medium;
-}
-
-.prose ul {
-  @apply list-disc pl-6 my-4;
-}
-
-.prose ol {
-  @apply list-decimal pl-6 my-4;
-}
-
-.prose > :first-child {
-  /* Override removing top margin, causing layout shift */
-  margin-top: 1.25em !important;
-  margin-bottom: 1.25em !important;
-}
-
-pre::-webkit-scrollbar {
+.article pre::-webkit-scrollbar {
   display: none;
 }
 
-pre {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-}
-
-/* Remove Safari input shadow on mobile */
-input[type='text'],
-input[type='email'] {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-}
-
-table {
-  display: block;
-  max-width: fit-content;
-  overflow-x: auto;
-  white-space: nowrap;
-}
-
-.title {
-  text-wrap: balance;
-}
-
-/* Add spacing for the footer links */
-footer ul {
-  @apply flex justify-center space-x-4;
-}
-
-footer ul li {
-  @apply inline-block;
+.article pre {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

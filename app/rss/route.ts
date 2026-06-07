@@ -1,25 +1,33 @@
-import { baseUrl } from 'app/sitemap'
-import { getBlogPosts } from 'app/blog/utils'
+import { baseUrl, site } from 'lib/site'
+import { getPublishedWriting } from 'lib/content'
+
+const RSS_DESCRIPTION =
+  'Essays on agents, customer context, workflow systems, and startup engineering.'
+const RSS_CONTENT_TYPE = 'text/xml'
+
+const XML_ESCAPES: Record<string, string> = {
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&apos;',
+}
+
+function escapeXml(value: string): string {
+  return value.replace(/[&<>"']/g, (char) => XML_ESCAPES[char] ?? char)
+}
 
 export async function GET() {
-  let allBlogs = await getBlogPosts()
+  const posts = getPublishedWriting()
 
-  const itemsXml = allBlogs
-    .sort((a, b) => {
-      if (new Date(a.metadata.publishedAt) > new Date(b.metadata.publishedAt)) {
-        return -1
-      }
-      return 1
-    })
+  const itemsXml = posts
     .map(
       (post) =>
         `<item>
-          <title>${post.metadata.title}</title>
-          <link>${baseUrl}/projects/${post.slug}</link>
-          <description>${post.metadata.summary || ''}</description>
-          <pubDate>${new Date(
-            post.metadata.publishedAt
-          ).toUTCString()}</pubDate>
+          <title>${escapeXml(post.title)}</title>
+          <link>${baseUrl}/writing/${post.slug}</link>
+          <description>${escapeXml(post.summary || '')}</description>
+          <pubDate>${new Date(post.date).toUTCString()}</pubDate>
         </item>`
     )
     .join('\n')
@@ -27,16 +35,16 @@ export async function GET() {
   const rssFeed = `<?xml version="1.0" encoding="UTF-8" ?>
   <rss version="2.0">
     <channel>
-        <title>My Portfolio</title>
+        <title>${site.name} · Writing</title>
         <link>${baseUrl}</link>
-        <description>This is my portfolio RSS feed</description>
+        <description>${RSS_DESCRIPTION}</description>
         ${itemsXml}
     </channel>
   </rss>`
 
   return new Response(rssFeed, {
     headers: {
-      'Content-Type': 'text/xml',
+      'Content-Type': RSS_CONTENT_TYPE,
     },
   })
 }

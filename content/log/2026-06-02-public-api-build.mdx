@@ -1,0 +1,26 @@
+---
+type: "build"
+date: "2026-06-02"
+title: "Notes from building a public API"
+summary: "Internal and external primitives are not the same object. Shipping a public API forces you to decide what your product actually is."
+tags: ["api", "devtools", "build"]
+flags:
+  detail: true
+---
+
+A few things shipping a public API at a startup taught me that internal services
+never did:
+
+- **The object model is the product.** Once external developers depend on your
+  resources, renaming a field is a breaking change, not a refactor. You're
+  forced to decide what your nouns really are.
+- **Internal primitives leak.** The shapes that were convenient for our own
+  services were almost never the shapes an outside developer wanted. The public
+  API is a second, more honest design pass.
+- **Docs and SDKs are part of the API.** An endpoint nobody can figure out how
+  to call doesn't exist. The surface area includes the examples.
+- **Backwards compatibility is a feature you sell.** Stability is the thing that
+  lets someone build on you at all.
+
+The throughline: a public API makes you commit. Internally you can be vague and
+patch it later. Externally, the contract is the product.

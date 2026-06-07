@@ -1,8 +1,12 @@
 import { ImageResponse } from 'next/og'
+import { site } from 'lib/site'
+
+const OG_WIDTH = 1200
+const OG_HEIGHT = 630
 
 export function GET(request: Request) {
-  let url = new URL(request.url)
-  let title = url.searchParams.get('title') || 'Next.js Portfolio Starter'
+  const url = new URL(request.url)
+  const title = url.searchParams.get('title') || site.name
 
   return new ImageResponse(
     (
@@ -15,8 +19,8 @@ export function GET(request: Request) {
       </div>
     ),
     {
-      width: 1200,
-      height: 630,
+      width: OG_WIDTH,
+      height: OG_HEIGHT,
     }
   )
 }

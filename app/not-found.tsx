@@ -1,10 +1,13 @@
+import Link from 'next/link'
+
 export default function NotFound() {
   return (
-    <section>
-      <h1 className="mb-8 text-2xl font-semibold tracking-tighter">
-        404 - Page Not Found
-      </h1>
-      <p className="mb-4">The page you are looking for does not exist.</p>
+    <section className="max-w-prose">
+      <h1 className="font-serif text-2xl tracking-tight">Not found</h1>
+      <p className="mt-3 text-muted">
+        That page doesn&rsquo;t exist. Head back{' '}
+        <Link href="/">home</Link> or to the <Link href="/log">log</Link>.
+      </p>
     </section>
   )
 }

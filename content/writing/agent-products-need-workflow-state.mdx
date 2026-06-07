@@ -1,0 +1,34 @@
+---
+title: "Agent products need workflow state"
+subtitle: "The best AI products expose less chat and more workflow state."
+date: "2026-05-28"
+status: "published"
+summary: "A short note on why useful agent products feel less like chat windows and more like quietly maintained workflow graphs."
+tags: ["agents", "workflow", "product"]
+featured: true
+canonical: true
+---
+
+The best AI products don't feel like chatbots. They feel like someone quietly
+cleaned up the workflow graph behind the scenes.
+
+A chat box is a great demo and a poor product surface. It hides the two things
+that actually make an agent useful: the **state** it's operating on, and the
+**actions** it's allowed to take. When those are invisible, every interaction
+starts from zero and the user has to re-explain the world.
+
+<SystemDiagram steps={["context", "tools", "workflow state", "review", "action"]} />
+
+The interesting work is in the middle of that line, not the ends. Models are
+abundant. The scarce thing is a harness that holds context, exposes the right
+tools, tracks where a task is in its lifecycle, routes the uncertain cases to a
+human, and closes the loop with notifications and feedback.
+
+<Callout>
+If your agent product is mostly a text box, you've shipped the model. You
+haven't shipped the system.
+</Callout>
+
+I'll write the longer version of this argument in *Agent Harnesses, Not
+Chatbots*. This is the one-paragraph version: build the workflow, then let the
+agent move through it.
