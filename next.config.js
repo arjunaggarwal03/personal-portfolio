@@ -1,10 +1,37 @@
+// Keep in sync with `baseUrl` in lib/site.ts (this file is plain CommonJS and
+// can't import the TS module).
+const BASE_URL = 'https://www.arjunaggarwal.dev'
+
+/**
+ * RFC 8288 Link header advertising agent-facing resources (llms.txt + RSS) so
+ * crawlers and agents can discover them without parsing HTML. Applied to every
+ * route; per-page canonicals are still emitted as <link> tags via metadata.
+ */
+const AGENT_LINK_HEADER = [
+  `<${BASE_URL}/llms.txt>; rel="alternate"; type="text/plain"; title="llms.txt"`,
+  `<${BASE_URL}/rss>; rel="alternate"; type="application/rss+xml"; title="RSS"`,
+].join(', ')
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
   outputFileTracingRoot: __dirname,
+  // The OG route reads this font from disk at runtime; make sure it ships in
+  // the serverless function bundle.
+  outputFileTracingIncludes: {
+    '/og': ['./app/og/fonts/**'],
+  },
   images: {
     formats: ['image/avif', 'image/webp'],
     remotePatterns: [{ protocol: 'https', hostname: '**' }],
+  },
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [{ key: 'Link', value: AGENT_LINK_HEADER }],
+      },
+    ]
   },
 }
 

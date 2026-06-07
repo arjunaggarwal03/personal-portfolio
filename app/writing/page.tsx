@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import { getWritingIndex } from 'lib/content'
+import { pageMetadata } from 'lib/seo'
 import { IndexRow } from 'app/components/index-row'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Writing',
   description:
     'Essays on agents, customer context, workflow systems, startup engineering, and the infrastructure around AI-native teams.',
-}
+  path: '/writing',
+})
 
 export default function WritingPage() {
   const posts = getWritingIndex()

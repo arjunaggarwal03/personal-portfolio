@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
 import { work, workDateRange } from 'content/work'
+import { pageMetadata } from 'lib/seo'
 import { IndexRow } from 'app/components/index-row'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Work',
   description:
     'A running history of the companies, systems, and products I have worked on.',
-}
+  path: '/work',
+})
 
 export default function WorkPage() {
   return (

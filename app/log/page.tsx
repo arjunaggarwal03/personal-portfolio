@@ -1,14 +1,15 @@
-import type { Metadata } from 'next'
 import { getLogFeed } from 'lib/content'
 import { applyLogFilter, activeFilterLabel, type LogQuery } from 'lib/filters'
+import { pageMetadata } from 'lib/seo'
 import { FilterBar } from 'app/components/filter-bar'
 import { LogEntryCard } from 'app/components/log-entry-card'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Log',
   description:
     "A messy index of what I'm noticing: work, cities, meals, music, films, links, clips, and half-formed thoughts.",
-}
+  path: '/log',
+})
 
 export default async function LogPage({
   searchParams,

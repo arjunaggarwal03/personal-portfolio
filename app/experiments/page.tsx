@@ -1,11 +1,12 @@
-import type { Metadata } from 'next'
 import { experiments, experimentGroupOrder } from 'content/experiments'
+import { pageMetadata } from 'lib/seo'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Early Experiments',
   description:
     'Older projects and prototypes from when I was circling around AI, search, systems, and developer tools.',
-}
+  path: '/experiments',
+})
 
 export default function ExperimentsPage() {
   const groups = experimentGroupOrder.filter((g) =>

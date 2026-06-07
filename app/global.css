@@ -1,7 +1,10 @@
 @import 'tailwindcss';
 
 @theme {
-  /* Warm editorial palette (doc section 6) */
+  /* Warm editorial palette (doc section 6).
+     NOTE: the `brand` map in lib/site.ts mirrors these values for code that
+     runs outside CSS (favicon/OG generators, manifest, theme-color). If you
+     change a color here, update lib/site.ts too. */
   --color-bg: #f8f5ee;
   --color-surface: #fffdf8;
   --color-surface-muted: #f1ece2;

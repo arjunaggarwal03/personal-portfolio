@@ -4,7 +4,9 @@ import { notFound } from 'next/navigation'
 import { getLogBySlug, getLogWithDetailPages, hasDetailPage } from 'lib/content'
 import { formatDate } from 'lib/dates'
 import { baseUrl } from 'lib/site'
+import { articleGraph, breadcrumbGraph, ogImageUrl } from 'lib/seo'
 import { CustomMDX } from 'app/components/mdx'
+import { JsonLd } from 'app/components/json-ld'
 import { RatingBadge } from 'app/components/rating-badge'
 import { TagList } from 'app/components/tag-pill'
 import { MediaEmbed } from 'app/components/media-embed'
@@ -31,7 +33,7 @@ export async function generateMetadata({
       description: entry.summary,
       type: 'article',
       url: `${baseUrl}/log/${entry.slug}`,
-      images: [`/og?title=${encodeURIComponent(title)}`],
+      images: [ogImageUrl(title)],
     },
   }
 }
@@ -45,6 +47,9 @@ export default async function LogDetail({
   const entry = getLogBySlug(slug)
   if (!entry || !hasDetailPage(entry)) notFound()
 
+  const title = entry.title ?? `Log: ${formatDate(entry.date)}`
+  const entryUrl = `${baseUrl}/log/${entry.slug}`
+
   const location = [
     entry.location?.venue,
     entry.location?.neighborhood,
@@ -56,6 +61,24 @@ export default async function LogDetail({
 
   return (
     <article className="max-w-prose">
+      <JsonLd
+        data={articleGraph({
+          title,
+          description: entry.summary,
+          url: entryUrl,
+          datePublished: entry.date,
+          dateModified: entry.updated ?? entry.date,
+          image: ogImageUrl(title),
+        })}
+      />
+      <JsonLd
+        data={breadcrumbGraph([
+          { name: 'Home', path: '' },
+          { name: 'Log', path: '/log' },
+          { name: title, path: `/log/${entry.slug}` },
+        ])}
+      />
+
       <p className="font-mono text-xs text-subtle">
         <Link href="/log" className="no-underline hover:text-accent">
           Log

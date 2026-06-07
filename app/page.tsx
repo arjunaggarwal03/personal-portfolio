@@ -1,11 +1,18 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { work, workDateRange } from 'content/work'
 import { getFeaturedWriting, getFeaturedLog } from 'lib/content'
 import { formatDateShort } from 'lib/dates'
 import { externalLinks } from 'lib/site'
+import { homeGraph } from 'lib/seo'
 import { SectionHeader } from 'app/components/section-header'
 import { SystemDiagram } from 'app/components/system-diagram'
 import { IndexRow } from 'app/components/index-row'
+import { JsonLd } from 'app/components/json-ld'
+
+export const metadata: Metadata = {
+  alternates: { canonical: '/' },
+}
 
 const SELECTED_COMPANIES = ['Lightfield', 'Amazon Web Services', 'Capital One']
 const HERO_STEPS = ['context', 'tools', 'workflow state', 'review', 'action']
@@ -22,6 +29,7 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col gap-14">
+      <JsonLd data={homeGraph()} />
       <section>
         <h1 className="font-serif text-3xl leading-tight tracking-tight">
           Arjun Aggarwal

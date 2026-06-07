@@ -1,11 +1,12 @@
 import './global.css'
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Inter, Newsreader, IBM_Plex_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { Header } from './components/header'
 import { Footer } from './components/footer'
-import { baseUrl, site } from 'lib/site'
+import { baseUrl, site, person, brand } from 'lib/site'
+import { ogImageUrl } from 'lib/seo'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -27,7 +28,27 @@ const ibmPlexMono = IBM_Plex_Mono({
   display: 'swap',
 })
 
-const defaultOgImage = `/og?title=${encodeURIComponent(site.name)}`
+const defaultOgImage = ogImageUrl(site.name)
+
+/**
+ * Browser/SERP title is just the name: short, and an exact match for the query
+ * we want to rank ("Arjun Aggarwal"). The longer role-qualified variant is kept
+ * for social share cards, where there's room and it reads well.
+ */
+const socialTitle = `${person.name} · ${person.jobTitle} at ${person.company}`
+
+/** Search-intent keywords: name variants first, then topics. */
+const keywords: string[] = [
+  'Arjun Aggarwal',
+  'Arjun Aggarwal Lightfield',
+  'Arjun Aggarwal engineer',
+  'Arjun Aggarwal San Francisco',
+  'Arjun Aggarwal founding engineer',
+  ...person.knowsAbout,
+]
+
+/** Optional Google Search Console verification token (set in Vercel env). */
+const googleSiteVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -36,25 +57,37 @@ export const metadata: Metadata = {
     template: `%s · ${site.name}`,
   },
   description: site.description,
+  applicationName: site.name,
+  authors: [{ name: person.name, url: baseUrl }],
+  creator: person.name,
+  publisher: person.name,
+  keywords,
+  category: 'technology',
+  // NOTE: no global `canonical` here. Next inherits metadata into child
+  // routes, so a canonical set in the layout makes every page canonicalize to
+  // it. Each page declares its own canonical instead.
   alternates: {
-    canonical: '/',
     types: {
       'application/rss+xml': `${baseUrl}/rss`,
     },
   },
   openGraph: {
-    title: site.name,
+    title: socialTitle,
     description: site.description,
     url: baseUrl,
     siteName: site.name,
     locale: 'en_US',
-    type: 'website',
+    type: 'profile',
+    firstName: 'Arjun',
+    lastName: 'Aggarwal',
+    username: 'arjunaggarwal',
     images: [defaultOgImage],
   },
   twitter: {
     card: 'summary_large_image',
-    title: site.name,
+    title: socialTitle,
     description: site.description,
+    creator: '@arjunaggarwal1',
     images: [defaultOgImage],
   },
   robots: {
@@ -68,6 +101,14 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+  ...(googleSiteVerification
+    ? { verification: { google: googleSiteVerification } }
+    : {}),
+}
+
+export const viewport: Viewport = {
+  themeColor: brand.bg,
+  colorScheme: 'light',
 }
 
 export default function RootLayout({

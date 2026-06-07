@@ -1,11 +1,12 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import { social } from 'lib/site'
+import { pageMetadata } from 'lib/seo'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Resume',
   description: 'Resume available on request.',
-}
+  path: '/resume',
+})
 
 export default function ResumePage() {
   return (

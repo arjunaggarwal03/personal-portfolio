@@ -3,8 +3,10 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getPublishedWriting, getWritingBySlug } from 'lib/content'
 import { formatDate } from 'lib/dates'
-import { baseUrl, site } from 'lib/site'
+import { baseUrl } from 'lib/site'
+import { articleGraph, breadcrumbGraph, ogImageUrl } from 'lib/seo'
 import { CustomMDX } from 'app/components/mdx'
+import { JsonLd } from 'app/components/json-ld'
 import { TagList } from 'app/components/tag-pill'
 
 export async function generateStaticParams() {
@@ -20,7 +22,7 @@ export async function generateMetadata({
   const post = getWritingBySlug(slug)
   if (!post) return {}
 
-  const ogImage = `${baseUrl}/og?title=${encodeURIComponent(post.title)}`
+  const ogImage = ogImageUrl(post.title)
   return {
     title: post.title,
     description: post.summary,
@@ -56,23 +58,26 @@ export default async function WritingDetail({
   const newer = index > 0 ? all[index - 1] : undefined
   const older = index < all.length - 1 ? all[index + 1] : undefined
 
+  const postUrl = `${baseUrl}/writing/${post.slug}`
+
   return (
     <article className="max-w-prose">
-      <script
-        type="application/ld+json"
-        suppressHydrationWarning
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'BlogPosting',
-            headline: post.title,
-            datePublished: post.date,
-            dateModified: post.updated ?? post.date,
-            description: post.summary,
-            url: `${baseUrl}/writing/${post.slug}`,
-            author: { '@type': 'Person', name: site.name },
-          }),
-        }}
+      <JsonLd
+        data={articleGraph({
+          title: post.title,
+          description: post.summary,
+          url: postUrl,
+          datePublished: post.date,
+          dateModified: post.updated ?? post.date,
+          image: ogImageUrl(post.title),
+        })}
+      />
+      <JsonLd
+        data={breadcrumbGraph([
+          { name: 'Home', path: '' },
+          { name: 'Writing', path: '/writing' },
+          { name: post.title, path: `/writing/${post.slug}` },
+        ])}
       />
 
       <header>
