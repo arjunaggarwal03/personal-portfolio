@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { footerLinks, isExternal, site } from 'lib/site'
+import { inlineLink } from 'lib/ui'
 
 export function Footer() {
   return (
@@ -22,17 +23,19 @@ export function Footer() {
                         ? 'noopener noreferrer'
                         : undefined
                     }
-                    className="no-underline hover:text-accent"
+                    className={inlineLink}
                   >
                     {link.label}
                   </a>
                 ) : (
-                  <Link href={link.href} className="no-underline hover:text-accent">
+                  <Link href={link.href} className={inlineLink}>
                     {link.label}
                   </Link>
                 )}
                 {i < footerLinks.length - 1 ? (
-                  <span className="text-subtle">·</span>
+                  <span aria-hidden="true" className="text-subtle">
+                    ·
+                  </span>
                 ) : null}
               </span>
             ))}

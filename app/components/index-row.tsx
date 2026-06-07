@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { titleLink } from 'lib/ui'
 import { TagList } from './tag-pill'
 
 export type IndexRowProps = {
@@ -10,6 +11,9 @@ export type IndexRowProps = {
   metaSlot?: React.ReactNode
   tags?: string[]
   tagHrefBase?: string
+  /** Heading level for the row title. Use 2 at the top of a page (directly
+   *  under the h1) and 3 when nested under an h2 section header. */
+  headingLevel?: 2 | 3
 }
 
 export function IndexRow({
@@ -21,19 +25,22 @@ export function IndexRow({
   metaSlot,
   tags,
   tagHrefBase,
+  headingLevel = 2,
 }: IndexRowProps) {
   const titleNode = href ? (
-    <Link href={href} className="no-underline hover:text-accent">
+    <Link href={href} className={titleLink}>
       {title}
     </Link>
   ) : (
     title
   )
 
+  const Heading = headingLevel === 2 ? 'h2' : 'h3'
+
   return (
     <div className="border-t border-border py-5 first:border-t-0">
       <div className="flex items-baseline justify-between gap-4">
-        <h3 className="font-serif text-lg tracking-tight">{titleNode}</h3>
+        <Heading className="font-serif text-lg tracking-tight">{titleNode}</Heading>
         {metaSlot ?? (
           meta ? (
             <span className="shrink-0 font-mono text-xs text-subtle">{meta}</span>

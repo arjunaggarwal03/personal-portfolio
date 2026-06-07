@@ -65,6 +65,7 @@ export default function HomePage() {
               kicker={item.role}
               meta={workDateRange(item)}
               description={item.summary}
+              headingLevel={3}
             />
           ))}
         </div>
@@ -86,6 +87,7 @@ export default function HomePage() {
                 href={post.status === 'published' ? `/writing/${post.slug}` : undefined}
                 description={post.summary}
                 meta={post.status === 'published' ? undefined : 'forthcoming'}
+                headingLevel={3}
               />
             ))}
           </div>

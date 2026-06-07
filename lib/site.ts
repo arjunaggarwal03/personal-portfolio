@@ -12,7 +12,7 @@ export const baseUrl = 'https://www.arjunaggarwal.dev'
  * truth. Keep in sync with global.css.
  */
 export const brand = {
-  bg: '#f8f5ee',
+  bg: '#f4ecd9',
   surface: '#fffdf8',
   ink: '#181713',
   muted: '#6f6a60',

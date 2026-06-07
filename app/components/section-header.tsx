@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { inlineLink } from 'lib/ui'
 
 export type SectionHeaderProps = {
   eyebrow?: string
@@ -27,7 +28,7 @@ export function SectionHeader({
         {href ? (
           <Link
             href={href}
-            className="shrink-0 font-mono text-xs text-muted no-underline hover:text-accent"
+            className={`shrink-0 font-mono text-xs text-muted ${inlineLink}`}
           >
             {hrefLabel ?? 'view all'}
           </Link>

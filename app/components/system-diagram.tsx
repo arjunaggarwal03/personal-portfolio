@@ -12,7 +12,9 @@ export function SystemDiagram({
           <span key={step}>
             {step}
             {i < steps.length - 1 ? (
-              <span className="px-1.5 text-subtle">→</span>
+              <span aria-hidden="true" className="px-1.5 text-subtle">
+                →
+              </span>
             ) : null}
           </span>
         ))}

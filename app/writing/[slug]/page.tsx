@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import { getPublishedWriting, getWritingBySlug } from 'lib/content'
 import { formatDate } from 'lib/dates'
 import { baseUrl } from 'lib/site'
+import { inlineLink } from 'lib/ui'
 import { articleGraph, breadcrumbGraph, ogImageUrl } from 'lib/seo'
 import { CustomMDX } from 'app/components/mdx'
 import { JsonLd } from 'app/components/json-ld'
@@ -102,9 +103,12 @@ export default async function WritingDetail({
         <CustomMDX source={post.body ?? ''} />
       </div>
 
-      <nav className="mt-16 flex justify-between gap-4 border-t border-border pt-6 font-mono text-xs">
+      <nav
+        aria-label="More writing"
+        className="mt-16 flex justify-between gap-4 border-t border-border pt-6 font-mono text-xs"
+      >
         {older ? (
-          <Link href={`/writing/${older.slug}`} className="text-muted no-underline hover:text-accent">
+          <Link href={`/writing/${older.slug}`} className={`text-muted ${inlineLink}`}>
             ← {older.title}
           </Link>
         ) : (
@@ -113,7 +117,7 @@ export default async function WritingDetail({
         {newer ? (
           <Link
             href={`/writing/${newer.slug}`}
-            className="text-right text-muted no-underline hover:text-accent"
+            className={`text-right text-muted ${inlineLink}`}
           >
             {newer.title} →
           </Link>

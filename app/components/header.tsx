@@ -16,7 +16,7 @@ export function Header() {
         >
           {site.name}
         </Link>
-        <nav className="flex items-center gap-5 font-mono text-sm">
+        <nav aria-label="Primary" className="flex items-center gap-5 font-mono text-sm">
           {navItems.map(({ path, label }) => {
             const active = pathname === path || pathname.startsWith(`${path}/`)
             return (
@@ -26,7 +26,7 @@ export function Header() {
                 aria-current={active ? 'page' : undefined}
                 className={
                   active
-                    ? 'text-ink no-underline decoration-accent underline underline-offset-4'
+                    ? 'text-ink decoration-accent underline underline-offset-4'
                     : 'text-muted no-underline hover:text-accent'
                 }
               >

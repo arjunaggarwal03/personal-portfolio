@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import { getLogBySlug, getLogWithDetailPages, hasDetailPage } from 'lib/content'
 import { formatDate } from 'lib/dates'
 import { baseUrl } from 'lib/site'
+import { inlineLink } from 'lib/ui'
 import { articleGraph, breadcrumbGraph, ogImageUrl } from 'lib/seo'
 import { CustomMDX } from 'app/components/mdx'
 import { JsonLd } from 'app/components/json-ld'
@@ -80,17 +81,15 @@ export default async function LogDetail({
       />
 
       <p className="font-mono text-xs text-subtle">
-        <Link href="/log" className="no-underline hover:text-accent">
+        <Link href="/log" className={inlineLink}>
           Log
         </Link>{' '}
         · {formatDate(entry.date)} · {entry.type}
       </p>
 
-      {entry.title ? (
-        <h1 className="mt-2 font-serif text-3xl leading-tight tracking-tight">
-          {entry.title}
-        </h1>
-      ) : null}
+      <h1 className="mt-2 font-serif text-3xl leading-tight tracking-tight">
+        {title}
+      </h1>
 
       <div className="mt-2 flex flex-wrap items-center gap-x-3">
         <RatingBadge rating={entry.rating} />

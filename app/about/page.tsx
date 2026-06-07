@@ -96,7 +96,9 @@ export default function AboutPage() {
                 {link.label}
               </a>
               {i < socialLinks.length - 1 ? (
-                <span className="px-1 text-subtle">·</span>
+                <span aria-hidden="true" className="px-1 text-subtle">
+                  ·
+                </span>
               ) : null}
             </span>
           ))}

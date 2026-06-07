@@ -116,9 +116,16 @@ export default function RootLayout({
       className={`${inter.variable} ${newsreader.variable} ${ibmPlexMono.variable}`}
     >
       <body className="min-h-screen">
+        <a href="#main-content" className="skip-link">
+          Skip to content
+        </a>
         <div className="flex min-h-screen flex-col">
           <Header />
-          <main className="mx-auto w-full max-w-[760px] flex-1 px-6 pt-10 md:pt-14">
+          <main
+            id="main-content"
+            tabIndex={-1}
+            className="mx-auto w-full max-w-[760px] flex-1 px-6 pt-10 md:pt-14"
+          >
             {children}
           </main>
           <Footer />

@@ -1,5 +1,6 @@
 import { experiments, experimentGroupOrder } from 'content/experiments'
 import { pageMetadata } from 'lib/seo'
+import { inlineLink } from 'lib/ui'
 
 export const metadata = pageMetadata({
   title: 'Early Experiments',
@@ -24,9 +25,9 @@ export default function ExperimentsPage() {
       <div className="mt-10 flex flex-col gap-10">
         {groups.map((group) => (
           <div key={group}>
-            <p className="mb-3 font-mono text-xs uppercase tracking-wider text-subtle">
+            <h2 className="mb-3 font-mono text-xs font-normal uppercase tracking-wider text-subtle">
               {group}
-            </p>
+            </h2>
             <div className="flex flex-col gap-4">
               {experiments
                 .filter((e) => e.group === group)
@@ -53,7 +54,7 @@ export default function ExperimentsPage() {
                             href={link.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-muted hover:text-accent"
+                            className={`text-muted ${inlineLink}`}
                           >
                             {link.label} →
                           </a>

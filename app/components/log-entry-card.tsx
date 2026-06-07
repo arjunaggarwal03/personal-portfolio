@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { inlineLink, titleLink } from 'lib/ui'
 import type { LogEntry } from 'lib/types'
 import { formatDateShort } from 'lib/dates'
 import { hasDetailPage } from 'lib/content'
@@ -18,7 +19,7 @@ export function LogEntryCard({ entry }: { entry: LogEntry }) {
 
   const titleNode = entry.title ? (
     detail ? (
-      <Link href={detail} className="no-underline hover:text-accent">
+      <Link href={detail} className={titleLink}>
         {entry.title}
       </Link>
     ) : (
@@ -34,7 +35,7 @@ export function LogEntryCard({ entry }: { entry: LogEntry }) {
       </div>
 
       {titleNode ? (
-        <h3 className="mt-1.5 font-serif text-lg tracking-tight">{titleNode}</h3>
+        <h2 className="mt-1.5 font-serif text-lg tracking-tight">{titleNode}</h2>
       ) : null}
 
       {entry.summary ? (
@@ -53,7 +54,7 @@ export function LogEntryCard({ entry }: { entry: LogEntry }) {
             href={entry.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="font-mono text-xs text-muted hover:text-accent"
+            className={`font-mono text-xs text-muted ${inlineLink}`}
           >
             {entry.source ?? new URL(entry.url).hostname.replace('www.', '')} →
           </a>
