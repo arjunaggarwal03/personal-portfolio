@@ -1,5 +1,4 @@
 import { pageMetadata } from 'lib/seo'
-import { social } from 'lib/site'
 import { ExternalLink } from 'app/components/external-link'
 
 export const metadata = pageMetadata({
@@ -9,7 +8,7 @@ export const metadata = pageMetadata({
   path: '/accessibility',
 })
 
-const email = social.email.replace('mailto:', '')
+const feedbackEmail = 'arjunaggarwal173@gmail.com'
 
 export default function AccessibilityPage() {
   return (
@@ -58,9 +57,9 @@ export default function AccessibilityPage() {
           conformance: Level A, Level AA, and Level AAA.
         </p>
         <p>
-          arjunaggarwal.dev is <strong>partially conformant</strong> with WCAG
-          2.2 Level AA. Partially conformant means that some parts of the content
-          do not fully conform to the accessibility standard.
+          arjunaggarwal.dev is <strong>fully conformant</strong> with WCAG 2.2
+          Level AA. Fully conformant means that the content fully conforms to the
+          accessibility standard without any exceptions.
         </p>
 
         <h2>Feedback</h2>
@@ -70,7 +69,7 @@ export default function AccessibilityPage() {
         </p>
         <ul>
           <li>
-            Email: <a href={social.email}>{email}</a>
+            Email: <a href={`mailto:${feedbackEmail}`}>{feedbackEmail}</a>
           </li>
         </ul>
         <p>I try to respond to feedback within 5 business days.</p>
@@ -95,11 +94,10 @@ export default function AccessibilityPage() {
 
         <h2>Limitations and alternatives</h2>
         <p>
-          Despite my best efforts to ensure accessibility of arjunaggarwal.dev,
-          there may be some limitations. The site is self-assessed and has not
-          been independently audited, so some content may not yet fully conform.
-          If you encounter a barrier that is not covered here, please contact me
-          using the details above.
+          I am not aware of any accessibility limitations on arjunaggarwal.dev at
+          this time. The site is self-assessed rather than independently audited,
+          so if you encounter a barrier that is not covered here, please contact
+          me using the details above and I will address it.
         </p>
 
         <h2>Assessment approach</h2>
