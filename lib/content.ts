@@ -45,7 +45,7 @@ export function plainTextLength(body?: string): number {
   const stripped = body
     .replace(/```[\s\S]*?```/g, ' ') // code fences
     .replace(/<[^>]+>/g, ' ') // jsx/html tags
-    .replace(/[#>*_`~\-]/g, ' ') // markdown markers
+    .replace(/[#>*_`~-]/g, ' ') // markdown markers
     .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1') // links -> text
     .replace(/\s+/g, ' ')
     .trim()
@@ -60,7 +60,7 @@ function toWritingPost(entry: RawEntry): WritingPost {
   const d = parseFrontmatter(
     writingFrontmatterSchema,
     entry.data,
-    `content/writing/${entry.slug}`
+    `content/writing/${entry.slug}`,
   )
   const body = entry.body
   return {
@@ -89,7 +89,8 @@ export function getWritingIndex(): WritingPost[] {
   const all = getAllWriting()
   if (!isProd) return all
   return all.filter(
-    (p) => p.status === 'published' || (p.status === 'forthcoming' && p.showOnIndex)
+    (p) =>
+      p.status === 'published' || (p.status === 'forthcoming' && p.showOnIndex),
   )
 }
 
@@ -104,7 +105,9 @@ export function getWritingBySlug(slug: string): WritingPost | undefined {
   return getPublishedWriting().find((p) => p.slug === slug)
 }
 
-export function getFeaturedWriting(limit = DEFAULT_FEATURED_WRITING): WritingPost[] {
+export function getFeaturedWriting(
+  limit = DEFAULT_FEATURED_WRITING,
+): WritingPost[] {
   const index = getWritingIndex()
   const featured = index.filter((p) => p.featured)
   const pool = featured.length > 0 ? featured : index
@@ -119,7 +122,7 @@ function toLogEntry(entry: RawEntry): LogEntry {
   const d = parseFrontmatter(
     logFrontmatterSchema,
     entry.data,
-    `content/log/${entry.slug}`
+    `content/log/${entry.slug}`,
   )
   return {
     id: entry.slug,
@@ -171,7 +174,7 @@ export function hasDetailPage(entry: LogEntry): boolean {
     entry.flags?.detail ||
       entry.type === 'essay' ||
       (entry.media && entry.media.length > 0) ||
-      plainTextLength(entry.body) > DETAIL_PAGE_MIN_PLAINTEXT
+      plainTextLength(entry.body) > DETAIL_PAGE_MIN_PLAINTEXT,
   )
 }
 
@@ -180,7 +183,7 @@ type LogEntryWithSlug = LogEntry & { slug: string }
 /** Log entries that should generate a standalone /log/[slug] route. */
 export function getLogWithDetailPages(): LogEntryWithSlug[] {
   return getVisibleLog().filter(
-    (e): e is LogEntryWithSlug => Boolean(e.slug) && hasDetailPage(e)
+    (e): e is LogEntryWithSlug => Boolean(e.slug) && hasDetailPage(e),
   )
 }
 

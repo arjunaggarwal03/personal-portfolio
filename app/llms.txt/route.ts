@@ -39,12 +39,13 @@ export function GET() {
     '## Writing',
     ...writing.map(
       (post) =>
-        `- [${post.title}](${baseUrl}/writing/${post.slug})${post.summary ? `: ${post.summary}` : ''}`
+        `- [${post.title}](${baseUrl}/writing/${post.slug})${post.summary ? `: ${post.summary}` : ''}`,
     ),
     '',
     '## Profiles',
     ...(Object.keys(social) as (keyof typeof social)[]).map(
-      (key) => `- ${PROFILE_LABELS[key]}: ${social[key].replace(/^mailto:/, '')}`
+      (key) =>
+        `- ${PROFILE_LABELS[key]}: ${social[key].replace(/^mailto:/, '')}`,
     ),
     '',
     '## Feeds',

@@ -57,7 +57,14 @@ const logType = z.enum([
 ])
 
 const mediaItemSchema = z.object({
-  kind: z.enum(['image', 'video', 'spotify', 'tweet', 'youtube', 'link-preview']),
+  kind: z.enum([
+    'image',
+    'video',
+    'spotify',
+    'tweet',
+    'youtube',
+    'link-preview',
+  ]),
   url: z.string().min(1),
   alt: z.string().optional(),
   caption: z.string().optional(),
@@ -68,7 +75,14 @@ const ratingSchema = z.object({
   value: z.number().optional(),
   max: z.number().optional(),
   label: z
-    .enum(['canon', 'revisit', 'liked', 'skip', 'in rotation', 'still thinking'])
+    .enum([
+      'canon',
+      'revisit',
+      'liked',
+      'skip',
+      'in rotation',
+      'still thinking',
+    ])
     .optional(),
 })
 
@@ -115,7 +129,7 @@ export type LogFrontmatter = z.infer<typeof logFrontmatterSchema>
 export function parseFrontmatter<T extends z.ZodTypeAny>(
   schema: T,
   data: unknown,
-  source: string
+  source: string,
 ): z.infer<T> {
   const result = schema.safeParse(data)
   if (!result.success) {

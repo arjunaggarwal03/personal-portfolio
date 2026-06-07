@@ -83,7 +83,7 @@ export type SiteLink = { label: string; href: string }
 export const social = {
   linkedin: 'https://www.linkedin.com/in/arjunaggarwal1/',
   github: 'https://github.com/arjunaggarwal03',
-  x: 'https://x.com/arjunaggarwal1',
+  x: 'https://x.com/arjunaggzz',
   email: 'mailto:arjun@arjunaggarwal.dev',
 } as const
 

@@ -41,7 +41,12 @@ export function ExternalLink({
   children: React.ReactNode
 }) {
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer" className={className}>
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={className}
+    >
       {children}
       <NewTabIndicator />
     </a>

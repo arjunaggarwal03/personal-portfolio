@@ -22,8 +22,17 @@ type Props = SvgProps &
  */
 const SvgIcon = forwardRef<SVGSVGElement, Props>(
   (
-    { alt, children, style, title, viewBox = '0 0 24 24', size, className, ...props },
-    ref
+    {
+      alt,
+      children,
+      style,
+      title,
+      viewBox = '0 0 24 24',
+      size,
+      className,
+      ...props
+    },
+    ref,
   ) => (
     <svg
       ref={ref}
@@ -40,7 +49,7 @@ const SvgIcon = forwardRef<SVGSVGElement, Props>(
       {children}
       {title ? <title>{title}</title> : null}
     </svg>
-  )
+  ),
 )
 
 SvgIcon.displayName = 'SvgIcon'

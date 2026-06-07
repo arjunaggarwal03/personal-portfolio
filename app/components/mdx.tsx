@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { MDXRemote, type MDXRemoteProps } from 'next-mdx-remote/rsc'
-import { highlight } from 'sugar-high'
+import { MDXRemote, type MDXRemoteProps } from 'next-mdx-remote-client/rsc'
+import rehypeShiki from '@shikijs/rehype'
 import remarkGfm from 'remark-gfm'
 import rehypeSlug from 'rehype-slug'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
@@ -9,11 +9,15 @@ import type { PluggableList } from 'unified'
 import { Callout, Aside, Quote, ImageWithCaption } from './prose'
 import { SystemDiagram } from './system-diagram'
 import { NewTabIndicator } from './external-link'
+import { codeTheme } from './code-theme'
 
 const remarkPlugins: PluggableList = [remarkGfm]
 const rehypePlugins: PluggableList = [
   rehypeSlug,
   [rehypeAutolinkHeadings, { behavior: 'wrap' }],
+  // Shiki highlights fenced code blocks at build time (VS Code-grade grammars)
+  // using our warm, WCAG-tuned theme. Replaces the runtime sugar-high call.
+  [rehypeShiki, { theme: codeTheme }],
 ]
 
 const mdxOptions = {
@@ -30,7 +34,7 @@ function CustomLink(props: React.AnchorHTMLAttributes<HTMLAnchorElement>) {
     )
   }
   if (href.startsWith('#')) {
-    return <a {...props} />
+    return <a {...props}>{props.children}</a>
   }
   const { children, ...rest } = props
   return (
@@ -39,11 +43,6 @@ function CustomLink(props: React.AnchorHTMLAttributes<HTMLAnchorElement>) {
       <NewTabIndicator />
     </a>
   )
-}
-
-function Code({ children, ...props }: { children?: string }) {
-  const codeHTML = highlight(typeof children === 'string' ? children : '')
-  return <code dangerouslySetInnerHTML={{ __html: codeHTML }} {...props} />
 }
 
 function MdxImage({ src, alt }: React.ImgHTMLAttributes<HTMLImageElement>) {
@@ -62,7 +61,6 @@ function MdxImage({ src, alt }: React.ImgHTMLAttributes<HTMLImageElement>) {
 
 const components = {
   a: CustomLink,
-  code: Code,
   img: MdxImage,
   Callout,
   Aside,
@@ -76,7 +74,7 @@ export function CustomMDX(props: MDXRemoteProps) {
     <MDXRemote
       {...props}
       options={mdxOptions}
-      components={{ ...components, ...(props.components || {}) }}
+      components={{ ...components, ...props.components }}
     />
   )
 }

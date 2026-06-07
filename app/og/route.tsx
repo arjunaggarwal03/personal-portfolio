@@ -18,7 +18,7 @@ const LONG_TITLE_THRESHOLD = 40
 // site's headline serif, so the OG title matches the on-page identity.
 // The file is kept in the function bundle via outputFileTracingIncludes.
 const newsreaderFont = readFileSync(
-  join(process.cwd(), 'app/og/fonts/newsreader-600.woff')
+  join(process.cwd(), 'app/og/fonts/newsreader-600.woff'),
 )
 
 export function GET(request: Request) {
@@ -27,56 +27,66 @@ export function GET(request: Request) {
   const isHome = title === site.name
 
   return new ImageResponse(
-    (
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        width: '100%',
+        height: '100%',
+        justifyContent: 'space-between',
+        backgroundColor: BG,
+        padding: '72px',
+      }}
+    >
       <div
         style={{
           display: 'flex',
-          flexDirection: 'column',
-          width: '100%',
-          height: '100%',
-          justifyContent: 'space-between',
-          backgroundColor: BG,
-          padding: '72px',
+          fontSize: 28,
+          color: ACCENT,
+          letterSpacing: 1,
         }}
       >
-        <div style={{ display: 'flex', fontSize: 28, color: ACCENT, letterSpacing: 1 }}>
-          {isHome ? `${person.jobTitle} at ${person.company}` : person.name}
-        </div>
-
-        <div
-          style={{
-            display: 'flex',
-            fontFamily: 'Newsreader',
-            fontSize: title.length > LONG_TITLE_THRESHOLD ? 64 : 84,
-            lineHeight: 1.05,
-            color: INK,
-            fontWeight: 600,
-            maxWidth: '900px',
-          }}
-        >
-          {title}
-        </div>
-
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'flex-end',
-            fontSize: 30,
-            color: MUTED,
-          }}
-        >
-          <div style={{ display: 'flex' }}>{person.location}</div>
-          <div style={{ display: 'flex', color: INK }}>{DOMAIN}</div>
-        </div>
+        {isHome ? `${person.jobTitle} at ${person.company}` : person.name}
       </div>
-    ),
+
+      <div
+        style={{
+          display: 'flex',
+          fontFamily: 'Newsreader',
+          fontSize: title.length > LONG_TITLE_THRESHOLD ? 64 : 84,
+          lineHeight: 1.05,
+          color: INK,
+          fontWeight: 600,
+          maxWidth: '900px',
+        }}
+      >
+        {title}
+      </div>
+
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'flex-end',
+          fontSize: 30,
+          color: MUTED,
+        }}
+      >
+        <div style={{ display: 'flex' }}>{person.location}</div>
+        <div style={{ display: 'flex', color: INK }}>{DOMAIN}</div>
+      </div>
+    </div>,
     {
       width: OG_WIDTH,
       height: OG_HEIGHT,
       fonts: [
-        { name: 'Newsreader', data: newsreaderFont, weight: 600, style: 'normal' },
+        {
+          name: 'Newsreader',
+          data: newsreaderFont,
+          weight: 600,
+          style: 'normal',
+        },
       ],
-    }
+    },
   )
 }

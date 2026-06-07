@@ -12,15 +12,16 @@ export const metadata = pageMetadata({
 
 export default function ExperimentsPage() {
   const groups = experimentGroupOrder.filter((g) =>
-    experiments.some((e) => e.group === g)
+    experiments.some((e) => e.group === g),
   )
 
   return (
     <section className="text-sm">
       <h1 className="font-serif text-2xl tracking-tight">Early Experiments</h1>
       <p className="mt-2 max-w-prose text-muted">
-        Older projects and prototypes from when I was circling around AI, search,
-        systems, and developer tools. Kept here for context, not as the headline.
+        Older projects and prototypes from when I was circling around AI,
+        search, systems, and developer tools. Kept here for context, not as the
+        headline.
       </p>
 
       <div className="mt-10 flex flex-col gap-10">

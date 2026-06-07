@@ -101,10 +101,10 @@ export default function AccessibilityPage() {
 
         <h2>Limitations and alternatives</h2>
         <p>
-          I am not aware of any accessibility limitations on arjunaggarwal.dev at
-          this time. The site is self-assessed rather than independently audited,
-          so if you encounter a barrier that is not covered here, please contact
-          me using the details above and I will address it.
+          I am not aware of any accessibility limitations on arjunaggarwal.dev
+          at this time. The site is self-assessed rather than independently
+          audited, so if you encounter a barrier that is not covered here,
+          please contact me using the details above and I will address it.
         </p>
 
         <h2>Assessment approach</h2>
@@ -121,10 +121,10 @@ export default function AccessibilityPage() {
         </ul>
         <p>
           Beyond this point-in-time review, every push and pull request runs an
-          automated Lighthouse accessibility audit (built on the same axe-core
-          engine) in continuous integration. A change cannot merge unless every
-          audited page keeps a perfect accessibility score, which keeps the
-          conformance claim above honest over time.
+          automated accessibility audit in continuous integration, using the
+          full axe-core WCAG 2.2 rule set driven by Playwright. A change cannot
+          merge while any audited page has an accessibility violation, which
+          keeps the conformance claim above honest over time.
         </p>
 
         <h2>Compatibility with browsers and assistive technology</h2>

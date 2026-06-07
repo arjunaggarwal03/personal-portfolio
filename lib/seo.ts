@@ -135,7 +135,12 @@ export function articleGraph(input: {
     image: input.image,
     inLanguage: 'en-US',
     mainEntityOfPage: { '@type': 'WebPage', '@id': input.url },
-    author: { '@id': PERSON_ID, '@type': 'Person', name: person.name, url: baseUrl },
+    author: {
+      '@id': PERSON_ID,
+      '@type': 'Person',
+      name: person.name,
+      url: baseUrl,
+    },
     publisher: { '@id': PERSON_ID },
     isPartOf: { '@id': WEBSITE_ID },
   }
@@ -143,7 +148,7 @@ export function articleGraph(input: {
 
 /** Breadcrumb trail for an inner page (helps SERP presentation + entity graph). */
 export function breadcrumbGraph(
-  trail: { name: string; path: string }[]
+  trail: { name: string; path: string }[],
 ): WithContext<BreadcrumbList> {
   return {
     '@context': 'https://schema.org',

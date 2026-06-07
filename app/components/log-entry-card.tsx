@@ -15,7 +15,8 @@ function metaLine(entry: LogEntry): string {
 }
 
 export function LogEntryCard({ entry }: { entry: LogEntry }) {
-  const detail = entry.slug && hasDetailPage(entry) ? `/log/${entry.slug}` : null
+  const detail =
+    entry.slug && hasDetailPage(entry) ? `/log/${entry.slug}` : null
   const media = entry.media ?? []
 
   const titleNode = entry.title ? (
@@ -36,7 +37,9 @@ export function LogEntryCard({ entry }: { entry: LogEntry }) {
       </div>
 
       {titleNode ? (
-        <h2 className="mt-1.5 font-serif text-lg tracking-tight">{titleNode}</h2>
+        <h2 className="mt-1.5 font-serif text-lg tracking-tight">
+          {titleNode}
+        </h2>
       ) : null}
 
       {entry.summary ? (

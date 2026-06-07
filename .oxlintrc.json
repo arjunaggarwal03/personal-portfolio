@@ -1,0 +1,32 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": [
+    "eslint",
+    "typescript",
+    "unicorn",
+    "oxc",
+    "react",
+    "jsx-a11y",
+    "nextjs",
+    "import"
+  ],
+  "env": {
+    "browser": true,
+    "node": true,
+    "es2024": true
+  },
+  "categories": {
+    "correctness": "error"
+  },
+  "rules": {
+    "jsx-a11y/media-has-caption": "off"
+  },
+  "ignorePatterns": [
+    ".next",
+    "out",
+    "node_modules",
+    "next-env.d.ts",
+    "test-results",
+    "playwright-report"
+  ]
+}

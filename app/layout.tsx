@@ -1,7 +1,7 @@
 import './global.css'
 import type { Metadata, Viewport } from 'next'
 import { Inter, Newsreader, IBM_Plex_Mono } from 'next/font/google'
-import { Analytics } from '@vercel/analytics/react'
+import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { Header } from './components/header'
 import { Footer } from './components/footer'
@@ -84,7 +84,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: socialTitle,
     description: site.description,
-    creator: '@arjunaggarwal1',
+    creator: '@arjunaggzz',
     images: [defaultOgImage],
   },
   robots: {

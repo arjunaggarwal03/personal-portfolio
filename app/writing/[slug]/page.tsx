@@ -108,7 +108,10 @@ export default async function WritingDetail({
         className="mt-16 flex justify-between gap-4 border-t border-border pt-6 font-mono text-xs"
       >
         {older ? (
-          <Link href={`/writing/${older.slug}`} className={`text-muted ${inlineLink}`}>
+          <Link
+            href={`/writing/${older.slug}`}
+            className={`text-muted ${inlineLink}`}
+          >
             ← {older.title}
           </Link>
         ) : (

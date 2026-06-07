@@ -56,19 +56,6 @@
 
   html {
     min-width: 320px;
-    /* sugar-high syntax tokens, tuned to the warm palette.
-       --sh-sign / --sh-comment darkened to #6b6353: on the code background
-       (--color-code-bg #efe7da) that is 4.84:1, clearing the 4.5:1 floor for
-       normal text (WCAG 1.4.3). The old #9a9285 was only 2.5:1. */
-    --sh-class: #7c4a32;
-    --sh-identifier: #181713;
-    --sh-sign: #6b6353;
-    --sh-string: #5b6b3a;
-    --sh-keyword: #9e3b2f;
-    --sh-comment: #6b6353;
-    --sh-jsxliterals: #5a5340;
-    --sh-property: #7c4a32;
-    --sh-entity: #7c4a32;
   }
 
   body {

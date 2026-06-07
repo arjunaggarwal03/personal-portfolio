@@ -15,7 +15,13 @@ export function TagPill({ tag, href }: { tag: string; href?: string }) {
   return <span className={TAG_BASE_CLASS}>{tag}</span>
 }
 
-export function TagList({ tags, hrefBase }: { tags?: string[]; hrefBase?: string }) {
+export function TagList({
+  tags,
+  hrefBase,
+}: {
+  tags?: string[]
+  hrefBase?: string
+}) {
   if (!tags || tags.length === 0) return null
   return (
     <div className="flex flex-wrap gap-1.5">

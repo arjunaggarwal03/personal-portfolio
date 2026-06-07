@@ -22,25 +22,29 @@ are just MDX or TypeScript files under `content/`.
 
 ## Stack
 
-- **Next.js 15** (App Router) + **React 19**
+- **Next.js 16** (App Router) + **React 19**
 - **Tailwind CSS v4** (design tokens via `@theme` in `app/global.css`)
-- **MDX** content via `next-mdx-remote/rsc` (v6) + `gray-matter` frontmatter,
-  with `remark-gfm` (tables/strikethrough/autolinks) and `rehype-slug` +
-  `rehype-autolink-headings` (deep-linkable headings)
+- **MDX** content via `next-mdx-remote-client/rsc` + `gray-matter` frontmatter,
+  with `remark-gfm` (tables/strikethrough/autolinks), `rehype-slug` +
+  `rehype-autolink-headings` (deep-linkable headings), and `@shikijs/rehype`
+  for build-time syntax highlighting (warm theme in `app/components/code-theme.ts`)
 - **Frontmatter validation** via `zod` schemas (`lib/schemas.ts`): malformed
   content fails the build with a file-scoped error
 - Images via `next/image`; fonts: Newsreader (serif), Inter (sans), IBM Plex
   Mono (mono) via `next/font`
-- ESLint **flat config** (`eslint.config.mjs`), ready for Next 16
+- **Oxlint** for linting (`.oxlintrc.json`: Next.js + jsx-a11y + react + import
+  rules) and **Biome** for formatting (`biome.json`) — both Rust, no ESLint
 
 ## Scripts
 
 ```bash
-npm run dev        # local dev server
-npm run build      # production build (also typechecks + lints)
-npm run start      # serve the production build
-npm run lint       # eslint
-npm run typecheck  # tsc --noEmit
+npm run dev          # local dev server
+npm run build        # production build (also typechecks)
+npm run start        # serve the production build
+npm run lint         # oxlint
+npm run format       # biome format --write .
+npm run format:check # biome format . (CI: fails on unformatted files)
+npm run typecheck    # tsc --noEmit
 ```
 
 ## Project structure

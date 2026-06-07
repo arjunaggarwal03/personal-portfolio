@@ -27,7 +27,6 @@ function youtubeEmbedUrl(url: string): string {
   return match ? `${YOUTUBE_EMBED_BASE}${match[1]}` : url
 }
 
-
 function Frame({
   children,
   ratio = DEFAULT_ASPECT_RATIO,
@@ -91,6 +90,7 @@ export function MediaEmbed({ item }: { item: MediaItem }) {
         <figure className="m-0">
           <video
             src={item.url}
+            aria-label={item.alt ?? item.caption ?? 'Embedded video'}
             controls
             playsInline
             preload="metadata"
@@ -141,7 +141,9 @@ export function MediaEmbed({ item }: { item: MediaItem }) {
             <NewTabIndicator />
           </span>
           {item.caption ? (
-            <span className="mt-1 block text-sm text-muted">{item.caption}</span>
+            <span className="mt-1 block text-sm text-muted">
+              {item.caption}
+            </span>
           ) : null}
         </a>
       )

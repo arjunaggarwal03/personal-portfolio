@@ -9,7 +9,9 @@ export const experiments: Experiment[] = [
     summary:
       'Semantic document search built at UMD\u2019s Bitcamp, before ChatGPT made this obvious. Search documents by meaning and related terms instead of verbatim matches.',
     tags: ['nlp', 'semantic-search'],
-    links: [{ label: 'GitHub', url: 'https://github.com/arjunaggarwal03/bytesize' }],
+    links: [
+      { label: 'GitHub', url: 'https://github.com/arjunaggarwal03/bytesize' },
+    ],
   },
   {
     title: 'Hermes',
@@ -58,7 +60,10 @@ export const experiments: Experiment[] = [
       'A visualization of applied linear algebra: rotating and projecting platonic solids from 3D to 2D with transformation matrices in OpenCV.',
     tags: ['graphics', 'opencv', 'linear-algebra'],
     links: [
-      { label: 'GitHub', url: 'https://github.com/arjunaggarwal03/platonic-rotation' },
+      {
+        label: 'GitHub',
+        url: 'https://github.com/arjunaggarwal03/platonic-rotation',
+      },
     ],
   },
 ]

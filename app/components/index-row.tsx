@@ -40,12 +40,15 @@ export function IndexRow({
   return (
     <div className="border-t border-border py-5 first:border-t-0">
       <div className="flex items-baseline justify-between gap-4">
-        <Heading className="font-serif text-lg tracking-tight">{titleNode}</Heading>
-        {metaSlot ?? (
-          meta ? (
-            <span className="shrink-0 font-mono text-xs text-subtle">{meta}</span>
-          ) : null
-        )}
+        <Heading className="font-serif text-lg tracking-tight">
+          {titleNode}
+        </Heading>
+        {metaSlot ??
+          (meta ? (
+            <span className="shrink-0 font-mono text-xs text-subtle">
+              {meta}
+            </span>
+          ) : null)}
       </div>
       {kicker ? (
         <p className="mt-0.5 font-mono text-xs text-subtle">{kicker}</p>

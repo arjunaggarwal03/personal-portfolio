@@ -6,7 +6,7 @@ type SpotifyIframeApi = {
   createController: (
     element: HTMLElement,
     options: Record<string, unknown>,
-    callback: (controller: { destroy: () => void }) => void
+    callback: (controller: { destroy: () => void }) => void,
   ) => void
 }
 
@@ -24,7 +24,8 @@ const SPOTIFY_URL_PATTERN =
 let apiPromise: Promise<SpotifyIframeApi> | null = null
 
 function loadSpotifyApi(): Promise<SpotifyIframeApi> {
-  if (window.__spotifyIframeApi) return Promise.resolve(window.__spotifyIframeApi)
+  if (window.__spotifyIframeApi)
+    return Promise.resolve(window.__spotifyIframeApi)
   if (!apiPromise) {
     apiPromise = new Promise<SpotifyIframeApi>((resolve) => {
       window.onSpotifyIframeApiReady = (api) => {

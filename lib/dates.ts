@@ -42,6 +42,6 @@ export function formatDateShort(date: string): string {
 
 export function sortByDateDesc<T extends { date: string }>(items: T[]): T[] {
   return [...items].sort((a, b) =>
-    new Date(a.date) > new Date(b.date) ? -1 : 1
+    new Date(a.date) > new Date(b.date) ? -1 : 1,
   )
 }

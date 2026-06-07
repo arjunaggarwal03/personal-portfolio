@@ -10,12 +10,13 @@
 
 # next.js
 /.next/
-/.next-prod/
 /out/
 
-# lighthouse ci
-/.lighthouseci/
-/.lighthouseci-local/
+# playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
 
 # production
 /build

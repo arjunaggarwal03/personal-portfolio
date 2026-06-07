@@ -42,18 +42,20 @@ export default function AboutPage() {
       <div className="article mt-8">
         <p>
           I&rsquo;m a founding engineer at{' '}
-          <ExternalLink href={externalLinks.lightfield}>Lightfield</ExternalLink>{' '}
-          in San Francisco, where we&rsquo;re building an agentic CRM for companies
-          built with their customers.
+          <ExternalLink href={externalLinks.lightfield}>
+            Lightfield
+          </ExternalLink>{' '}
+          in San Francisco, where we&rsquo;re building an agentic CRM for
+          companies built with their customers.
         </p>
 
         <p>
           The old CRM was designed for the layer between builders and customers.
           In AI-native companies, that line is starting to blur: sales, product,
-          engineering, delivery, and agents all need the same live picture of the
-          customer. My work sits underneath that shift: public APIs, workflow
-          automation, agent tools, human-in-the-loop review, notifications, and
-          core CRM surfaces.
+          engineering, delivery, and agents all need the same live picture of
+          the customer. My work sits underneath that shift: public APIs,
+          workflow automation, agent tools, human-in-the-loop review,
+          notifications, and core CRM surfaces.
         </p>
 
         <p>

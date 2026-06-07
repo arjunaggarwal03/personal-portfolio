@@ -16,7 +16,10 @@ export function Header() {
         >
           {site.name}
         </Link>
-        <nav aria-label="Primary" className="flex items-center gap-5 font-mono text-sm">
+        <nav
+          aria-label="Primary"
+          className="flex items-center gap-5 font-mono text-sm"
+        >
           {navItems.map(({ path, label }) => {
             const active = pathname === path || pathname.startsWith(`${path}/`)
             return (

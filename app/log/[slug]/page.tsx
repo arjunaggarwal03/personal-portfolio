@@ -119,7 +119,9 @@ export default async function LogDetail({
 
       {entry.url ? (
         <p className="mt-5">
-          <ExternalLink href={entry.url}>{entry.source ?? 'Source'}</ExternalLink>
+          <ExternalLink href={entry.url}>
+            {entry.source ?? 'Source'}
+          </ExternalLink>
         </p>
       ) : null}
 

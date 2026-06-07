@@ -22,7 +22,7 @@ const LATEST_LOG_COUNT = 5
 
 export default function HomePage() {
   const selectedWork = SELECTED_COMPANIES.map((name) =>
-    work.find((w) => w.company === name)
+    work.find((w) => w.company === name),
   ).filter((w): w is NonNullable<typeof w> => Boolean(w))
 
   const featuredWriting = getFeaturedWriting(FEATURED_WRITING_COUNT)
@@ -37,14 +37,16 @@ export default function HomePage() {
         </h1>
         <p className="mt-4 max-w-prose text-md leading-relaxed">
           Founding engineer at{' '}
-          <ExternalLink href={externalLinks.lightfield}>Lightfield</ExternalLink>
+          <ExternalLink href={externalLinks.lightfield}>
+            Lightfield
+          </ExternalLink>
           , building agentic CRM and customer-context infrastructure in San
           Francisco.
         </p>
         <p className="mt-4 max-w-prose text-muted">
-          I&rsquo;m interested in systems that turn scattered context into useful
-          work: agents, APIs, workflow automation, developer tools, and the
-          infrastructure around customer-facing teams.
+          I&rsquo;m interested in systems that turn scattered context into
+          useful work: agents, APIs, workflow automation, developer tools, and
+          the infrastructure around customer-facing teams.
         </p>
         <SystemDiagram steps={HERO_STEPS} />
       </section>
@@ -83,7 +85,11 @@ export default function HomePage() {
               <IndexRow
                 key={post.slug}
                 title={post.title}
-                href={post.status === 'published' ? `/writing/${post.slug}` : undefined}
+                href={
+                  post.status === 'published'
+                    ? `/writing/${post.slug}`
+                    : undefined
+                }
                 description={post.summary}
                 meta={post.status === 'published' ? undefined : 'forthcoming'}
                 headingLevel={3}
@@ -92,8 +98,9 @@ export default function HomePage() {
           </div>
         ) : (
           <p className="max-w-prose text-muted">
-            Essays in progress on agents, customer context, workflow systems, and
-            startup engineering. <Link href="/writing">See what&rsquo;s coming →</Link>
+            Essays in progress on agents, customer context, workflow systems,
+            and startup engineering.{' '}
+            <Link href="/writing">See what&rsquo;s coming →</Link>
           </p>
         )}
       </section>
@@ -108,7 +115,10 @@ export default function HomePage() {
         {latestLog.length > 0 ? (
           <div className="flex flex-col">
             {latestLog.map((entry) => (
-              <div key={entry.id} className="border-t border-border py-3 first:border-t-0">
+              <div
+                key={entry.id}
+                className="border-t border-border py-3 first:border-t-0"
+              >
                 <p className="font-mono text-xs text-subtle">
                   {formatDateShort(entry.date)} · {entry.type}
                 </p>
@@ -127,8 +137,9 @@ export default function HomePage() {
           </div>
         ) : (
           <p className="max-w-prose text-muted">
-            A running index of what I&rsquo;m noticing: work, cities, meals, music,
-            films, links, and half-formed thoughts. <Link href="/log">Open the log →</Link>
+            A running index of what I&rsquo;m noticing: work, cities, meals,
+            music, films, links, and half-formed thoughts.{' '}
+            <Link href="/log">Open the log →</Link>
           </p>
         )}
       </section>
