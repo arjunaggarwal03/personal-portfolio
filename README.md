@@ -137,3 +137,8 @@ Edit the typed arrays in [`content/work.ts`](content/work.ts) and
 - `sitemap.xml` and `rss` include public, published content only.
 
 In dev (`npm run dev`) drafts are visible so you can preview them.
+
+## License
+
+Code is licensed under the MIT License. Site content (writing, log entries,
+copy, and images) is © 2026 Arjun Aggarwal, all rights reserved.
