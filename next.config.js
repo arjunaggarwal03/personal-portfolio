@@ -16,6 +16,11 @@ const AGENT_LINK_HEADER = [
 const nextConfig = {
   pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
   outputFileTracingRoot: __dirname,
+  // Baked in at build time (= deploy time on Vercel) so the /now "This site"
+  // tile can show how long ago the running build shipped, without an API call.
+  env: {
+    BUILD_TIME: new Date().toISOString(),
+  },
   // The OG route reads this font from disk at runtime; make sure it ships in
   // the serverless function bundle.
   outputFileTracingIncludes: {

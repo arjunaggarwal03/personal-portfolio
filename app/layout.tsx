@@ -66,6 +66,8 @@ export const metadata: Metadata = {
   alternates: {
     types: {
       'application/rss+xml': `${baseUrl}/rss`,
+      'application/atom+xml': `${baseUrl}/atom`,
+      'application/feed+json': `${baseUrl}/feed.json`,
     },
   },
   openGraph: {

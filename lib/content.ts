@@ -1,5 +1,6 @@
 import fs from 'fs'
 import path from 'path'
+import { cache } from 'react'
 import matter from 'gray-matter'
 import readingTime from 'reading-time'
 import type { LogEntry, WritingPost } from './types'
@@ -80,9 +81,12 @@ function toWritingPost(entry: RawEntry): WritingPost {
   }
 }
 
-function getAllWriting(): WritingPost[] {
-  return sortByDateDesc(readCollection(WRITING_DIR).map(toWritingPost))
-}
+// Read + parse + sort once per request: a single page render fans out into
+// several of the helpers below (index, slug lookup, prev/next, metadata), and
+// without this each call would re-walk the directory and re-parse every file.
+const getAllWriting = cache((): WritingPost[] =>
+  sortByDateDesc(readCollection(WRITING_DIR).map(toWritingPost)),
+)
 
 /** Posts that can appear on the Writing index. */
 export function getWritingIndex(): WritingPost[] {
@@ -145,9 +149,9 @@ function toLogEntry(entry: RawEntry): LogEntry {
   }
 }
 
-function getAllLog(): LogEntry[] {
-  return sortByDateDesc(readCollection(LOG_DIR).map(toLogEntry))
-}
+const getAllLog = cache((): LogEntry[] =>
+  sortByDateDesc(readCollection(LOG_DIR).map(toLogEntry)),
+)
 
 /** Entries visible at all (excludes drafts + private in prod). */
 function getVisibleLog(): LogEntry[] {

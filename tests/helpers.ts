@@ -6,6 +6,7 @@ export const PAGE_ROUTES = [
   '/work',
   '/writing',
   '/log',
+  '/now',
   '/about',
   '/experiments',
   '/resume',
@@ -15,6 +16,8 @@ export const PAGE_ROUTES = [
 /** Non-HTML endpoints, each with the content-type it is required to serve. */
 export const ENDPOINTS: { path: string; contentType: RegExp }[] = [
   { path: '/rss', contentType: /application\/rss\+xml/ },
+  { path: '/atom', contentType: /application\/atom\+xml/ },
+  { path: '/feed.json', contentType: /application\/feed\+json/ },
   { path: '/sitemap.xml', contentType: /xml/ },
   { path: '/robots.txt', contentType: /text\/plain/ },
   { path: '/llms.txt', contentType: /text\/plain/ },

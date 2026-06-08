@@ -12,6 +12,7 @@ const ROUTES = [
   '/work',
   '/writing',
   '/log',
+  '/now',
   '/about',
   '/experiments',
   '/resume',

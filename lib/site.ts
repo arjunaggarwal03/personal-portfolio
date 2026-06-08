@@ -74,6 +74,7 @@ export const navItems: NavItem[] = [
   { path: '/work', label: 'Work' },
   { path: '/writing', label: 'Writing' },
   { path: '/log', label: 'Log' },
+  { path: '/now', label: 'Now' },
   { path: '/about', label: 'About' },
 ]
 

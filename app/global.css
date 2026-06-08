@@ -122,6 +122,25 @@
   transform: translateY(0);
 }
 
+/* Equalizer bars for the /now "Listening" tile — a quiet sign of life while a
+   track is actually playing. Each bar sets its own --eq-delay inline so they
+   fall out of phase. Neutralized by the reduced-motion block below. */
+@keyframes now-eq {
+  0%,
+  100% {
+    transform: scaleY(0.3);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+.now-eq-bar {
+  transform-origin: bottom;
+  animation: now-eq 900ms ease-in-out infinite;
+  animation-delay: var(--eq-delay, 0ms);
+}
+
 /* Respect reduced motion globally */
 @media (prefers-reduced-motion: reduce) {
   *,
