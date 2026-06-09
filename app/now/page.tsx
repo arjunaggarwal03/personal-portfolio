@@ -34,8 +34,7 @@ export default function NowPage() {
         </span>
       </div>
       <p className="mt-3 max-w-prose text-muted">
-        No bio, no status update I&rsquo;ll forget to change — just live signals
-        from the things I&rsquo;m actually doing right now.
+        Some live, mostly random data about me right now.
       </p>
       <p className="mt-1">
         <LiveClock />

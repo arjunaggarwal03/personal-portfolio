@@ -1,6 +1,7 @@
 import { getSite } from 'lib/now/vercel'
 import { relativeTime } from 'lib/now/format'
 import { ExternalLink } from '../external-link'
+import { LivePing } from './live-ping'
 import { NowEmpty, NowTile } from './now-tile'
 
 const EYEBROW = 'This site'
@@ -17,34 +18,12 @@ export async function SiteTile() {
   }
 
   const { deploy, ping } = data
-  const up = Boolean(ping?.ok)
+  const initial = ping ? { ms: ping.ms, ok: ping.ok } : null
 
   return (
     <NowTile eyebrow={EYEBROW} fetchedAt={fetchedAt}>
       <div className="flex h-full flex-col gap-2">
-        <div className="flex items-center gap-2">
-          <span
-            className={`inline-block h-1.5 w-1.5 rounded-full ${
-              up ? 'animate-pulse bg-accent' : 'bg-subtle'
-            }`}
-            aria-hidden="true"
-          />
-          <span className="text-[0.95rem] text-ink">
-            {up ? 'Operational' : 'No response'}
-          </span>
-        </div>
-
-        {up && ping ? (
-          <p className="leading-none">
-            <span className="font-serif text-4xl tracking-tight text-ink">
-              {ping.ms}
-            </span>
-            <span className="text-sm text-muted">ms</span>
-            <span className="ml-2 font-mono text-[0.7rem] uppercase tracking-wider text-subtle">
-              live ping
-            </span>
-          </p>
-        ) : null}
+        <LivePing initial={initial} />
 
         {deploy ? (
           <div className="mt-auto flex flex-col gap-1 border-t border-border-soft pt-3">

@@ -24,14 +24,20 @@ export type Track = {
   image: string | null
   /** Whether this is currently playing (vs. most recently played). */
   nowPlaying: boolean
+  /**
+   * Album-art accent, extracted server-side and clamped into the site's warm
+   * palette. Drives the cover glow + progress/equalizer tint. Null when no art
+   * or extraction failed — the UI falls back to the default accent.
+   */
+  color?: string | null
+  /** ISO timestamp this track was played (recently-played items only). */
+  playedAt?: string
 }
 
 export type Listening = {
   current: Track | null
   recent: Track[]
   topTrack: Track | null
-  /** Top artists over the last ~4 weeks (names only). */
-  topArtists: string[]
   /**
    * Playback progress for the currently-playing track, in milliseconds.
    * Both null unless something is actively playing (drives the progress bar).
@@ -70,7 +76,11 @@ export type ContributionDay = {
 
 export type Building = {
   commits: Commit[]
-  /** Commits pushed in the trailing 7 days, across public events. */
+  /**
+   * Commits authored in the trailing 7 days (GraphQL `totalCommitContributions`,
+   * with a public commit-search fallback). Counts commits specifically — not all
+   * contributions — so private/restricted activity doesn't inflate the number.
+   */
   commitsThisWeek: number
   /**
    * Recent contribution calendar, as weeks of days (Sun→Sat). Sourced from the
