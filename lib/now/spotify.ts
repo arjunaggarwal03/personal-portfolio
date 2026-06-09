@@ -1,5 +1,5 @@
 import { clampChroma, formatHex, oklch } from 'culori'
-import { Vibrant } from 'node-vibrant/node'
+import sharp from 'sharp'
 import type { Listening, NowPlaying, SourceResult, Track } from './types'
 
 /**
@@ -152,6 +152,22 @@ function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
   return Promise.race([promise, timeout]).finally(() => clearTimeout(timer))
 }
 
+/**
+ * Fetch the cover and pull its dominant color with sharp (already in the tree
+ * for Next's image optimization), then bend it onto the site palette. sharp's
+ * histogram-based `dominant` gives a stable representative hue; `toAccent`
+ * clamps lightness/chroma so the exact swatch choice doesn't matter — only the
+ * hue carries through to the glow.
+ */
+async function dominantAccent(url: string): Promise<string | null> {
+  const res = await fetch(url)
+  if (!res.ok) return null
+  const buf = Buffer.from(await res.arrayBuffer())
+  const { dominant } = await sharp(buf).stats()
+  if (!dominant) return null
+  return toAccent(dominant.r, dominant.g, dominant.b)
+}
+
 async function extractColor(url: string | null): Promise<string | null> {
   if (!url) return null
   const cached = colorCache.get(url)
@@ -164,20 +180,7 @@ async function extractColor(url: string | null): Promise<string | null> {
 
   let result: string | null = null
   try {
-    const palette = await withTimeout(
-      Vibrant.from(url).getPalette(),
-      COLOR_TIMEOUT_MS,
-    )
-    const swatch =
-      palette.Vibrant ??
-      palette.LightVibrant ??
-      palette.DarkVibrant ??
-      palette.Muted ??
-      null
-    if (swatch) {
-      const [r, g, b] = swatch.rgb
-      result = toAccent(r, g, b)
-    }
+    result = await withTimeout(dominantAccent(url), COLOR_TIMEOUT_MS)
   } catch {
     result = null
   }
