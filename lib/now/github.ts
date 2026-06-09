@@ -60,9 +60,16 @@ async function searchCommits(
   }
 }
 
-const CONTRIB_QUERY = `query($login:String!){
+// One round-trip for both signals: `week` scopes a fresh collection to the
+// trailing 7 days and reads *commits only* (the headline number), while
+// `calendar` pulls the full trailing-year calendar for the heatmap. Counting
+// commits — not total contributions — keeps the number honest: the all-in
+// contribution total is dominated by private/restricted activity the visitor
+// can't see, so it reads as implausibly high for a public commit count.
+const CONTRIB_QUERY = `query($login:String!,$from:DateTime!){
   user(login:$login){
-    contributionsCollection{
+    week: contributionsCollection(from:$from){ totalCommitContributions }
+    calendar: contributionsCollection{
       contributionCalendar{
         weeks{ contributionDays{ date contributionCount } }
       }
@@ -76,20 +83,29 @@ type GqlWeek = {
 type GqlResponse = {
   data?: {
     user?: {
-      contributionsCollection?: { contributionCalendar?: { weeks?: GqlWeek[] } }
+      week?: { totalCommitContributions?: number }
+      calendar?: { contributionCalendar?: { weeks?: GqlWeek[] } }
     }
   }
 }
 
+type ContributionData = {
+  /** Heatmap weeks (Sun→Sat); empty when no token / on failure. */
+  weeks: ContributionDay[][]
+  /** Commits authored in the trailing 7 days; null when unavailable. */
+  commitsThisWeek: number | null
+}
+
 /**
- * Trailing contribution calendar via the GraphQL API, grouped as weeks of days
- * (Sun→Sat) for the heatmap. GraphQL requires a token (any classic PAT works,
- * no scopes needed for public contributions); returns [] when none is set or on
- * any failure, so the rest of the tile still renders.
+ * Trailing contribution calendar + 7-day commit count via the GraphQL API.
+ * GraphQL requires a token (any classic PAT works, no scopes needed for public
+ * contributions); returns empty/null when none is set or on any failure, so the
+ * rest of the tile still renders.
  */
-async function fetchContributions(user: string): Promise<ContributionDay[][]> {
-  if (!process.env.GITHUB_TOKEN) return []
+async function fetchContributions(user: string): Promise<ContributionData> {
+  if (!process.env.GITHUB_TOKEN) return { weeks: [], commitsThisWeek: null }
   try {
+    const from = new Date(Date.now() - WEEK_MS).toISOString()
     const res = await fetch(`${API}/graphql`, {
       method: 'POST',
       headers: {
@@ -98,23 +114,26 @@ async function fetchContributions(user: string): Promise<ContributionDay[][]> {
       },
       body: JSON.stringify({
         query: CONTRIB_QUERY,
-        variables: { login: user },
+        variables: { login: user, from },
       }),
       next: { revalidate: REVALIDATE },
     })
-    if (!res.ok) return []
+    if (!res.ok) return { weeks: [], commitsThisWeek: null }
     const json = (await res.json()) as GqlResponse
-    const weeks =
-      json.data?.user?.contributionsCollection?.contributionCalendar?.weeks ??
-      []
-    return weeks.slice(-HEATMAP_WEEKS).map((w) =>
+    const rawWeeks =
+      json.data?.user?.calendar?.contributionCalendar?.weeks ?? []
+    const weeks = rawWeeks.slice(-HEATMAP_WEEKS).map((w) =>
       w.contributionDays.map((d) => ({
         date: d.date,
         count: d.contributionCount,
       })),
     )
+    return {
+      weeks,
+      commitsThisWeek: json.data?.user?.week?.totalCommitContributions ?? null,
+    }
   } catch {
-    return []
+    return { weeks: [], commitsThisWeek: null }
   }
 }
 
@@ -122,11 +141,8 @@ export async function getBuilding(): Promise<SourceResult<Building>> {
   const user = username()
   if (!user) return { state: 'unconfigured', data: null, fetchedAt: now() }
 
-  const weekAgoDate = new Date(Date.now() - WEEK_MS).toISOString().split('T')[0]
-
-  const [recent, week, contributions] = await Promise.all([
+  const [recent, contrib] = await Promise.all([
     searchCommits(`author:${user}`, COMMIT_LIMIT),
-    searchCommits(`author:${user} author-date:>=${weekAgoDate}`, 1),
     fetchContributions(user),
   ])
 
@@ -144,9 +160,21 @@ export async function getBuilding(): Promise<SourceResult<Building>> {
     return { state: 'empty', data: null, fetchedAt: now() }
   }
 
+  // Prefer the GraphQL commit count (reliable, private+public). Fall back to a
+  // public commit search only when no token is configured.
+  let commitsThisWeek = contrib.commitsThisWeek
+  if (commitsThisWeek === null) {
+    const weekAgo = new Date(Date.now() - WEEK_MS).toISOString().split('T')[0]
+    const week = await searchCommits(
+      `author:${user} author-date:>=${weekAgo}`,
+      1,
+    )
+    commitsThisWeek = week?.total_count ?? 0
+  }
+
   return {
     state: 'ok',
-    data: { commits, commitsThisWeek: week?.total_count ?? 0, contributions },
+    data: { commits, commitsThisWeek, contributions: contrib.weeks },
     fetchedAt: now(),
   }
 }

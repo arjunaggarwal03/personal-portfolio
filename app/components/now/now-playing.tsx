@@ -27,6 +27,10 @@ import { ExternalLink } from '../external-link'
 const POLL_MS = 10_000
 const TICK_MS = 1_000
 
+/** Per-bar animation offsets (ms) for the equalizer — hoisted so the array
+ *  isn't reallocated on every poll-driven re-render. */
+const EQ_DELAYS = [0, 180, 360] as const
+
 const perfNow = () =>
   typeof performance !== 'undefined' ? performance.now() : Date.now()
 
@@ -47,40 +51,63 @@ type Playback = {
   anchor: number
 }
 
-function Equalizer() {
+function Equalizer({ accent }: { accent: string | null }) {
   return (
     <span aria-hidden="true" className="flex h-3 items-end gap-[2px]">
-      {[0, 180, 360].map((delay) => (
+      {EQ_DELAYS.map((delay) => (
         <span
           key={delay}
-          className="now-eq-bar h-full w-[3px] rounded-sm bg-accent"
-          style={{ '--eq-delay': `${delay}ms` } as CSSProperties}
+          className="now-eq-bar h-full w-[3px] rounded-sm bg-accent transition-colors duration-700"
+          style={
+            {
+              '--eq-delay': `${delay}ms`,
+              ...(accent ? { backgroundColor: accent } : {}),
+            } as CSSProperties
+          }
         />
       ))}
     </span>
   )
 }
 
-function Cover({ track }: { track: Track | null }) {
+function Cover({
+  track,
+  accent,
+}: {
+  track: Track | null
+  accent: string | null
+}) {
   return (
-    <div className="relative aspect-square w-full overflow-hidden rounded-lg border border-border-soft bg-surface-muted">
-      {track?.image ? (
-        <Image
-          key={track.image}
-          src={track.image}
-          alt=""
-          fill
-          sizes="(min-width: 768px) 20rem, 100vw"
-          className="object-cover"
-        />
-      ) : (
-        <span
+    <div className="relative">
+      {track?.image && accent ? (
+        // Soft album-art halo: a blurred, color-tinted pool behind the cover
+        // that bleeds past its edges. Cross-fades when the accent changes
+        // (track change) via the background-color transition.
+        <div
           aria-hidden="true"
-          className="absolute inset-0 grid place-items-center font-serif text-3xl text-subtle/60"
-        >
-          ♪
-        </span>
-      )}
+          className="pointer-events-none absolute inset-0 z-0 rounded-2xl opacity-45 blur-2xl transition-[background-color] duration-700 ease-out"
+          style={{ backgroundColor: accent }}
+        />
+      ) : null}
+      <div className="relative z-10 aspect-square w-full overflow-hidden rounded-lg border border-border-soft bg-surface-muted">
+        {track?.image ? (
+          <Image
+            key={track.image}
+            src={track.image}
+            alt=""
+            fill
+            sizes="(min-width: 768px) 20rem, 100vw"
+            className="object-cover"
+          />
+        ) : (
+          <span
+            aria-hidden="true"
+            className="absolute inset-0 grid place-items-center font-serif text-3xl text-subtle/60"
+          >
+            ♪
+          </span>
+        )}
+      </div>
     </div>
   )
 }
@@ -96,12 +123,14 @@ function TrackProgress({
   baseMs,
   durationMs,
   anchor,
+  accent,
   onEnded,
 }: {
   isPlaying: boolean
   baseMs: number
   durationMs: number | null
   anchor: number
+  accent: string | null
   onEnded: () => void
 }) {
   const barRef = useRef<HTMLDivElement>(null)
@@ -149,8 +178,11 @@ function TrackProgress({
     >
       <div
         ref={fillRef}
-        className="h-full rounded-full bg-accent transition-[width] duration-1000 ease-linear"
-        style={{ width: `${startPct}%` }}
+        className="h-full rounded-full bg-accent transition-[width,background-color] duration-1000 ease-linear"
+        style={{
+          width: `${startPct}%`,
+          ...(accent ? { backgroundColor: accent } : {}),
+        }}
       />
     </div>
   )
@@ -193,6 +225,7 @@ export function NowPlaying({ initial }: { initial: NowPlayingData }) {
   }, [snap])
 
   const { track, isPlaying, baseMs, durationMs, anchor } = state
+  const accent = track?.color ?? null
   const status = isPlaying
     ? 'now playing'
     : durationMs !== null
@@ -201,11 +234,11 @@ export function NowPlaying({ initial }: { initial: NowPlayingData }) {
 
   return (
     <div className="flex flex-col gap-4">
-      <Cover track={track} />
+      <Cover track={track} accent={accent} />
 
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2">
-          {isPlaying ? <Equalizer /> : null}
+          {isPlaying ? <Equalizer accent={accent} /> : null}
           <span className="font-mono text-[0.7rem] uppercase tracking-wider text-subtle">
             {status}
           </span>
@@ -232,6 +265,7 @@ export function NowPlaying({ initial }: { initial: NowPlayingData }) {
           baseMs={baseMs}
           durationMs={durationMs}
           anchor={anchor}
+          accent={accent}
           onEnded={() => {
             void mutate()
           }}

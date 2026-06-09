@@ -9,7 +9,7 @@ export function TileSkeleton({
   lines?: number
 }) {
   return (
-    <section className="flex h-full flex-col rounded-lg border border-border bg-surface p-5">
+    <section className="flex h-full flex-col rounded-xl border border-border-soft bg-surface p-5 shadow-tile">
       <div className="font-mono text-xs uppercase tracking-wider text-subtle">
         {eyebrow}
       </div>

@@ -1,3 +1,5 @@
+import { clampChroma, formatHex, oklch } from 'culori'
+import { Vibrant } from 'node-vibrant/node'
 import type { Listening, NowPlaying, SourceResult, Track } from './types'
 
 /**
@@ -17,8 +19,6 @@ const TOKEN_URL = 'https://accounts.spotify.com/api/token'
 const API = 'https://api.spotify.com/v1'
 
 const RECENT_LIMIT = 4
-/** Refresh the live data at most this often (seconds). */
-const REVALIDATE = 60
 
 const now = () => new Date().toISOString()
 
@@ -31,8 +31,6 @@ type SpotifyTrack = {
   duration_ms?: number
   external_urls?: { spotify?: string }
 }
-
-const TOP_ARTIST_LIMIT = 5
 
 function isConfigured(): boolean {
   return Boolean(
@@ -104,11 +102,101 @@ function toTrack(track: SpotifyTrack, nowPlaying: boolean): Track {
   }
 }
 
+// --- Album-art accent extraction -------------------------------------------
+// Pull a dominant swatch from the cover and bend it into the site's warm
+// palette so every album lands in a harmonious mid-tone band (never neon,
+// never washed-out) that reads as an accent on the cream surface AND works as
+// a soft glow. Memoized by image URL — album art is immutable, so each cover
+// is decoded at most once no matter how many polls reuse it.
+
+const colorCache = new Map<string, string | null>()
+const COLOR_TIMEOUT_MS = 2500
+/** Cap the memo so a long-lived server instance can't grow it unbounded. */
+const COLOR_CACHE_MAX = 64
+
+function clamp(n: number, lo: number, hi: number): number {
+  return Math.min(hi, Math.max(lo, n))
+}
+
+/**
+ * Bend a swatch into the site's accent band using OKLCH. Because OKLCH is
+ * perceptually uniform, clamping lightness + chroma into a narrow band makes
+ * every album land at the *same apparent* brightness/saturation — only the hue
+ * varies. (HSL clamping couldn't do this: equal HSL lightness looks far
+ * brighter for yellow/green than for blue/purple, so glows were inconsistent.)
+ * A hueless (grayscale) cover defaults to the warm terracotta hue so its glow
+ * still reads on-palette. `clampChroma` gamut-maps back into sRGB.
+ */
+function toAccent(r: number, g: number, b: number): string | null {
+  const c = oklch({ mode: 'rgb', r: r / 255, g: g / 255, b: b / 255 })
+  if (!c) return null
+  const tuned = clampChroma(
+    {
+      mode: 'oklch',
+      l: clamp(c.l, 0.55, 0.62),
+      c: clamp(c.c ?? 0, 0.09, 0.14),
+      h: c.h ?? 50,
+    },
+    'oklch',
+  )
+  return formatHex(tuned) ?? null
+}
+
+function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined
+  const timeout = new Promise<T>((_, reject) => {
+    timer = setTimeout(() => reject(new Error('color timeout')), ms)
+  })
+  // Clear the timer once the race settles so the rejection callback (and its
+  // captured promise) can't linger for the full timeout after a fast decode.
+  return Promise.race([promise, timeout]).finally(() => clearTimeout(timer))
+}
+
+async function extractColor(url: string | null): Promise<string | null> {
+  if (!url) return null
+  const cached = colorCache.get(url)
+  if (cached !== undefined) {
+    // Touch on read so the cap below evicts genuinely-cold covers (LRU).
+    colorCache.delete(url)
+    colorCache.set(url, cached)
+    return cached
+  }
+
+  let result: string | null = null
+  try {
+    const palette = await withTimeout(
+      Vibrant.from(url).getPalette(),
+      COLOR_TIMEOUT_MS,
+    )
+    const swatch =
+      palette.Vibrant ??
+      palette.LightVibrant ??
+      palette.DarkVibrant ??
+      palette.Muted ??
+      null
+    if (swatch) {
+      const [r, g, b] = swatch.rgb
+      result = toAccent(r, g, b)
+    }
+  } catch {
+    result = null
+  }
+  if (colorCache.size >= COLOR_CACHE_MAX) {
+    const oldest = colorCache.keys().next().value
+    if (oldest !== undefined) colorCache.delete(oldest)
+  }
+  colorCache.set(url, result)
+  return result
+}
+
 async function apiGet<T>(path: string, token: string): Promise<T | null> {
   try {
     const res = await fetch(`${API}${path}`, {
       headers: { Authorization: `Bearer ${token}` },
-      next: { revalidate: REVALIDATE },
+      // Never cache: /now is rendered per request, so each refresh should show
+      // the genuinely-current track + recently-played list, not a 60s-stale
+      // snapshot. The token cache + color memo keep this cheap.
+      cache: 'no-store',
     })
     // 204 = nothing currently playing; treat as no data, not an error.
     if (res.status === 204 || !res.ok) return null
@@ -126,22 +214,18 @@ export async function getListening(): Promise<SourceResult<Listening>> {
   const token = await getAccessToken()
   if (!token) return { state: 'empty', data: null, fetchedAt: now() }
 
-  const [current, recent, top, topArtistsRes] = await Promise.all([
+  const [current, recent, top] = await Promise.all([
     apiGet<{
       item: SpotifyTrack | null
       is_playing: boolean
       progress_ms: number | null
     }>('/me/player/currently-playing', token),
-    apiGet<{ items: { track: SpotifyTrack }[] }>(
+    apiGet<{ items: { track: SpotifyTrack; played_at: string }[] }>(
       `/me/player/recently-played?limit=${RECENT_LIMIT}`,
       token,
     ),
     apiGet<{ items: SpotifyTrack[] }>(
       '/me/top/tracks?time_range=short_term&limit=1',
-      token,
-    ),
-    apiGet<{ items: SpotifyArtist[] }>(
-      `/me/top/artists?time_range=short_term&limit=${TOP_ARTIST_LIMIT}`,
       token,
     ),
   ])
@@ -153,17 +237,21 @@ export async function getListening(): Promise<SourceResult<Listening>> {
   const durationMs = playing ? (current?.item?.duration_ms ?? null) : null
 
   const recentTracks: Track[] = (recent?.items ?? [])
-    .map((i) => i.track)
-    .filter(Boolean)
-    .map((t) => toTrack(t, false))
+    .filter((i) => i.track)
+    .map((i) => ({ ...toTrack(i.track, false), playedAt: i.played_at }))
 
   const topTrack = top?.items?.[0] ? toTrack(top.items[0], false) : null
 
-  const topArtists = (topArtistsRes?.items ?? []).map((a) => a.name)
-
-  const hasAny =
-    currentTrack || recentTracks.length > 0 || topTrack || topArtists.length > 0
+  const hasAny = currentTrack || recentTracks.length > 0 || topTrack
   if (!hasAny) return { state: 'empty', data: null, fetchedAt: now() }
+
+  // Only the headline cover drives the hero glow (the recently-played
+  // thumbnails don't use an accent), so extract a single color for whichever
+  // track becomes the headline — current → most-recent → top — instead of
+  // decoding covers whose accent is never read. Mutating the headline object
+  // colors the exact instance the tile re-selects with the same precedence.
+  const headline = currentTrack ?? recentTracks[0] ?? topTrack
+  if (headline) headline.color = await extractColor(headline.image)
 
   return {
     state: 'ok',
@@ -171,7 +259,6 @@ export async function getListening(): Promise<SourceResult<Listening>> {
       current: currentTrack,
       recent: recentTracks,
       topTrack,
-      topArtists,
       progressMs,
       durationMs,
     },
@@ -179,27 +266,15 @@ export async function getListening(): Promise<SourceResult<Listening>> {
   }
 }
 
-// Briefly cache the live snapshot so concurrent client polls collapse into at
-// most one upstream Spotify call per window — keeps us well clear of the
-// per-app rate limit no matter how many tabs are open.
-let nowCache: { result: SourceResult<NowPlaying>; expires: number } | null =
-  null
-const NOW_TTL_MS = 5000
-
 /**
  * Single-purpose, low-latency playback snapshot for the client poller. Only
- * touches `/me/player/currently-playing` (one request) and skips Next's data
- * cache so each refresh is genuinely current.
+ * touches `/me/player/currently-playing` (one request). Bursts are collapsed at
+ * the CDN, not here: the /api/now-playing route sets `s-maxage` +
+ * `stale-while-revalidate`, so Vercel serves nearly every poll from the edge
+ * and this function only runs once per window globally (across all visitors and
+ * instances) — something a per-instance memory cache could never coordinate.
  */
 export async function getNowPlaying(): Promise<SourceResult<NowPlaying>> {
-  if (nowCache && nowCache.expires > Date.now()) return nowCache.result
-
-  const result = await fetchNowPlaying()
-  nowCache = { result, expires: Date.now() + NOW_TTL_MS }
-  return result
-}
-
-async function fetchNowPlaying(): Promise<SourceResult<NowPlaying>> {
   if (!isConfigured()) {
     return { state: 'unconfigured', data: null, fetchedAt: now() }
   }
@@ -234,6 +309,8 @@ async function fetchNowPlaying(): Promise<SourceResult<NowPlaying>> {
       progress_ms: number | null
     }
     const playing = Boolean(body.is_playing && body.item)
+    const track = body.item ? toTrack(body.item, playing) : null
+    if (track) track.color = await extractColor(track.image)
 
     // Keep position/duration whenever there's an item — a paused track reports
     // is_playing:false but still has a meaningful progress_ms, so the client can
@@ -242,7 +319,7 @@ async function fetchNowPlaying(): Promise<SourceResult<NowPlaying>> {
       state: 'ok',
       data: {
         isPlaying: playing,
-        track: body.item ? toTrack(body.item, playing) : null,
+        track,
         progressMs: body.item ? (body.progress_ms ?? null) : null,
         durationMs: body.item ? (body.item.duration_ms ?? null) : null,
       },

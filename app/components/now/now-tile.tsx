@@ -13,7 +13,7 @@ export function NowTile({
 }) {
   const stamp = fetchedAt ? relativeTime(fetchedAt) : null
   return (
-    <section className="flex h-full flex-col rounded-lg border border-border bg-surface p-5">
+    <section className="flex h-full flex-col rounded-xl border border-border-soft bg-surface p-5 shadow-tile">
       <div className="flex items-baseline justify-between gap-3">
         <h2 className="font-mono text-xs uppercase tracking-wider text-subtle">
           {eyebrow}
