@@ -66,6 +66,21 @@ function openBrowser(url) {
   })
 }
 
+/** Escape a string for safe interpolation into HTML text/attribute context. */
+function escapeHtml(value) {
+  return String(value).replace(
+    /[&<>"']/g,
+    (ch) =>
+      ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;',
+      })[ch],
+  )
+}
+
 /** Replace or append a KEY=value line in .env, preserving the rest. */
 function writeEnvValue(key, value) {
   let body = ''
@@ -121,7 +136,7 @@ const server = createServer(async (req, res) => {
   }
 
   if (error) {
-    done(400, `<h2>✗ Authorization denied</h2><p>${error}</p>`)
+    done(400, `<h2>✗ Authorization denied</h2><p>${escapeHtml(error)}</p>`)
     console.error(`\n✗ Authorization denied: ${error}\n`)
     server.close()
     process.exit(1)
@@ -148,7 +163,10 @@ const server = createServer(async (req, res) => {
     server.close()
     process.exit(0)
   } catch (e) {
-    done(500, `<h2>✗ Token exchange failed</h2><pre>${e.message}</pre>`)
+    done(
+      500,
+      `<h2>✗ Token exchange failed</h2><pre>${escapeHtml(e.message)}</pre>`,
+    )
     console.error(`\n✗ ${e.message}\n`)
     server.close()
     process.exit(1)
