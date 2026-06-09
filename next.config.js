@@ -28,7 +28,15 @@ const nextConfig = {
   },
   images: {
     formats: ['image/avif', 'image/webp'],
-    remotePatterns: [{ protocol: 'https', hostname: '**' }],
+    // Scope the optimizer to hosts we actually render (Spotify album art on the
+    // /now tiles). A `**` wildcard turns the optimizer into an open proxy for
+    // arbitrary remote images — a cost/abuse vector Next explicitly warns
+    // against. Add a pattern here when introducing images from a new host.
+    remotePatterns: [
+      { protocol: 'https', hostname: 'i.scdn.co' },
+      { protocol: 'https', hostname: '**.scdn.co' },
+      { protocol: 'https', hostname: '**.spotifycdn.com' },
+    ],
   },
   async headers() {
     return [

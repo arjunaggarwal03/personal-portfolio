@@ -18,7 +18,11 @@ import { parseRoute, type Route } from 'lib/now/regions'
  * fallback; once mounted, real visitor samples take over and feed the sparkline.
  */
 
-const POLL_MS = 4000
+// Each probe is an uncached, force-dynamic function invocation (it has to be —
+// it measures the visitor's real round-trip and reads x-vercel-id per request).
+// 10s keeps the tile feeling live while cutting invocations ~2.5× vs. 4s; SWR
+// already pauses polling on hidden tabs.
+const POLL_MS = 10_000
 /** Width of the sparkline in slots; also the history we keep. */
 const SLOTS = 32
 

@@ -87,6 +87,15 @@ export function GET(request: Request) {
           style: 'normal',
         },
       ],
+      // This is a dynamic Route Handler (reads ?title=), so Next leaves it
+      // uncached by default — every social-card fetch re-runs Satori. The output
+      // is deterministic per URL and Vercel purges the CDN on each deploy, so a
+      // long-lived shared cache is safe: the function runs ~once per unique
+      // title, then the edge serves the rest. Set on ImageResponse directly so
+      // it overrides @vercel/og's default Cache-Control (Next ≥15 merge fix).
+      headers: {
+        'Cache-Control': 'public, immutable, no-transform, max-age=31536000',
+      },
     },
   )
 }
