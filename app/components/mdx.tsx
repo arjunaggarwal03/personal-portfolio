@@ -45,7 +45,7 @@ function CustomLink(props: React.AnchorHTMLAttributes<HTMLAnchorElement>) {
   )
 }
 
-function MdxImage({ src, alt }: React.ImgHTMLAttributes<HTMLImageElement>) {
+function MdxImage({ src, alt }: { src?: string; alt?: string }) {
   if (typeof src !== 'string') return null
   return (
     <Image
@@ -70,11 +70,17 @@ const components = {
 }
 
 export function CustomMDX(props: MDXRemoteProps) {
+  // Cast: parent-directory @types/react can collide with the local install and
+  // make MDX component prop types fail assignability without a real runtime bug.
   return (
     <MDXRemote
       {...props}
       options={mdxOptions}
-      components={{ ...components, ...props.components }}
+      components={
+        { ...components, ...props.components } as NonNullable<
+          MDXRemoteProps['components']
+        >
+      }
     />
   )
 }

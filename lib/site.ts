@@ -27,9 +27,15 @@ export const site = {
   role: 'Founding engineer at Lightfield',
   location: 'San Francisco',
   description:
-    'Founding engineer at Lightfield, building agentic CRM and customer-context infrastructure in San Francisco.',
+    'Founding engineer at Lightfield in San Francisco. I work across product and systems, and write about what changes when models begin operating software alongside people.',
+  /** Homepage-specific meta description (slightly more concrete than site-wide). */
+  homeDescription:
+    'Founding engineer at Lightfield in San Francisco, working across AI product development, APIs, workflows, and CRM systems.',
+  /** Short machine-readable page summary for AI-facing and structured surfaces. */
+  summary:
+    'Work, writing, and a personal record from Arjun Aggarwal, a founding engineer at Lightfield in San Francisco.',
   /** Small rotating-feel line shown in the footer. */
-  currentlyThinking: 'agents, workflow state, customer context',
+  currentlyThinking: 'what software assumes when a person is operating it',
 } as const
 
 /**
@@ -47,14 +53,14 @@ export const person = {
   /** Headshot in /public. Square; used for the Person schema image. */
   image: '/arjun-aggarwal.jpg',
   /** One-sentence, third-person bio that LLMs and rich results can quote. */
-  bio: 'Arjun Aggarwal is a founding engineer at Lightfield in San Francisco, where he builds agentic CRM and customer-context infrastructure: public APIs, workflow automation, agent tools, and human-in-the-loop systems.',
+  bio: 'Arjun Aggarwal is a founding engineer at Lightfield in San Francisco. He works across APIs, agent tools, workflows, and CRM product surfaces, and writes about the technical and product decisions behind software operated by both people and models.',
   knowsAbout: [
-    'AI agents',
-    'agentic CRM',
-    'customer context infrastructure',
-    'workflow automation',
+    'AI products',
+    'software engineering',
+    'distributed systems',
     'developer tools',
-    'graph machine learning',
+    'workflow design',
+    'graph systems',
     'startup engineering',
   ],
   /** Prior affiliations, for entity disambiguation. */
@@ -64,6 +70,7 @@ export const person = {
     'Amazon Web Services',
     'Capital One',
     'Bank of America',
+    'Mindgrasp',
     'University of Maryland',
   ],
 } as const

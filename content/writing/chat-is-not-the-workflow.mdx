@@ -1,0 +1,100 @@
+---
+title: "Chat is not the workflow"
+subtitle: "Conversation is useful while intent is forming. It becomes brittle when it also has to carry state, ownership, and consequences."
+date: "2026-06-08"
+status: "published"
+summary: "What building agent actions inside a CRM changed about how I think about chat, workflow state, and human control."
+tags: ["AI products", "workflows", "product engineering"]
+featured: true
+canonical: true
+---
+
+I used to think chat was mostly a temporary interface: useful for demonstrating
+a model, but unlikely to remain the center of serious software. Building agent
+tools inside a CRM has made me less certain.
+
+Chat is unusually good while a person is still forming an intention. It lets
+someone express an incomplete thought, revise the request, and supply context
+the product never modeled. A form asks the user to think like the database. A
+conversation can meet them earlier, before the request has a clean shape.
+
+The problem begins when the conversation is also expected to become the workflow
+engine, audit log, and system of record.
+
+Consider a simple request: “Follow up with them next week.”
+
+The sentence is easy for a person to understand and underspecified for software.
+Who is “them”? Does “next week” mean Monday, seven days from now, or before the
+next meeting? Who owns the follow-up? Is the user asking for a reminder, an
+email draft, or an email to be sent? What happens if the opportunity changes
+before then?
+
+A capable model can infer many of those answers. That does not mean it should
+hide the inferences.
+
+Once the request becomes work inside a shared product, several people and
+systems may interact with it. A teammate might edit the task. A manager might
+need to approve the action. A notification might fire. The customer record might
+change while approval is pending. The action might succeed technically and still
+produce the wrong social outcome.
+
+At that point, the conversation is no longer enough. The product needs an
+explicit representation of what has been proposed, which facts support it, who
+owns it, what state it is in, what it will change, and whether it can be
+reversed.
+
+This changed the way I think about the boundary between chat and workflow.
+
+The clean version of the argument is that chat should capture intent and a
+workflow system should execute it. Reality is messier. Intent often continues to
+evolve after execution begins. Users learn what they meant by seeing a proposed
+action. Review is not only a safety gate; it is another turn in the process of
+specifying the work.
+
+That makes the interface a product question, not simply an infrastructure
+choice.
+
+From the model’s perspective, a larger action space is more capable. From the
+engineer’s perspective, narrower operations are easier to validate, retry, and
+observe. From the user’s perspective, capability and reliability matter only if
+the action is understandable enough to trust. Those perspectives do not always
+point toward the same design.
+
+My current view is that the product should separate at least three things:
+
+1. **The conversation:** where the user and model form an intention.
+2. **The proposed action:** an explicit, inspectable interpretation of that
+   intention.
+3. **The product state:** the durable record of what was approved, executed,
+   changed, or rejected.
+
+The boundaries do not have to be visible as three different screens. They do
+have to exist in the system.
+
+There is a strong argument against making all of this explicit. Better models
+may manage ambiguity well enough that users should not have to see intermediate
+state. Excessive confirmation turns an agent into a slow form generator. If
+every action requires approval, the product has automated the least important
+part of the work and left the user supervising a machine.
+
+I think that criticism is right. Universal preapproval is not the goal. In many
+cases, reversibility, sensible limits, and a clear activity record may provide
+better control than interrupting the user before every action.
+
+The appropriate boundary also depends on the domain. My view is shaped by CRM,
+where several people share state and a technically valid action can affect a
+real customer relationship. A coding agent operating inside a disposable branch
+can take more initiative because the environment is easier to inspect and
+reverse.
+
+So I no longer think the choice is chat or workflow. Chat is part of the
+workflow, especially while the work is still ambiguous. It becomes dangerous
+only when the product asks the transcript to carry responsibilities it was never
+designed to hold.
+
+The question I have not resolved is how much of the underlying state should be
+visible to the user. Too little, and the agent feels unpredictable. Too much,
+and the product makes people manage the machinery that was supposed to help
+them.
+
+That boundary will move as models improve. It will not disappear.

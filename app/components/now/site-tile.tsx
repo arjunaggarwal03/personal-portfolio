@@ -2,9 +2,9 @@ import { getSite } from 'lib/now/vercel'
 import { relativeTime } from 'lib/now/format'
 import { ExternalLink } from '../external-link'
 import { LivePing } from './live-ping'
-import { NowEmpty, NowTile } from './now-tile'
+import { NowTile } from './now-tile'
 
-const EYEBROW = 'This site'
+const EYEBROW = 'Site status'
 
 export async function SiteTile() {
   const { state, data, fetchedAt } = await getSite()
@@ -12,7 +12,9 @@ export async function SiteTile() {
   if (state !== 'ok' || !data) {
     return (
       <NowTile eyebrow={EYEBROW} fetchedAt={fetchedAt}>
-        <NowEmpty state={state} label="Site" />
+        <p className="font-mono text-xs text-subtle">
+          Site status is unavailable right now.
+        </p>
       </NowTile>
     )
   }
@@ -43,7 +45,7 @@ export async function SiteTile() {
           </div>
         ) : (
           <p className="mt-auto border-t border-border-soft pt-3 font-mono text-xs text-subtle">
-            Deploy info appears in production
+            Deployment details appear in production.
           </p>
         )}
       </div>

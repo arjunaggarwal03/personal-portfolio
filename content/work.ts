@@ -1,6 +1,7 @@
 import type { WorkItem } from 'lib/types'
 
-// Reverse-chronological. Narrative summaries, not resume bullets (doc 13.4).
+// Reverse-chronological. Narrative summaries, not resume bullets.
+// Lightfield claims should be fact-checked before merge (ownership + public-safety).
 export const work: WorkItem[] = [
   {
     company: 'Lightfield',
@@ -9,57 +10,61 @@ export const work: WorkItem[] = [
     startDate: '2025',
     current: true,
     summary:
-      'Building infrastructure for agentic CRM: public APIs, workflow automation, agent tools, human-in-the-loop review, notifications, and core customer-facing product surfaces. The work is about making customer context actionable for both people and agents.',
-    tags: ['agents', 'apis', 'workflow', 'crm'],
+      "I work across the product and systems behind Lightfield's CRM. I've helped turn product operations into a public API and Python SDK used by our own agent, built tools for creating and editing CRM tasks, and worked on workflow automation, human review, notifications, and core product surfaces. The recurring challenge is translating an ambiguous request into a change that is understandable to the user and correct in the product.",
+    tags: ['AI products', 'APIs', 'workflows', 'CRM'],
   },
   {
     company: 'Google / YouTube',
     role: 'Software Engineer',
     startDate: '2025',
     summary:
-      'Joined YouTube Living Room / Connected Experience, then left early for Lightfield to work closer to founders, move faster, and take on more ownership.',
-    tags: ['frontend', 'tv', 'consumer'],
+      "I joined YouTube's Living Room team and left after a week to join Lightfield. I wanted more ownership and a shorter distance between a product decision and the customer affected by it. It was also a high-variance bet made with limited information; that was part of the appeal.",
+    tags: ['consumer product', 'connected TV'],
   },
   {
     company: 'Plato',
-    role: 'Founder',
+    role: 'Co-founder',
     startDate: '2024',
     endDate: '2025',
     summary:
-      'Co-founded an intelligent service catalog for internal engineering knowledge: natural-language service search, organized documentation spaces, and a support agent grounded in team docs. We applied to YC with the idea.',
-    tags: ['devtools', 'search', 'agents'],
+      'We built an intelligent service catalog for internal engineering knowledge: natural-language service search, organized documentation spaces, and a support agent grounded in team documentation. We applied to Y Combinator but did not turn Plato into a lasting company. It was my first attempt to choose the problem, build the product, and convince other people it should exist.',
+    tags: ['developer tools', 'search', 'knowledge systems'],
   },
   {
     company: 'Amazon Web Services',
-    role: 'SDE Intern',
+    role: 'Software Development Engineer Intern',
+    location: 'Seattle',
     startDate: '2024',
     summary:
-      'Built financial reconciliation infrastructure for high-volume payment events. The work was about reliable systems: tracing failures, preserving reporting completeness, and making financial data trustworthy as it moved across services.',
-    tags: ['payments', 'infra', 'reliability'],
+      'I built reporting and reconciliation infrastructure for roughly ten million financial events a month. The system used SNS, SQS, Lambda, DynamoDB, EventBridge, S3, and CloudWatch to trace events across services and preserve reporting completeness through retries and partial failures. The point was not throughput by itself. Financial data had to remain trustworthy when the underlying delivery system was asynchronous and imperfect.',
+    tags: ['distributed systems', 'financial events', 'AWS'],
   },
   {
     company: 'Capital One',
-    role: 'ML Engineering Intern',
+    role: 'Machine Learning Engineering Intern',
+    location: 'College Park',
     startDate: '2023',
     summary:
-      'Worked on graph ML infrastructure for large-scale card and customer relationship data. I spent a lot of that internship studying how Twitter and Facebook modeled social graphs, especially systems like TAO, and started to see how much product intelligence comes from making relationship data queryable. This is where the context-graph thread started.',
-    tags: ['graph-ml', 'infra', 'context'],
+      'I worked with a roughly 900-million-edge graph representing relationships in card data. I rewrote motif queries with GraphFrames and improved their performance by about six times. The project taught me that a graph is useful only when its relationships can answer an operational question quickly enough to affect the product; scale alone is not the interesting part.',
+    tags: ['graph systems', 'Spark', 'machine learning'],
   },
   {
     company: 'Bank of America',
     role: 'Software Engineering Intern',
+    location: 'Jersey City',
     startDate: '2023',
     summary:
-      'Worked in Enterprise Risk & Finance Technology, automating internal risk workflows with Python, SQL, and data-processing jobs: taking manual analyst work and making it faster, cleaner, and less painful to repeat.',
-    tags: ['automation', 'python', 'enterprise'],
+      'I automated part of an internal risk-testing workflow with Python and SQL, reducing its runtime by roughly 85 percent. The work was less glamorous than the number suggests: understand how analysts performed the process, preserve the checks they trusted, and remove the repetition without making the result harder to inspect.',
+    tags: ['automation', 'Python', 'risk systems'],
   },
   {
     company: 'Mindgrasp',
     role: 'Software Engineer',
+    location: 'College Park',
     startDate: '2022',
     summary:
-      'Joined early, before the product had traction, working directly with the founders out of their first UMD office. It was my first close-up look at an AI-native product: early OCR and language models applied to lectures and study materials. Mindgrasp has since grown into an AI study platform used by millions of students.',
-    tags: ['ai', 'ocr', 'nlp', 'early-stage'],
+      'I joined Mindgrasp before the product had traction and worked directly with the founders from their first UMD office. We were applying OCR and language models to lectures and study materials before most students had used a conversational AI product. It was my first close look at models becoming a product rather than remaining a demo or research result.',
+    tags: ['applied AI', 'OCR', 'early-stage startups'],
   },
 ]
 

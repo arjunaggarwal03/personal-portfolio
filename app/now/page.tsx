@@ -10,7 +10,7 @@ import { LiveClock } from 'app/components/now/live-clock'
 export const metadata = pageMetadata({
   title: 'Now',
   description:
-    'A live snapshot of what I’m listening to, building, and where I am right now — pulled in real time from Spotify, GitHub, Open-Meteo, and Vercel.',
+    'A live snapshot of what Arjun is listening to, recent public GitHub activity, San Francisco weather, and the status of this site.',
   path: '/now',
 })
 
@@ -30,11 +30,16 @@ export default function NowPage() {
             className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-accent"
             aria-hidden="true"
           />
-          live
+          Live
         </span>
       </div>
       <p className="mt-3 max-w-prose text-muted">
-        Some live, mostly random data about me right now.
+        A small, live snapshot: what I&rsquo;m listening to, what has changed on
+        my public GitHub, and the weather in San Francisco.
+      </p>
+      <p className="mt-2 max-w-prose text-muted">
+        It is more ambient than comprehensive. Most of my current work happens
+        in private repositories.
       </p>
       <p className="mt-1">
         <LiveClock />
@@ -47,20 +52,24 @@ export default function NowPage() {
           </Suspense>
         </div>
         <div className="md:col-span-2">
-          <Suspense fallback={<TileSkeleton eyebrow="Building" lines={4} />}>
+          <Suspense
+            fallback={<TileSkeleton eyebrow="Public GitHub" lines={4} />}
+          >
             <BuildingTile />
           </Suspense>
         </div>
-        <Suspense fallback={<TileSkeleton eyebrow="In SF" lines={3} />}>
+        <Suspense
+          fallback={<TileSkeleton eyebrow="In San Francisco" lines={3} />}
+        >
           <SfTile />
         </Suspense>
-        <Suspense fallback={<TileSkeleton eyebrow="This site" lines={3} />}>
+        <Suspense fallback={<TileSkeleton eyebrow="Site status" lines={3} />}>
           <SiteTile />
         </Suspense>
       </div>
 
       <p className="mt-6 font-mono text-[0.7rem] text-subtle">
-        Auto-updated from live sources · Spotify · GitHub · Open-Meteo · Vercel
+        Updated from Spotify, public GitHub activity, Open-Meteo, and Vercel.
       </p>
     </section>
   )

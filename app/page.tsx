@@ -3,20 +3,27 @@ import Link from 'next/link'
 import { work, workDateRange } from 'content/work'
 import { getFeaturedWriting, getFeaturedLog } from 'lib/content'
 import { formatDateShort } from 'lib/dates'
-import { externalLinks } from 'lib/site'
-import { homeGraph } from 'lib/seo'
+import { externalLinks, site } from 'lib/site'
+import { homeGraph, ogImageUrl } from 'lib/seo'
 import { ExternalLink } from 'app/components/external-link'
 import { SectionHeader } from 'app/components/section-header'
-import { SystemDiagram } from 'app/components/system-diagram'
 import { IndexRow } from 'app/components/index-row'
 import { JsonLd } from 'app/components/json-ld'
 
 export const metadata: Metadata = {
+  description: site.homeDescription,
   alternates: { canonical: '/' },
+  openGraph: {
+    description: site.homeDescription,
+    images: [ogImageUrl(site.name)],
+  },
+  twitter: {
+    description: site.homeDescription,
+    images: [ogImageUrl(site.name)],
+  },
 }
 
 const SELECTED_COMPANIES = ['Lightfield', 'Amazon Web Services', 'Capital One']
-const HERO_STEPS = ['context', 'tools', 'workflow state', 'review', 'action']
 const FEATURED_WRITING_COUNT = 4
 const LATEST_LOG_COUNT = 5
 
@@ -25,7 +32,9 @@ export default function HomePage() {
     work.find((w) => w.company === name),
   ).filter((w): w is NonNullable<typeof w> => Boolean(w))
 
-  const featuredWriting = getFeaturedWriting(FEATURED_WRITING_COUNT)
+  const featuredWriting = getFeaturedWriting(FEATURED_WRITING_COUNT).filter(
+    (post) => post.status === 'published',
+  )
   const latestLog = getFeaturedLog(LATEST_LOG_COUNT)
 
   return (
@@ -36,25 +45,24 @@ export default function HomePage() {
           Arjun Aggarwal
         </h1>
         <p className="mt-4 max-w-prose text-md leading-relaxed">
-          Founding engineer at{' '}
+          I&rsquo;m a founding engineer at{' '}
           <ExternalLink href={externalLinks.lightfield}>
             Lightfield
-          </ExternalLink>
-          , building agentic CRM and customer-context infrastructure in San
-          Francisco.
+          </ExternalLink>{' '}
+          in San Francisco, where I work across the APIs, agent tools,
+          workflows, and product surfaces behind our CRM.
         </p>
         <p className="mt-4 max-w-prose text-muted">
-          I&rsquo;m interested in systems that turn scattered context into
-          useful work: agents, APIs, workflow automation, developer tools, and
-          the infrastructure around customer-facing teams.
+          This site is where I explain what I&rsquo;m learning and keep track of
+          restaurants, cities, films, music, and things I don&rsquo;t want to
+          forget.
         </p>
-        <SystemDiagram steps={HERO_STEPS} />
       </section>
 
       <section>
         <SectionHeader
           eyebrow="Selected work"
-          title="Where I've worked"
+          title="A few things I've worked on"
           href="/work"
           hrefLabel="all work"
         />
@@ -75,7 +83,7 @@ export default function HomePage() {
       <section>
         <SectionHeader
           eyebrow="Selected writing"
-          title="What I'm thinking about"
+          title="Recent writing"
           href="/writing"
           hrefLabel="all writing"
         />
@@ -85,22 +93,17 @@ export default function HomePage() {
               <IndexRow
                 key={post.slug}
                 title={post.title}
-                href={
-                  post.status === 'published'
-                    ? `/writing/${post.slug}`
-                    : undefined
-                }
+                href={`/writing/${post.slug}`}
                 description={post.summary}
-                meta={post.status === 'published' ? undefined : 'forthcoming'}
                 headingLevel={3}
               />
             ))}
           </div>
         ) : (
           <p className="max-w-prose text-muted">
-            Essays in progress on agents, customer context, workflow systems,
-            and startup engineering.{' '}
-            <Link href="/writing">See what&rsquo;s coming →</Link>
+            I&rsquo;m working on the first few pieces. I&rsquo;d rather leave
+            this sparse than publish an argument before I understand it.{' '}
+            <Link href="/writing">all writing →</Link>
           </p>
         )}
       </section>
@@ -137,9 +140,8 @@ export default function HomePage() {
           </div>
         ) : (
           <p className="max-w-prose text-muted">
-            A running index of what I&rsquo;m noticing: work, cities, meals,
-            music, films, links, and half-formed thoughts.{' '}
-            <Link href="/log">Open the log →</Link>
+            A running record of restaurants, cities, films, music, links, and
+            things I want to remember. <Link href="/log">full log →</Link>
           </p>
         )}
       </section>

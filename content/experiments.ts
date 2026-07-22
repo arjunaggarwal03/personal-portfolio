@@ -1,13 +1,13 @@
 import type { Experiment, ExperimentGroup } from 'lib/types'
 
-// Older projects, demoted and reframed. 1-2 sentences each (doc section 18).
+// Older projects, demoted and reframed. 1-2 sentences each.
 export const experiments: Experiment[] = [
   {
     title: 'ByteSize',
     year: '2024',
     group: 'AI / Search',
     summary:
-      'Semantic document search built at UMD\u2019s Bitcamp, before ChatGPT made this obvious. Search documents by meaning and related terms instead of verbatim matches.',
+      'A Bitcamp prototype for semantic document search: query a collection by meaning and related language rather than exact wording.',
     tags: ['nlp', 'semantic-search'],
     links: [
       { label: 'GitHub', url: 'https://github.com/arjunaggarwal03/bytesize' },
@@ -18,14 +18,14 @@ export const experiments: Experiment[] = [
     year: '2024',
     group: 'AI / Search',
     summary:
-      'A CLI tool for developer communication: message code snippets from the terminal, with semantic search over message history using BERT embeddings and a vector database.',
+      'A command-line tool for sending code snippets and searching message history by meaning. I used it to experiment with BERT embeddings, vector search, and a developer workflow that stayed inside the terminal.',
     tags: ['devtools', 'embeddings', 'fastapi'],
   },
   {
     title: 'Music Similarity Search',
     group: 'AI / Search',
     summary:
-      'Audio embeddings and vector search for music discovery \u2014 finding songs by how they sound rather than how they\u2019re tagged.',
+      'An experiment in finding songs by how they sound rather than how they are labeled, using learned audio representations and vector search.',
     tags: ['audio', 'embeddings'],
   },
   {
@@ -33,7 +33,7 @@ export const experiments: Experiment[] = [
     year: '2024',
     group: 'AI / Search',
     summary:
-      'A first real pass at data science: EDA, feature engineering, and an XGBoost classifier predicting whether a film would be a hit or a flop.',
+      'An early data-science project using exploratory analysis, feature engineering, and XGBoost to predict whether a film would be commercially successful.',
     tags: ['ml', 'xgboost', 'data-science'],
   },
   {
@@ -41,7 +41,7 @@ export const experiments: Experiment[] = [
     year: '2024',
     group: 'Systems',
     summary:
-      'A small command-line shell in C with tokenization into a command tree, supporting pipes, file redirection, boolean operators, and process control.',
+      'A small shell with tokenization into a command tree, pipes, file redirection, boolean operators, and process control. Building it made operating-system abstractions considerably less abstract.',
     tags: ['c', 'systems', 'os'],
   },
   {
@@ -49,7 +49,7 @@ export const experiments: Experiment[] = [
     year: '2022',
     group: 'Computer Vision',
     summary:
-      'A computer-vision system that detected vehicle parking passes at ~96% accuracy using YOLOv3 for detection and Google OCR for reading pass numbers.',
+      'A computer-vision system that detected vehicle parking passes at roughly 96 percent accuracy, then used OCR to read the pass number.',
     tags: ['cv', 'yolo', 'ocr'],
   },
   {
@@ -57,7 +57,7 @@ export const experiments: Experiment[] = [
     year: '2021',
     group: 'Computer Vision',
     summary:
-      'A visualization of applied linear algebra: rotating and projecting platonic solids from 3D to 2D with transformation matrices in OpenCV.',
+      'A visualization of linear algebra: rotate Platonic solids in three dimensions and project them into two using transformation matrices and OpenCV.',
     tags: ['graphics', 'opencv', 'linear-algebra'],
     links: [
       {

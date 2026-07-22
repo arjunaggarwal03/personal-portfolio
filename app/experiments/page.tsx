@@ -6,7 +6,7 @@ import { ExternalLink } from 'app/components/external-link'
 export const metadata = pageMetadata({
   title: 'Early Experiments',
   description:
-    'Older projects and prototypes from when I was circling around AI, search, systems, and developer tools.',
+    'Older projects through which Arjun learned AI, search, systems, computer vision, and data science by building small working artifacts.',
   path: '/experiments',
 })
 
@@ -19,9 +19,13 @@ export default function ExperimentsPage() {
     <section className="text-sm">
       <h1 className="font-serif text-2xl tracking-tight">Early Experiments</h1>
       <p className="mt-2 max-w-prose text-muted">
-        Older projects and prototypes from when I was circling around AI,
-        search, systems, and developer tools. Kept here for context, not as the
-        headline.
+        These are old school, weekend, and hackathon projects. Some were useful;
+        some were mainly excuses to learn a model or system by building the
+        smallest thing that made it concrete.
+      </p>
+      <p className="mt-3 max-w-prose text-muted">
+        I keep them because they show the path, not because they represent my
+        best work.
       </p>
 
       <div className="mt-10 flex flex-col gap-10">

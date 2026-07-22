@@ -90,6 +90,7 @@ const webSiteNode: WebSite = {
   url: baseUrl,
   name: person.name,
   alternateName: `${person.name} personal site`,
+  description: site.summary,
   inLanguage: 'en-US',
   publisher: { '@id': PERSON_ID },
 }

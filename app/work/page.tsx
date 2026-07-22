@@ -5,7 +5,7 @@ import { IndexRow } from 'app/components/index-row'
 export const metadata = pageMetadata({
   title: 'Work',
   description:
-    'A running history of the companies, systems, and products I have worked on.',
+    'A history of the products and systems Arjun Aggarwal has worked on, from graph data and financial events to developer tools and AI-operated software.',
   path: '/work',
 })
 
@@ -14,9 +14,14 @@ export default function WorkPage() {
     <section>
       <h1 className="font-serif text-2xl tracking-tight">Work</h1>
       <p className="mt-2 max-w-prose text-muted">
-        A running history of the companies, systems, and products I have worked
-        on. The thread that connects them is context: customer context,
-        engineering context, graph context, and the systems that make it usable.
+        I&rsquo;ve spent most of my career moving between product and systems
+        work: graph data, financial event processing, developer tools, and now
+        software operated by both people and models.
+      </p>
+      <p className="mt-3 max-w-prose text-muted">
+        The path was less planned than that sentence makes it sound. I followed
+        the places where I could learn quickly, work close to the problem, and
+        own more of the result.
       </p>
 
       <div className="mt-8">

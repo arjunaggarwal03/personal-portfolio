@@ -4,142 +4,80 @@ import { ExternalLink } from 'app/components/external-link'
 export const metadata = pageMetadata({
   title: 'Accessibility',
   description:
-    'Accessibility statement for arjunaggarwal.dev: conformance status, feedback, technical specifications, and assessment approach.',
+    'Accessibility practices, testing, known limitations, and contact information for arjunaggarwal.dev.',
   path: '/accessibility',
 })
 
-const feedbackEmail = 'arjunaggarwal173@gmail.com'
+const feedbackEmail = 'arjun@arjunaggarwal.dev'
 
 export default function AccessibilityPage() {
   return (
     <section className="max-w-prose">
-      <header>
-        <h1 className="font-serif text-2xl tracking-tight">
-          Accessibility statement
-        </h1>
-        <p className="mt-1 font-mono text-xs text-subtle">
-          For arjunaggarwal.dev
-        </p>
-      </header>
+      <h1 className="font-serif text-2xl tracking-tight">Accessibility</h1>
 
       <div className="article mt-8">
         <p>
-          I am committed to ensuring digital accessibility for people with
-          disabilities. I continually improve the user experience for everyone
-          and apply the relevant accessibility standards.
+          I want this site to be usable by as many people as possible, including
+          people navigating with a keyboard, screen reader, zoom, or
+          reduced-motion preference.
         </p>
 
-        <h2>Measures to support accessibility</h2>
-        <p>
-          I consider accessibility throughout the design and build of this site.
-          In particular, this site:
-        </p>
+        <h2>What the site supports</h2>
         <ul>
-          <li>uses semantic HTML and WAI-ARIA only where it adds meaning;</li>
+          <li>Semantic HTML and descriptive page structure</li>
+          <li>A visible keyboard focus indicator and skip-to-content link</li>
           <li>
-            provides a visible keyboard focus indicator and a skip-to-content
-            link;
+            Text and interface contrast designed to meet WCAG 2.2 Level AA
           </li>
-          <li>
-            aims for text and non-text contrast that meets WCAG 2.2 Level AA;
-          </li>
-          <li>respects the operating system&rsquo;s reduced-motion setting;</li>
-          <li>
-            runs an automated accessibility audit on every change in continuous
-            integration, so regressions are caught before they ship.
-          </li>
+          <li>Reduced motion when requested by the operating system</li>
+          <li>Alternative text for meaningful images</li>
+          <li>Automated accessibility checks on each change</li>
         </ul>
 
-        <h2>Conformance status</h2>
+        <h2>Current status</h2>
         <p>
-          The{' '}
+          The site is self-assessed and designed to be substantially conformant
+          with{' '}
           <ExternalLink href="https://www.w3.org/WAI/standards-guidelines/wcag/">
-            Web Content Accessibility Guidelines (WCAG)
-          </ExternalLink>{' '}
-          define requirements for designers and developers to improve
-          accessibility for people with disabilities. They have three levels of
-          conformance: Level A, Level AA, and Level AAA.
+            WCAG 2.2 Level AA
+          </ExternalLink>
+          . Third-party media embeds and newly published content may introduce
+          issues I have not identified yet.
         </p>
         <p>
-          arjunaggarwal.dev is <strong>substantially conformant</strong> with
-          WCAG 2.2 Level AA. Substantially conformant means the site conforms to
-          the standard in nearly all respects, with the possible exception of
-          isolated issues &mdash; for example in third-party embeds or
-          newly-published content &mdash; that may not yet have been identified
-          or resolved.
+          I test with automated tools, keyboard navigation, focus checks, and
+          current versions of major browsers. Automated tests help catch
+          regressions, but they are not a substitute for feedback from people
+          using assistive technology.
         </p>
 
         <h2>Feedback</h2>
         <p>
-          I welcome your feedback on the accessibility of arjunaggarwal.dev.
-          Please let me know if you encounter accessibility barriers:
+          If something prevents you from using the site, email{' '}
+          <a href={`mailto:${feedbackEmail}`}>{feedbackEmail}</a>. Please
+          include the page and, if you are comfortable sharing it, the browser
+          or assistive technology you were using.
         </p>
-        <ul>
-          <li>
-            Email: <a href={`mailto:${feedbackEmail}`}>{feedbackEmail}</a>
-          </li>
-        </ul>
-        <p>I try to respond to feedback within 5 business days.</p>
-
-        <h2>Technical specifications</h2>
         <p>
-          Accessibility of arjunaggarwal.dev relies on the following
-          technologies to work with the particular combination of web browser
-          and any assistive technologies or plugins installed on your computer:
-        </p>
-        <ul>
-          <li>HTML</li>
-          <li>WAI-ARIA</li>
-          <li>CSS</li>
-          <li>JavaScript</li>
-          <li>SVG</li>
-        </ul>
-        <p>
-          These technologies are relied upon for conformance with the
-          accessibility standards used.
+          I will try to acknowledge the report within five business days and fix
+          confirmed barriers as quickly as I can.
         </p>
 
-        <h2>Limitations and alternatives</h2>
+        <h2>Compatibility</h2>
         <p>
-          I am not aware of any accessibility limitations on arjunaggarwal.dev
-          at this time. The site is self-assessed rather than independently
-          audited, so if you encounter a barrier that is not covered here,
-          please contact me using the details above and I will address it.
+          The site is designed for current versions of Chrome, Firefox, Safari,
+          and Edge. It relies on HTML, CSS, JavaScript, SVG, and limited
+          WAI-ARIA where native HTML does not provide enough meaning.
         </p>
 
-        <h2>Assessment approach</h2>
+        <h2>Assessment</h2>
         <p>
-          I assessed the accessibility of arjunaggarwal.dev by self-evaluation,
-          using the following tools and methods:
+          Accessibility is checked with axe-core and Playwright in continuous
+          integration, along with manual keyboard and focus testing. I also use
+          Lighthouse and browser accessibility inspectors during development.
         </p>
-        <ul>
-          <li>Lighthouse</li>
-          <li>axe DevTools</li>
-          <li>WAVE</li>
-          <li>W3C Nu HTML Checker</li>
-          <li>Manual keyboard and focus testing across the site</li>
-        </ul>
         <p>
-          Beyond this point-in-time review, every push and pull request runs an
-          automated accessibility audit in continuous integration, using the
-          full axe-core WCAG 2.2 rule set driven by Playwright. A change cannot
-          merge while any audited page has an accessibility violation, which
-          keeps the conformance claim above honest over time.
-        </p>
-
-        <h2>Compatibility with browsers and assistive technology</h2>
-        <p>
-          arjunaggarwal.dev is designed to be compatible with current versions
-          of major web browsers, including Chrome, Firefox, Safari, and Edge.
-        </p>
-
-        <h2>Date</h2>
-        <p>
-          This statement was created on June 7, 2026 using the{' '}
-          <ExternalLink href="https://www.w3.org/WAI/planning/statements/">
-            W3C Accessibility Statement Generator
-          </ExternalLink>
-          .
+          <strong>Last reviewed:</strong> July 2026
         </p>
       </div>
     </section>
