@@ -1,5 +1,5 @@
 import { getPublishedWriting } from 'lib/content'
-import { baseUrl, person, navItems, social } from 'lib/site'
+import { baseUrl, person, social } from 'lib/site'
 
 export const dynamic = 'force-static'
 
@@ -12,6 +12,37 @@ const PROFILE_LABELS: Record<keyof typeof social, string> = {
   x: 'X (Twitter)',
   email: 'Email',
 }
+
+const PAGES: { label: string; path: string; blurb: string }[] = [
+  { label: 'Home', path: '', blurb: 'overview and recent work' },
+  {
+    label: 'Work',
+    path: '/work',
+    blurb: 'roles, systems, decisions, and outcomes',
+  },
+  {
+    label: 'Writing',
+    path: '/writing',
+    blurb: 'finished essays and open questions',
+  },
+  {
+    label: 'Log',
+    path: '/log',
+    blurb:
+      'restaurants, cities, films, music, links, photographs, and personal notes',
+  },
+  { label: 'Now', path: '/now', blurb: 'a live ambient snapshot' },
+  {
+    label: 'About',
+    path: '/about',
+    blurb: 'background and contact information',
+  },
+  {
+    label: 'Resume',
+    path: '/resume',
+    blurb: 'résumé links and fuller work history',
+  },
+]
 
 /**
  * /llms.txt — a curated, plain-text map of the site for LLMs and AI agents,
@@ -26,15 +57,13 @@ export function GET() {
     '',
     `> ${person.bio}`,
     '',
-    `- Role: ${person.jobTitle} at ${person.company} (${person.companyUrl})`,
+    `- Role: ${person.jobTitle} at ${person.company}`,
     `- Location: ${person.location}`,
     `- Focus: ${person.knowsAbout.join(', ')}`,
     `- Previously: ${person.affiliations.filter((a) => a !== person.company).join(', ')}`,
     '',
     '## Pages',
-    `- [Home](${baseUrl}): overview and current focus`,
-    ...navItems.map((n) => `- [${n.label}](${baseUrl}${n.path})`),
-    `- [Resume](${baseUrl}/resume)`,
+    ...PAGES.map((p) => `- [${p.label}](${baseUrl}${p.path}): ${p.blurb}`),
     '',
     '## Writing',
     ...writing.map(

@@ -1,23 +1,15 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { externalLinks, person, site, socialLinks } from 'lib/site'
+import { externalLinks, person, site, social } from 'lib/site'
 import { pageMetadata } from 'lib/seo'
 import { ExternalLink } from 'app/components/external-link'
 
 export const metadata = pageMetadata({
   title: 'About',
   description:
-    'Founding engineer at Lightfield in San Francisco. Interested in systems that turn scattered context into useful work.',
+    'About Arjun Aggarwal, a founding engineer at Lightfield in San Francisco working across AI products, APIs, workflows, and CRM systems.',
   path: '/about',
 })
-
-const threads = [
-  'context becoming infrastructure',
-  'agents as workflow systems',
-  'customer-facing teams becoming more technical',
-  'internal knowledge becoming queryable',
-  'cities, restaurants, films, and music as taste inputs',
-]
 
 export default function AboutPage() {
   return (
@@ -45,62 +37,75 @@ export default function AboutPage() {
           <ExternalLink href={externalLinks.lightfield}>
             Lightfield
           </ExternalLink>{' '}
-          in San Francisco, where we&rsquo;re building an agentic CRM for
-          companies built with their customers.
+          in San Francisco. We are building a CRM for companies where sales,
+          product, engineering, and delivery all participate in the customer
+          relationship.
         </p>
 
         <p>
-          The old CRM was designed for the layer between builders and customers.
-          In AI-native companies, that line is starting to blur: sales, product,
-          engineering, delivery, and agents all need the same live picture of
-          the customer. My work sits underneath that shift: public APIs,
-          workflow automation, agent tools, human-in-the-loop review,
-          notifications, and core CRM surfaces.
+          My work moves between product and systems. I&rsquo;ve helped turn
+          product operations into a public API and Python SDK used by our own
+          agent, built tools for creating and editing CRM tasks, and worked on
+          workflow automation, human review, notifications, and core product
+          surfaces.
         </p>
 
         <p>
-          Before Lightfield, I worked on payments infrastructure at AWS,
-          enterprise workflow automation at Bank of America, graph ML at Capital
-          One, and co-founded Plato, an intelligent service catalog for internal
-          engineering knowledge. Earlier, I worked at Mindgrasp before ChatGPT
-          made AI study tools obvious, and worked on applied ML research at UMD.
+          I&rsquo;m interested in what changes when software is operated by a
+          model as well as a person. Human-facing products contain years of
+          implicit assumptions: people resolve ambiguous names, notice stale
+          records, recover from unclear errors, and understand when a
+          technically valid action would be socially wrong. When a model becomes
+          another operator, those assumptions become product and systems
+          decisions.
         </p>
 
         <p>
-          The common thread is context: customer context, engineering context,
-          graph context, and the systems that make it usable.
+          Before Lightfield, I briefly joined YouTube&rsquo;s Living Room team
+          at Google. I left after a week because I wanted more ownership and a
+          shorter distance between the work and the customer. The decision was
+          not as inevitable as a retrospective career narrative can make it
+          sound. It was a bet on what I would learn, made with limited
+          information.
         </p>
 
-        <h2>Threads I keep returning to</h2>
-        <ul>
-          {threads.map((t) => (
-            <li key={t}>{t}</li>
-          ))}
-        </ul>
-
-        <h2>Outside work</h2>
         <p>
-          I keep loose notes on cities, restaurants, films, music, and things I
-          want to remember. Most of that lives in the{' '}
-          <Link href="/log">Log</Link>.
+          Earlier, I built financial-event infrastructure at AWS, worked with a
+          roughly 900-million-edge graph at Capital One, automated risk testing
+          at Bank of America, joined Mindgrasp before it had traction, and
+          co-founded Plato, a service catalog for internal engineering
+          knowledge.
         </p>
 
-        <h2>Elsewhere</h2>
-        <p className="flex flex-wrap gap-x-2 font-mono text-sm">
-          {socialLinks.map((link, i) => (
-            <span key={link.label}>
-              {link.href.startsWith('http') ? (
-                <ExternalLink href={link.href}>{link.label}</ExternalLink>
-              ) : (
-                <a href={link.href}>{link.label}</a>
-              )}
-              {i < socialLinks.length - 1 ? (
-                <span aria-hidden="true" className="px-1 text-subtle">
-                  ·
-                </span>
-              ) : null}
-            </span>
-          ))}
+        <p>
+          Looking backward, I can see a recurring attraction to systems that
+          make complicated domains easier to understand and operate. I&rsquo;m
+          wary of making the trajectory sound more deliberate than it was. Some
+          choices came from intellectual interest, some from opportunity, and
+          some from wanting to move faster.
+        </p>
+
+        <p>
+          Much of the writing here starts with a view I held too confidently, a
+          system that behaved differently than expected, or a decision that
+          looked different depending on where you sat. I care about reaching a
+          conclusion, but I want the competing views and missing information to
+          remain visible.
+        </p>
+
+        <p>
+          Outside work, I spend a lot of time on restaurants, films, music,
+          cities, soccer, and travel. Those interests live mostly in the{' '}
+          <Link href="/log">Log</Link>, where they are allowed to remain
+          interests rather than become metaphors for software.
+        </p>
+
+        <p>
+          The best way to reach me is <a href={social.email}>email</a>. You can
+          also find me on{' '}
+          <ExternalLink href={social.linkedin}>LinkedIn</ExternalLink>,{' '}
+          <ExternalLink href={social.github}>GitHub</ExternalLink>, and{' '}
+          <ExternalLink href={social.x}>X</ExternalLink>.
         </p>
       </div>
     </section>

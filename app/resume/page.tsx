@@ -5,7 +5,8 @@ import { ExternalLink } from 'app/components/external-link'
 
 export const metadata = pageMetadata({
   title: 'Resume',
-  description: 'Resume available on request.',
+  description:
+    "Résumé links and the fuller work history behind Arjun Aggarwal's roles.",
   path: '/resume',
 })
 
@@ -14,9 +15,13 @@ export default function ResumePage() {
     <section className="max-w-prose">
       <h1 className="font-serif text-2xl tracking-tight">Resume</h1>
       <p className="mt-3 text-muted">
-        Resume available on request. For current work history, see{' '}
-        <Link href="/work">Work</Link> or{' '}
-        <ExternalLink href={social.linkedin}>LinkedIn</ExternalLink>.
+        A concise version of my work and education. For the decisions and
+        systems behind each role, see <Link href="/work">Work</Link>.
+      </p>
+      <p className="mt-4 text-muted">
+        I don&rsquo;t host a downloadable PDF on this site yet. The fuller
+        narrative is on <Link href="/work">Work</Link>; the résumé format lives
+        on <ExternalLink href={social.linkedin}>LinkedIn</ExternalLink>.
       </p>
     </section>
   )

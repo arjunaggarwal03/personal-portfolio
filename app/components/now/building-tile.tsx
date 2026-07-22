@@ -3,9 +3,9 @@ import { relativeTime } from 'lib/now/format'
 import type { ContributionDay } from 'lib/now/types'
 import { inlineLink } from 'lib/ui'
 import { ExternalLink } from '../external-link'
-import { NowEmpty, NowTile } from './now-tile'
+import { NowTile } from './now-tile'
 
-const EYEBROW = 'Building'
+const EYEBROW = 'Public GitHub'
 
 // Warm ramp from "no activity" through deepening accent — five buckets.
 const LEVELS = [
@@ -50,13 +50,33 @@ export async function BuildingTile() {
   if (state !== 'ok' || !data) {
     return (
       <NowTile eyebrow={EYEBROW} fetchedAt={fetchedAt}>
-        <NowEmpty state={state} label="GitHub" />
+        <p className="font-mono text-xs text-subtle">
+          Public GitHub activity is unavailable right now.
+        </p>
       </NowTile>
     )
   }
 
   const latest = data.commits[0]
   const hasHeatmap = data.contributions.some((w) => w.length > 0)
+
+  if (data.commitsThisWeek === 0 && !latest) {
+    return (
+      <NowTile eyebrow={EYEBROW} fetchedAt={fetchedAt}>
+        <p className="text-sm text-muted">
+          No public commits this week. Most current work is private.
+        </p>
+        {hasHeatmap ? (
+          <div className="mt-4">
+            <Heatmap weeks={data.contributions} />
+            <p className="mt-2 font-mono text-[0.65rem] uppercase tracking-wider text-subtle">
+              last {data.contributions.length} weeks
+            </p>
+          </div>
+        ) : null}
+      </NowTile>
+    )
+  }
 
   return (
     <NowTile eyebrow={EYEBROW} fetchedAt={fetchedAt}>
@@ -67,7 +87,7 @@ export async function BuildingTile() {
               {data.commitsThisWeek}
             </p>
             <p className="mt-2 text-sm text-muted">
-              commit{data.commitsThisWeek === 1 ? '' : 's'} this week
+              public commit{data.commitsThisWeek === 1 ? '' : 's'} this week
             </p>
           </div>
           {hasHeatmap ? (
@@ -94,7 +114,11 @@ export async function BuildingTile() {
               </ExternalLink>
             </p>
           </div>
-        ) : null}
+        ) : (
+          <p className="mt-auto border-t border-border-soft pt-3 text-sm text-muted">
+            No public commits this week. Most current work is private.
+          </p>
+        )}
       </div>
     </NowTile>
   )

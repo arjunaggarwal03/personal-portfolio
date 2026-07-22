@@ -72,7 +72,7 @@ export function GET(request: Request) {
           color: MUTED,
         }}
       >
-        <div style={{ display: 'flex' }}>{person.location}</div>
+        <div style={{ display: 'flex' }}>{site.location}</div>
         <div style={{ display: 'flex', color: INK }}>{DOMAIN}</div>
       </div>
     </div>,

@@ -1,7 +1,7 @@
 import { getWeather } from 'lib/now/weather'
-import { NowEmpty, NowTile } from './now-tile'
+import { NowTile } from './now-tile'
 
-const EYEBROW = 'In SF'
+const EYEBROW = 'In San Francisco'
 
 // Semicircle arc: center (60,60), radius 50 → spans x:10→110, peaks at y:10.
 const ARC = 'M 10 60 A 50 50 0 0 1 110 60'
@@ -64,7 +64,9 @@ export async function SfTile() {
   if (state !== 'ok' || !data) {
     return (
       <NowTile eyebrow={EYEBROW} fetchedAt={fetchedAt}>
-        <NowEmpty state={state} label="Weather" />
+        <p className="font-mono text-xs text-subtle">
+          San Francisco weather is unavailable right now.
+        </p>
       </NowTile>
     )
   }
@@ -86,7 +88,7 @@ export async function SfTile() {
         <p className="mt-auto font-mono text-[0.7rem] uppercase tracking-wider text-subtle">
           {data.dayFraction !== null
             ? `golden hour ${data.goldenHour}`
-            : `sets ${data.sunset}`}
+            : `sunset ${data.sunset}`}
           {data.aqi !== null ? ` · AQI ${data.aqi}` : ''}
         </p>
       </div>

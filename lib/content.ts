@@ -88,14 +88,9 @@ const getAllWriting = cache((): WritingPost[] =>
   sortByDateDesc(readCollection(WRITING_DIR).map(toWritingPost)),
 )
 
-/** Posts that can appear on the Writing index. */
+/** Posts that can appear on the Writing index (published only). */
 export function getWritingIndex(): WritingPost[] {
-  const all = getAllWriting()
-  if (!isProd) return all
-  return all.filter(
-    (p) =>
-      p.status === 'published' || (p.status === 'forthcoming' && p.showOnIndex),
-  )
+  return getAllWriting().filter((p) => p.status === 'published')
 }
 
 /** Posts with viewable detail pages (published only in prod; all in dev). */
@@ -114,6 +109,7 @@ export function getFeaturedWriting(
 ): WritingPost[] {
   const index = getWritingIndex()
   const featured = index.filter((p) => p.featured)
+  // Prefer featured published pieces; fall back to recent published.
   const pool = featured.length > 0 ? featured : index
   return pool.slice(0, limit)
 }

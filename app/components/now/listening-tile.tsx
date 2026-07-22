@@ -2,7 +2,7 @@ import Image from 'next/image'
 import { getListening } from 'lib/now/spotify'
 import { relativeTime } from 'lib/now/format'
 import type { NowPlaying as NowPlayingData } from 'lib/now/types'
-import { NowEmpty, NowTile } from './now-tile'
+import { NowTile } from './now-tile'
 import { NowPlaying } from './now-playing'
 
 const EYEBROW = 'Listening'
@@ -13,7 +13,9 @@ export async function ListeningTile() {
   if (state !== 'ok' || !data) {
     return (
       <NowTile eyebrow={EYEBROW} fetchedAt={fetchedAt}>
-        <NowEmpty state={state} label="Spotify" />
+        <p className="font-mono text-xs text-subtle">
+          Listening data is unavailable right now.
+        </p>
       </NowTile>
     )
   }
@@ -22,7 +24,9 @@ export async function ListeningTile() {
   if (!headline) {
     return (
       <NowTile eyebrow={EYEBROW} fetchedAt={fetchedAt}>
-        <NowEmpty state="empty" label="Spotify" />
+        <p className="font-mono text-xs text-subtle">
+          Nothing recent from Spotify.
+        </p>
       </NowTile>
     )
   }
