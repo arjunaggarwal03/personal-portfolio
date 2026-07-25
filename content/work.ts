@@ -11,6 +11,8 @@ export const work: WorkItem[] = [
     current: true,
     summary:
       "I work across the product and systems behind Lightfield's CRM. I've helped turn product operations into a public API and Python SDK used by our own agent, built tools for creating and editing CRM tasks, and worked on workflow automation, human review, notifications, and core product surfaces. The recurring challenge is translating an ambiguous request into a change that is understandable to the user and correct in the product.",
+    homeSummary:
+      'Helped turn product operations into a public API and Python SDK used by Lightfield’s own agent, while building the task, review, and workflow systems around it.',
     tags: ['AI products', 'APIs', 'workflows', 'CRM'],
   },
   {
@@ -36,7 +38,9 @@ export const work: WorkItem[] = [
     location: 'Seattle',
     startDate: '2024',
     summary:
-      'I built reporting and reconciliation infrastructure for roughly ten million financial events a month. The system used SNS, SQS, Lambda, DynamoDB, EventBridge, S3, and CloudWatch to trace events across services and preserve reporting completeness through retries and partial failures. The point was not throughput by itself. Financial data had to remain trustworthy when the underlying delivery system was asynchronous and imperfect.',
+      'I built reporting and reconciliation infrastructure for roughly ten million financial events a month. The system used SNS, SQS, Lambda, DynamoDB, EventBridge, S3, and CloudWatch to trace events across services and preserve reporting completeness through retries and partial failures.',
+    homeSummary:
+      'Built reporting and reconciliation infrastructure for roughly ten million financial events a month, designed around retries, partial failures, and reporting completeness.',
     tags: ['distributed systems', 'financial events', 'AWS'],
   },
   {
@@ -45,7 +49,9 @@ export const work: WorkItem[] = [
     location: 'College Park',
     startDate: '2023',
     summary:
-      'I worked with a roughly 900-million-edge graph representing relationships in card data. I rewrote motif queries with GraphFrames and improved their performance by about six times. The project taught me that a graph is useful only when its relationships can answer an operational question quickly enough to affect the product; scale alone is not the interesting part.',
+      'I worked with a roughly 900-million-edge graph representing relationships in card data. I rewrote motif queries with GraphFrames, improving their performance by about six times and making relationship queries practical at the dataset’s scale.',
+    homeSummary:
+      'Improved motif-query performance by roughly 6× on a 900-million-edge card graph using GraphFrames.',
     tags: ['graph systems', 'Spark', 'machine learning'],
   },
   {
@@ -54,7 +60,7 @@ export const work: WorkItem[] = [
     location: 'Jersey City',
     startDate: '2023',
     summary:
-      'I automated part of an internal risk-testing workflow with Python and SQL, reducing its runtime by roughly 85 percent. The work was less glamorous than the number suggests: understand how analysts performed the process, preserve the checks they trusted, and remove the repetition without making the result harder to inspect.',
+      'I automated part of an internal risk-testing workflow with Python and SQL, reducing its runtime by roughly 85 percent while preserving the checks analysts used to inspect the result.',
     tags: ['automation', 'Python', 'risk systems'],
   },
   {

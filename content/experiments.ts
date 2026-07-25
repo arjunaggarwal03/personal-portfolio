@@ -53,6 +53,7 @@ export const experiments: Experiment[] = [
     tags: ['cv', 'yolo', 'ocr'],
   },
   {
+    id: 'platonic-rotation',
     title: 'Platonic Rotation',
     year: '2021',
     group: 'Computer Vision',

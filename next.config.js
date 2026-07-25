@@ -46,6 +46,15 @@ const nextConfig = {
       },
     ]
   },
+  async redirects() {
+    return [
+      {
+        source: '/blog/platonic',
+        destination: '/experiments#platonic-rotation',
+        permanent: true,
+      },
+    ]
+  },
 }
 
 module.exports = nextConfig

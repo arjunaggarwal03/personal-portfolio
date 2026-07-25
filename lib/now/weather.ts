@@ -20,7 +20,7 @@ const now = () => new Date().toISOString()
 const FORECAST_URL =
   `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}` +
   `&current=temperature_2m,weather_code,is_day&daily=sunrise,sunset` +
-  `&temperature_unit=fahrenheit&timezone=${encodeURIComponent(TZ)}&forecast_days=1`
+  `&temperature_unit=fahrenheit&timezone=${encodeURIComponent(TZ)}&timeformat=unixtime&forecast_days=1`
 
 const AQI_URL =
   `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${LAT}&longitude=${LON}` +
@@ -51,8 +51,8 @@ function aqiLabelFor(aqi: number): string {
   return 'Hazardous'
 }
 
-function timeLabel(iso: string): string {
-  return new Date(iso).toLocaleTimeString('en-US', {
+function timeLabel(timestampMs: number): string {
+  return new Date(timestampMs).toLocaleTimeString('en-US', {
     timeZone: TZ,
     hour: 'numeric',
     minute: '2-digit',
@@ -71,7 +71,7 @@ async function getJson<T>(url: string): Promise<T | null> {
 
 type Forecast = {
   current?: { temperature_2m?: number; weather_code?: number; is_day?: number }
-  daily?: { sunrise?: string[]; sunset?: string[] }
+  daily?: { sunrise?: number[]; sunset?: number[] }
 }
 type AirQuality = { current?: { us_aqi?: number } }
 
@@ -83,15 +83,22 @@ export async function getWeather(): Promise<SourceResult<Weather>> {
 
   const temp = forecast?.current?.temperature_2m
   const code = forecast?.current?.weather_code
-  const sunriseIso = forecast?.daily?.sunrise?.[0]
-  const sunsetIso = forecast?.daily?.sunset?.[0]
+  const sunriseTimestamp = forecast?.daily?.sunrise?.[0]
+  const sunsetTimestamp = forecast?.daily?.sunset?.[0]
 
-  if (temp === undefined || code === undefined || !sunriseIso || !sunsetIso) {
+  if (
+    temp === undefined ||
+    code === undefined ||
+    sunriseTimestamp === undefined ||
+    sunsetTimestamp === undefined
+  ) {
     return { state: 'empty', data: null, fetchedAt: now() }
   }
 
-  const sunriseMs = new Date(sunriseIso).getTime()
-  const sunsetMs = new Date(sunsetIso).getTime()
+  // Unix timestamps avoid interpreting Open-Meteo's otherwise offset-free
+  // local time strings in the server's timezone (UTC on Vercel).
+  const sunriseMs = sunriseTimestamp * 1000
+  const sunsetMs = sunsetTimestamp * 1000
   const goldenMs = sunsetMs - GOLDEN_OFFSET_MIN * 60_000
   const nowMs = Date.now()
   const daylightLeftMin = Math.max(0, Math.round((sunsetMs - nowMs) / 60_000))
@@ -114,8 +121,8 @@ export async function getWeather(): Promise<SourceResult<Weather>> {
       condition: conditionFor(code),
       aqi,
       aqiLabel: aqi !== null ? aqiLabelFor(aqi) : null,
-      sunset: timeLabel(sunsetIso),
-      goldenHour: timeLabel(new Date(goldenMs).toISOString()),
+      sunset: timeLabel(sunsetMs),
+      goldenHour: timeLabel(goldenMs),
       daylightLeftMin,
       isDaytime: forecast?.current?.is_day === 1,
       dayFraction,

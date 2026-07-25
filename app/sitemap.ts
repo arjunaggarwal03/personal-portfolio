@@ -3,7 +3,7 @@ import { getPublishedWriting, getLogWithDetailPages } from 'lib/content'
 import { baseUrl, navItems } from 'lib/site'
 
 /** Routes not covered by nav items (home + secondary pages). */
-const EXTRA_ROUTES = ['', '/experiments', '/resume', '/accessibility']
+const EXTRA_ROUTES = ['', '/experiments', '/accessibility']
 
 /** Per-route crawl hints. Home is the canonical entity page, so highest. */
 const PRIORITY: Record<string, number> = {

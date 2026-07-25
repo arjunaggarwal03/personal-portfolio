@@ -38,7 +38,7 @@ export default function ExperimentsPage() {
               {experiments
                 .filter((e) => e.group === group)
                 .map((exp) => (
-                  <div key={exp.title}>
+                  <div key={exp.title} id={exp.id} className="scroll-mt-8">
                     <div className="flex items-baseline justify-between gap-3">
                       <h3 className="text-[0.95rem] font-medium text-ink">
                         {exp.title}

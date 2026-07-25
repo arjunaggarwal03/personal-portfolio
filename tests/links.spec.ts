@@ -24,3 +24,9 @@ test('internal links all resolve', async ({ page, request }) => {
   }
   expect(broken, `Broken internal links:\n${broken.join('\n')}`).toEqual([])
 })
+
+test('Platonic Rotation redirect anchor exists', async ({ page }) => {
+  await page.goto('/blog/platonic')
+  await expect(page).toHaveURL(/\/experiments#platonic-rotation$/)
+  await expect(page.locator('#platonic-rotation')).toBeVisible()
+})

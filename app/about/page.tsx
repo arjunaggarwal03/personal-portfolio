@@ -79,18 +79,10 @@ export default function AboutPage() {
 
         <p>
           Looking backward, I can see a recurring attraction to systems that
-          make complicated domains easier to understand and operate. I&rsquo;m
-          wary of making the trajectory sound more deliberate than it was. Some
-          choices came from intellectual interest, some from opportunity, and
-          some from wanting to move faster.
-        </p>
-
-        <p>
-          Much of the writing here starts with a view I held too confidently, a
-          system that behaved differently than expected, or a decision that
-          looked different depending on where you sat. I care about reaching a
-          conclusion, but I want the competing views and missing information to
-          remain visible.
+          make complicated domains easier to understand and operate. The path
+          was not as deliberate as that pattern sounds: some choices came from
+          intellectual interest, some from opportunity, and some from wanting to
+          move faster.
         </p>
 
         <p>
