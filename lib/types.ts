@@ -115,6 +115,7 @@ export type WorkItem = {
   endDate?: string
   current?: boolean
   summary: string
+  homeSummary?: string
   details?: string[]
   tags?: string[]
   links?: {
@@ -130,6 +131,7 @@ export type ExperimentGroup =
   | 'Other'
 
 export type Experiment = {
+  id?: string
   title: string
   year?: string
   group: ExperimentGroup

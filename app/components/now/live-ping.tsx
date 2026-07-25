@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import useSWR from 'swr'
-import { parseRoute, type Route } from 'lib/now/regions'
 
 /**
  * Live, browser-measured latency for the "This site" tile.
@@ -10,9 +9,8 @@ import { parseRoute, type Route } from 'lib/now/regions'
  * Unlike a server-side check, this pings from the *visitor's* browser, so the
  * number is their real round-trip to the site. We time it with the Resource
  * Timing API (responseStart − requestStart = TTFB) — the honest network number,
- * free of JS/main-thread jitter — and read the response's `x-vercel-id` to
- * reconstruct the request's edge → origin route. SWR drives the polling: it
- * pauses on hidden tabs, revalidates on focus, and dedupes.
+ * free of JS/main-thread jitter. SWR drives the polling: it pauses on hidden
+ * tabs, revalidates on focus, and dedupes.
  *
  * Server-rendered `initial` latency hydrates the first paint and is the no-JS
  * fallback; once mounted, real visitor samples take over and feed the sparkline.
@@ -29,7 +27,6 @@ const SLOTS = 32
 type Sample = {
   ms: number
   ok: boolean
-  route: Route | null
   /** 0 for the server-rendered seed; a real client probe otherwise. */
   at: number
 }
@@ -42,11 +39,9 @@ async function probe(): Promise<Sample> {
   const url = `/api/ping?t=${Date.now()}-${Math.random().toString(36).slice(2)}`
   const t0 = perfNow()
   let ok = false
-  let vercelId: string | null = null
   try {
     const res = await fetch(url, { cache: 'no-store' })
     ok = res.ok || res.status === 204
-    vercelId = res.headers.get('x-vercel-id')
     await res.arrayBuffer().catch(() => {})
   } catch {
     ok = false
@@ -74,16 +69,7 @@ async function probe(): Promise<Sample> {
     // keep wall-clock fallback
   }
 
-  let route = parseRoute(vercelId)
-  // Local dev has no Vercel edge network, so responses carry no `x-vercel-id`
-  // and the route can't be real. Show a representative edge→origin route so the
-  // full tile is previewable in dev. Production always has a real id and never
-  // takes this branch (NODE_ENV is "production" there).
-  if (!route && process.env.NODE_ENV === 'development') {
-    route = parseRoute('sfo1::iad1::dev')
-  }
-
-  return { ms, ok, route, at: Date.now() }
+  return { ms, ok, at: Date.now() }
 }
 
 type Band = 'fast' | 'ok' | 'slow'
@@ -99,12 +85,6 @@ const BAND_COLOR: Record<Band, string> = {
   fast: '#4f8a5b',
   ok: '#b8843a',
   slow: '#b5503c',
-}
-
-function formatDistance(km: number): string {
-  const rounded =
-    km >= 1000 ? Math.round(km / 100) * 100 : Math.round(km / 10) * 10
-  return `${rounded.toLocaleString('en-US')} km`
 }
 
 const round1 = (n: number) => Math.round(n * 10) / 10
@@ -181,40 +161,6 @@ function Sparkline({ samples }: { samples: Sample[] }) {
   )
 }
 
-/** Region code (e.g. `sfo1`) → IATA airport code (e.g. `SFO`). */
-const iata = (code: string) => code.slice(0, 3).toUpperCase()
-
-/**
- * Route as a single tidy row: airport codes on the left, distance pushed to the
- * right (mirroring the deploy sha/time footer below it). Codes are short and
- * fixed-width, so the line never wraps or clips like full city names did.
- */
-function RouteCaption({ route }: { route: Route }) {
-  const { edge, origin, edgeOnly, distanceKm } = route
-  if (!edge) return null
-
-  if (edgeOnly || !origin) {
-    return (
-      <p className="font-mono text-[0.7rem] uppercase tracking-wider text-subtle">
-        edge · {iata(edge.code)}
-      </p>
-    )
-  }
-
-  return (
-    <div className="flex items-baseline justify-between gap-3 font-mono text-[0.7rem] uppercase tracking-wider text-subtle">
-      <span>
-        {iata(edge.code)} → {iata(origin.code)}
-      </span>
-      {distanceKm ? (
-        <span className="shrink-0 opacity-70">
-          {formatDistance(distanceKm)}
-        </span>
-      ) : null}
-    </div>
-  )
-}
-
 export function LivePing({
   initial,
 }: {
@@ -223,7 +169,6 @@ export function LivePing({
   const seed: Sample = {
     ms: initial?.ms ?? 0,
     ok: initial?.ok ?? false,
-    route: null,
     at: 0,
   }
 
@@ -273,8 +218,6 @@ export function LivePing({
       </div>
 
       <Sparkline samples={history} />
-
-      {latest.route ? <RouteCaption route={latest.route} /> : null}
     </div>
   )
 }

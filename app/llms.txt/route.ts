@@ -37,11 +37,6 @@ const PAGES: { label: string; path: string; blurb: string }[] = [
     path: '/about',
     blurb: 'background and contact information',
   },
-  {
-    label: 'Resume',
-    path: '/resume',
-    blurb: 'résumé links and fuller work history',
-  },
 ]
 
 /**

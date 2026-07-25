@@ -41,3 +41,11 @@ test('unknown route returns 404', async ({ request }) => {
   const res = await request.get('/this-route-should-not-exist-9f3a2')
   expect(res.status()).toBe(404)
 })
+
+test('legacy Platonic Rotation URL redirects permanently to its anchor', async ({
+  request,
+}) => {
+  const res = await request.get('/blog/platonic', { maxRedirects: 0 })
+  expect(res.status()).toBe(308)
+  expect(res.headers().location).toBe('/experiments#platonic-rotation')
+})

@@ -108,12 +108,11 @@ export const socialLinks: SiteLink[] = [
   { label: 'Email', href: social.email },
 ]
 
-/** Footer links: social profiles plus internal Resume and Accessibility links. */
+/** Footer links: social profiles plus the internal Accessibility link. */
 export const footerLinks: SiteLink[] = [
   { label: 'LinkedIn', href: social.linkedin },
   { label: 'GitHub', href: social.github },
   { label: 'X', href: social.x },
-  { label: 'Resume', href: '/resume' },
   { label: 'Email', href: social.email },
   { label: 'Accessibility', href: '/accessibility' },
 ]

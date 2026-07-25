@@ -73,7 +73,7 @@ export default function HomePage() {
               title={item.company}
               kicker={item.role}
               meta={workDateRange(item)}
-              description={item.summary}
+              description={item.homeSummary ?? item.summary}
               headingLevel={3}
             />
           ))}
@@ -110,8 +110,8 @@ export default function HomePage() {
 
       <section>
         <SectionHeader
-          eyebrow="From the log"
-          title="Lately"
+          eyebrow="Log"
+          title="From the log"
           href="/log"
           hrefLabel="full log"
         />
