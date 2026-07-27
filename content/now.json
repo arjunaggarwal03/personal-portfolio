@@ -1,0 +1,28 @@
+{
+  "lastUpdated": "2026-06-08",
+  "building": {
+    "title": "Workflow state for agents",
+    "summary": "Working on the product and systems that turn ambiguous requests into changes people can understand, review, and trust.",
+    "revised": "2026-06-08",
+    "href": "https://lightfield.app"
+  },
+  "thinking": {
+    "question": "How much of an agent's intermediate state should a person have to see?",
+    "perspectives": [
+      {
+        "label": "Make it explicit",
+        "view": "Visible proposals, ownership, and state make consequential work easier to inspect and recover."
+      },
+      {
+        "label": "Let the system carry it",
+        "view": "Better defaults, reversibility, and a clear activity record may create more trust than constant confirmation."
+      }
+    ],
+    "evidence": "I would update this view after seeing which controls people actually use when an agent has reliable rollback and a legible history."
+  },
+  "changedMyMind": {
+    "previous": "Chat was mostly a temporary interface for demonstrating models.",
+    "current": "Chat can remain useful while intent is forming, provided durable workflow state exists outside the conversation.",
+    "revised": "2026-06-08"
+  }
+}

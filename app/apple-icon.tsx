@@ -1,6 +1,6 @@
 import { ImageResponse } from 'next/og'
 import { brand } from 'lib/site'
-import { SPARKLE_PATH } from 'app/components/icons'
+import { SPARKLE_PATH } from 'app/components/icons/SparkleIcon'
 
 export const size = { width: 180, height: 180 }
 export const contentType = 'image/png'

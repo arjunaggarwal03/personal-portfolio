@@ -1,4 +1,4 @@
-import type { Experiment, ExperimentGroup } from 'lib/types'
+import type { Experiment, ExperimentGroup } from 'lib/content/schemas/site'
 
 // Older projects, demoted and reframed. 1-2 sentences each.
 export const experiments: Experiment[] = [

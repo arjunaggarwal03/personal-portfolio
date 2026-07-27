@@ -1,6 +1,6 @@
 import { Feed } from 'feed'
 import { baseUrl, person, site } from 'lib/site'
-import { getPublishedWriting } from 'lib/content'
+import { getPublishedWriting } from 'lib/content/queries'
 
 const FEED_DESCRIPTION =
   'Essays and working questions about software, AI products, technical decisions, startups, and the beliefs that change while building them.'

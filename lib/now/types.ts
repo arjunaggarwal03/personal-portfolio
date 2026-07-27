@@ -1,5 +1,5 @@
 /**
- * Shared shapes for the live /now dashboard.
+ * Shared integration shapes for the ambient live sections on /now.
  *
  * Every source fetcher returns a discriminated result so a tile can render one
  * of three states without throwing: `ok` (data), `empty` (source reachable but
@@ -58,37 +58,6 @@ export type NowPlaying = {
   durationMs: number | null
 }
 
-export type Commit = {
-  repo: string
-  message: string
-  sha: string
-  url: string
-  /** ISO timestamp of the push. */
-  date: string
-}
-
-/** One day of GitHub contribution activity, for the heatmap. */
-export type ContributionDay = {
-  /** ISO date (YYYY-MM-DD). */
-  date: string
-  count: number
-}
-
-export type Building = {
-  commits: Commit[]
-  /**
-   * Commits authored in the trailing 7 days (GraphQL `totalCommitContributions`,
-   * with a public commit-search fallback). Counts commits specifically — not all
-   * contributions — so private/restricted activity doesn't inflate the number.
-   */
-  commitsThisWeek: number
-  /**
-   * Recent contribution calendar, as weeks of days (Sun→Sat). Sourced from the
-   * GitHub GraphQL contributions API; empty when no token is configured.
-   */
-  contributions: ContributionDay[][]
-}
-
 export type Weather = {
   temperatureF: number
   condition: string
@@ -105,28 +74,4 @@ export type Weather = {
    * sunset (drives the sun-arc dot); null before sunrise / after sunset.
    */
   dayFraction: number | null
-}
-
-export type Deploy = {
-  /** First line of the deployed commit message, when available. */
-  message: string
-  /** Deploy environment / target, e.g. "production". */
-  env: string
-  /** Git branch the deploy shipped from. */
-  ref: string
-  /** Short commit SHA. */
-  sha: string
-  /** ISO timestamp the running build shipped (build time on Vercel). */
-  createdAt: string
-  url: string
-}
-
-export type Ping = {
-  ok: boolean
-  ms: number
-}
-
-export type SiteStatus = {
-  deploy: Deploy | null
-  ping: Ping | null
 }

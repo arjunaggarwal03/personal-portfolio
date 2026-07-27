@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next'
-import { getPublishedWriting, getLogWithDetailPages } from 'lib/content'
+import { getPublishedWriting, getLogWithDetailPages } from 'lib/content/queries'
 import { baseUrl, navItems } from 'lib/site'
 
 /** Routes not covered by nav items (home + secondary pages). */
@@ -33,12 +33,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }))
 
-  const log: MetadataRoute.Sitemap = getLogWithDetailPages().map((entry) => ({
-    url: `${baseUrl}/log/${entry.slug}`,
-    lastModified: entry.updated ?? entry.date,
-    changeFrequency: 'monthly',
-    priority: 0.5,
-  }))
+  const log: MetadataRoute.Sitemap = getLogWithDetailPages()
+    .filter((entry) => entry.visibility === 'public' && !entry.flags.draft)
+    .map((entry) => ({
+      url: `${baseUrl}/log/${entry.slug}`,
+      lastModified: entry.updated ?? entry.date,
+      changeFrequency: 'monthly',
+      priority: 0.5,
+    }))
 
   return [...staticRoutes, ...writing, ...log]
 }

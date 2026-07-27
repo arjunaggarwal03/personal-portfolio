@@ -1,9 +1,10 @@
-import type { LogEntry, LogType } from './types'
+import type { LogEntry, LogType } from './content/schemas/log'
 
 export type LogQuery = {
   type?: string
   view?: string
   tag?: string
+  page?: string
 }
 
 type FilterDef = {

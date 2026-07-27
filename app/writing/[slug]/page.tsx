@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { getPublishedWriting, getWritingBySlug } from 'lib/content'
+import { getPublishedWriting, getWritingBySlug } from 'lib/content/queries'
 import { formatDate } from 'lib/dates'
 import { baseUrl } from 'lib/site'
 import { inlineLink } from 'lib/ui'

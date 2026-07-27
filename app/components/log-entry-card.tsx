@@ -1,12 +1,12 @@
 import Link from 'next/link'
 import { inlineLink, titleLink } from 'lib/ui'
 import { ExternalLink } from './external-link'
-import type { LogEntry } from 'lib/types'
+import type { LogEntry } from 'lib/content/schemas/log'
 import { formatDateShort } from 'lib/dates'
-import { hasDetailPage } from 'lib/content'
+import { getAsset, hasDetailPage } from 'lib/content/queries'
 import { RatingBadge } from './rating-badge'
 import { TagList } from './tag-pill'
-import { MediaEmbed } from './media-embed'
+import { PersonalMediaCover } from './personal-media-cover'
 
 function metaLine(entry: LogEntry): string {
   const parts = [formatDateShort(entry.date), entry.type]
@@ -17,11 +17,11 @@ function metaLine(entry: LogEntry): string {
 export function LogEntryCard({ entry }: { entry: LogEntry }) {
   const detail =
     entry.slug && hasDetailPage(entry) ? `/log/${entry.slug}` : null
-  const media = entry.media ?? []
+  const cover = getAsset(entry.cover)
 
   const titleNode = entry.title ? (
     detail ? (
-      <Link href={detail} className={titleLink}>
+      <Link href={detail} prefetch={false} className={titleLink}>
         {entry.title}
       </Link>
     ) : (
@@ -63,11 +63,9 @@ export function LogEntryCard({ entry }: { entry: LogEntry }) {
         </p>
       ) : null}
 
-      {media.length > 0 ? (
+      {cover && detail ? (
         <div className="mt-3">
-          {media.map((m, i) => (
-            <MediaEmbed key={i} item={m} />
-          ))}
+          <PersonalMediaCover asset={cover} href={detail} />
         </div>
       ) : null}
 

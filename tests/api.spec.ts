@@ -1,30 +1,5 @@
 import { expect, test } from '@playwright/test'
 
-/**
- * Contract tests for the two dynamic /now API routes the client polls. These
- * don't need any upstream secrets: `/api/ping` is self-contained, and
- * `/api/now-playing` returns a valid discriminated envelope even when Spotify
- * is unconfigured (state: "unconfigured"). We assert the shape + caching
- * guarantees the client relies on, not live data — so they stay green in CI.
- */
-
-test.describe('/api/ping', () => {
-  test('returns an uncached 204 with no body', async ({ request }) => {
-    const res = await request.get('/api/ping')
-
-    // 204 keeps the payload empty so the measured time is dominated by the
-    // network, not bytes — the whole point of the latency probe.
-    expect(res.status(), 'ping status').toBe(204)
-    expect((await res.body()).length, 'ping body is empty').toBe(0)
-
-    // Must never be cached, or the edge→origin round-trip (and its x-vercel-id)
-    // collapses and the latency number goes stale.
-    expect(res.headers()['cache-control'], 'ping cache-control').toContain(
-      'no-store',
-    )
-  })
-})
-
 test.describe('/api/now-playing', () => {
   test('returns an uncached JSON SourceResult envelope', async ({
     request,

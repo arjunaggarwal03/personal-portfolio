@@ -8,7 +8,7 @@ typed data files (no CMS, no database).
 
 ## Quick start
 
-Requires **Node 20+** and npm.
+Requires **Node 24** and npm.
 
 ```bash
 git clone https://github.com/arjunaggarwal03/personal-portfolio.git
@@ -28,7 +28,7 @@ are just MDX or TypeScript files under `content/`.
   with `remark-gfm` (tables/strikethrough/autolinks), `rehype-slug` +
   `rehype-autolink-headings` (deep-linkable headings), and `@shikijs/rehype`
   for build-time syntax highlighting (warm theme in `app/components/code-theme.ts`)
-- **Frontmatter validation** via `zod` schemas (`lib/schemas.ts`): malformed
+- **Content validation** via authoritative Zod schemas (`lib/content/schemas`): malformed
   content fails the build with a file-scoped error
 - Images via `next/image`; fonts: Newsreader (serif), Inter (sans), IBM Plex
   Mono (mono) via `next/font`
@@ -45,6 +45,9 @@ npm run lint         # oxlint
 npm run format       # biome format --write .
 npm run format:check # biome format . (CI: fails on unformatted files)
 npm run typecheck    # tsc --noEmit
+npm run content:validate
+npm run check:fast   # copy/content edit gate
+npm run check        # complete build, browser, a11y, and performance gate
 ```
 
 ## Project structure
@@ -65,10 +68,8 @@ content/             all editable content
   log/*.mdx          log entries
   work.ts            work history (structured data)
   experiments.ts     early projects (structured data)
-lib/                 framework-agnostic logic
-  site.ts            site identity, nav, social links, baseUrl  <-- edit copy here
-  types.ts           content types (single source of truth)
-  content.ts         MDX readers + production visibility filtering
+lib/content/         schemas, loading, normalization, validation, model, queries
+lib/media/           Cloudinary and Mux delivery adapters
   filters.ts         /log filter definitions
   dates.ts           date formatting + sorting
 ```
@@ -131,7 +132,7 @@ Edit the typed arrays in [`content/work.ts`](content/work.ts) and
 
 ## Content visibility (production)
 
-`lib/content.ts` filters content for production builds:
+`lib/content/queries.ts` filters content for production builds:
 
 - **draft** writing and `flags.draft` log entries are hidden everywhere.
 - **forthcoming** essays appear on the Writing index (if `showOnIndex`) but have
@@ -139,6 +140,15 @@ Edit the typed arrays in [`content/work.ts`](content/work.ts) and
 - **private** log entries are hidden; **unlisted** render at their slug but are
   excluded from indexes and feeds.
 - `sitemap.xml` and `rss` include public, published content only.
+
+## Architecture and media
+
+- [Content/media architecture](docs/content-media-architecture.md)
+- [Local Apple Photos scan and publishing](docs/media-publishing.md)
+- [Performance contracts and CI](docs/performance.md)
+
+Provider variables are listed in `.env.example`. They are optional for local
+development, previews, CI, and production builds.
 
 In dev (`npm run dev`) drafts are visible so you can preview them.
 

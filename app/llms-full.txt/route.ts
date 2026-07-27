@@ -1,4 +1,4 @@
-import { getPublishedWriting } from 'lib/content'
+import { getPublishedWriting } from 'lib/content/queries'
 import { baseUrl, person } from 'lib/site'
 import { formatDate } from 'lib/dates'
 

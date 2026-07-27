@@ -17,6 +17,7 @@
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+/.lighthouseci/
 
 # production
 /build
@@ -43,3 +44,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Local Log authoring state (manifests contain absolute source paths).
+/.log-workspace/

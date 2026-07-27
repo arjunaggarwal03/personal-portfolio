@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { work, workDateRange } from 'content/work'
-import { getFeaturedWriting, getFeaturedLog } from 'lib/content'
+import { getFeaturedWriting, getFeaturedLog } from 'lib/content/queries'
 import { formatDateShort } from 'lib/dates'
 import { externalLinks, site } from 'lib/site'
 import { homeGraph, ogImageUrl } from 'lib/seo'

@@ -1,4 +1,4 @@
-import { getWritingIndex } from 'lib/content'
+import { getWritingIndex } from 'lib/content/queries'
 import { pageMetadata } from 'lib/seo'
 import { IndexRow } from 'app/components/index-row'
 

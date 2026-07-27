@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import type { MediaItem } from 'lib/types'
+import type { LogEmbed } from 'lib/content/schemas/log'
 import { SpotifyEmbed } from './spotify-embed'
 import { NewTabIndicator } from './external-link'
 
@@ -45,7 +45,7 @@ function Frame({
   )
 }
 
-export function MediaEmbed({ item }: { item: MediaItem }) {
+export function MediaEmbed({ item }: { item: LogEmbed }) {
   const ratio = item.aspectRatio ?? DEFAULT_ASPECT_RATIO
 
   let content: React.ReactNode

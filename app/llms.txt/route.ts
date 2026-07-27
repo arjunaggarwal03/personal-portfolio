@@ -1,4 +1,4 @@
-import { getPublishedWriting } from 'lib/content'
+import { getPublishedWriting } from 'lib/content/queries'
 import { baseUrl, person, social } from 'lib/site'
 
 export const dynamic = 'force-static'
