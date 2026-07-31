@@ -6,7 +6,7 @@ const FEED_DESCRIPTION =
   'Essays and working questions about software, AI products, technical decisions, startups, and the beliefs that change while building them.'
 
 /** Public URLs for each syndication format, advertised in every feed. */
-export const feedLinks = {
+const feedLinks = {
   rss: `${baseUrl}/rss`,
   atom: `${baseUrl}/atom`,
   json: `${baseUrl}/feed.json`,

@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { pageMetadata } from 'lib/seo'
 import { FilterBar } from 'app/components/filter-bar'
 import { LogEntryCard } from 'app/components/log-entry-card'
+import { typeStyles } from 'lib/typography'
 
 const description =
   "A messy index of what I'm noticing: work, cities, meals, music, films, links, clips, and half-formed thoughts."
@@ -50,7 +51,7 @@ export default async function LogPage({
 
   return (
     <section>
-      <h1 className="font-serif text-2xl tracking-tight">Log</h1>
+      <h1 className={typeStyles.indexTitle}>Log</h1>
       <p className="mt-2 max-w-prose text-muted">
         A messy index of what I&rsquo;m noticing: work, cities, meals, music,
         films, links, clips, and half-formed thoughts.

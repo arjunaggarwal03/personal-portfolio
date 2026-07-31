@@ -90,6 +90,28 @@ test('reports orphaned assets as warnings', () => {
   )
 })
 
+test('rejects an unexpected frontmatter field', () => {
+  const result = logEntrySchema.safeParse({ ...entry, surprise: true })
+  assert.equal(result.success, false)
+})
+
+test('requires a visual cover to belong to its gallery', () => {
+  const second = mediaAssetSchema.parse({ ...asset, id: 'cover-two' })
+  const mismatched = logEntrySchema.parse({
+    ...entry,
+    gallery: ['cover-two'],
+  })
+  assert.throws(
+    () =>
+      validateContent({
+        writing: [writing],
+        log: [mismatched],
+        assets: [asset, second],
+      }),
+    /cover must also appear in gallery/,
+  )
+})
+
 test('pagination deterministically limits large Log collections', () => {
   const items = Array.from({ length: 45 }, (_, index) => index)
   assert.deepEqual(paginateLogEntries(items, 2), {

@@ -3,6 +3,7 @@
 import Image, { type ImageLoader } from 'next/image'
 import type { ImageAsset } from 'lib/content/schemas/media'
 import { cloudinaryImageUrl } from 'lib/media/cloudinary'
+import { publicEnv } from 'lib/env/public'
 
 const loader: ImageLoader = ({ src, width }) =>
   cloudinaryImageUrl(src, width) ?? '/media/unavailable.svg'
@@ -32,7 +33,7 @@ export function PersonalImage({
       />
     )
   }
-  if (!process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME) {
+  if (!publicEnv.cloudinaryCloudName) {
     return (
       <Image
         src="/media/unavailable.svg"

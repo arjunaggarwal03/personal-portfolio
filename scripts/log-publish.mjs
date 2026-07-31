@@ -1,8 +1,23 @@
-import { createHash } from 'node:crypto'
 import { execFileSync } from 'node:child_process'
-import { access, mkdir, readFile, writeFile } from 'node:fs/promises'
+import {
+  access,
+  mkdir,
+  open,
+  readFile,
+  rename,
+  stat,
+  writeFile,
+} from 'node:fs/promises'
 import path from 'node:path'
 import sharp from 'sharp'
+import { v2 as cloudinary } from 'cloudinary'
+import Mux from '@mux/mux-node'
+import { stringify as stringifyYaml } from 'yaml'
+import { mediaCatalogSchema } from '../lib/content/schemas/media.ts'
+import { logFrontmatterSchema } from '../lib/content/schemas/log.ts'
+import { selectionManifestSchema } from '../lib/content/schemas/publishing.ts'
+import { publishingEnv } from '../lib/env/publishing.ts'
+import { nextUploadedByte } from '../lib/media/mux-upload.ts'
 
 const args = process.argv.slice(2)
 const dryRun = args.includes('--dry-run')
@@ -11,13 +26,15 @@ if (!manifestPath)
   throw new Error(
     'Usage: npm run log:publish -- <selection-manifest> [--dry-run]',
   )
-const manifest = JSON.parse(await readFile(path.resolve(manifestPath), 'utf8'))
-if (manifest.version !== 1 || !Array.isArray(manifest.items))
-  throw new Error('Unsupported selection manifest')
-const selected = manifest.items.filter(
-  (item) => item.selected && !item.duplicateOf,
+const manifest = selectionManifestSchema.parse(
+  JSON.parse(await readFile(path.resolve(manifestPath), 'utf8')),
 )
+const selected = manifest.items
+  .filter((item) => item.selected && !item.duplicateOf)
+  .sort((a, b) => (a.order ?? Infinity) - (b.order ?? Infinity))
 if (!selected.length) throw new Error('Selection contains no publishable items')
+if (selected.filter((item) => item.cover).length !== 1)
+  throw new Error('Select exactly one cover item')
 for (const item of selected) {
   if (!item.hash || !item.sourcePath || !['image', 'video'].includes(item.kind))
     throw new Error(`Malformed item ${item.id ?? '(unknown)'}`)
@@ -30,6 +47,12 @@ for (const item of selected) {
   await access(item.sourcePath)
 }
 
+const entry = manifest.entry ?? {}
+if (!/^\d{4}-\d{2}-\d{2}$/.test(entry.date ?? ''))
+  throw new Error('entry.date must be YYYY-MM-DD')
+if (!/^[a-z0-9-]+$/.test(entry.slug ?? ''))
+  throw new Error('entry.slug must be lowercase kebab-case')
+
 const plan = selected.map((item) => ({
   id: `log-${item.hash.slice(0, 16)}`,
   kind: item.kind,
@@ -41,20 +64,33 @@ console.log(
 )
 if (dryRun) process.exit(0)
 
-const required = selected.some((item) => item.kind === 'image')
-  ? [
-      'NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME',
-      'CLOUDINARY_API_KEY',
-      'CLOUDINARY_API_SECRET',
-    ]
-  : []
-if (selected.some((item) => item.kind === 'video'))
-  required.push('MUX_TOKEN_ID', 'MUX_TOKEN_SECRET')
-const missing = required.filter((key) => !process.env[key])
+const providerEnv = publishingEnv()
+const missing = []
+if (selected.some((item) => item.kind === 'image')) {
+  if (!providerEnv.cloudinaryCloudName)
+    missing.push('NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME')
+  if (!providerEnv.cloudinaryApiKey) missing.push('CLOUDINARY_API_KEY')
+  if (!providerEnv.cloudinaryApiSecret) missing.push('CLOUDINARY_API_SECRET')
+}
+if (selected.some((item) => item.kind === 'video')) {
+  if (!providerEnv.muxTokenId) missing.push('MUX_TOKEN_ID')
+  if (!providerEnv.muxTokenSecret) missing.push('MUX_TOKEN_SECRET')
+}
 if (missing.length)
   throw new Error(
     `Publishing credentials are missing: ${missing.join(', ')}. Scan and --dry-run remain available without credentials.`,
   )
+
+cloudinary.config({
+  cloud_name: providerEnv.cloudinaryCloudName,
+  api_key: providerEnv.cloudinaryApiKey,
+  api_secret: providerEnv.cloudinaryApiSecret,
+  secure: true,
+})
+const mux = new Mux({
+  tokenId: providerEnv.muxTokenId,
+  tokenSecret: providerEnv.muxTokenSecret,
+})
 
 const workspace = path.join(process.cwd(), '.log-workspace')
 const derivativeDirectory = path.join(workspace, 'publishable')
@@ -86,11 +122,16 @@ const retryFetch = (operation) =>
     return response
   })
 let checkpointWrite = Promise.resolve()
+const atomicWrite = async (target, value) => {
+  const temporary = `${target}.${process.pid}.tmp`
+  await writeFile(temporary, value)
+  await rename(temporary, target)
+}
 const checkpoint = async (hash, record) => {
   checkpoints[hash] = record
   const snapshot = `${JSON.stringify(checkpoints, null, 2)}\n`
   checkpointWrite = checkpointWrite.then(() =>
-    writeFile(checkpointPath, snapshot),
+    atomicWrite(checkpointPath, snapshot),
   )
   await checkpointWrite
 }
@@ -102,47 +143,27 @@ async function publishImage(item, id) {
     .resize({ width: 2400, withoutEnlargement: true })
     .webp({ quality: 88 })
     .toFile(derivative)
-  const timestamp = Math.floor(Date.now() / 1000)
   const publicId = `portfolio/log/${item.hash}`
-  const signature = createHash('sha256')
-    .update(
-      `overwrite=false&public_id=${publicId}&timestamp=${timestamp}${process.env.CLOUDINARY_API_SECRET}`,
-    )
-    .digest('hex')
-  const form = new FormData()
-  form.set('file', new Blob([await readFile(derivative)]), `${item.hash}.webp`)
-  form.set('api_key', process.env.CLOUDINARY_API_KEY)
-  form.set('timestamp', String(timestamp))
-  form.set('public_id', publicId)
-  form.set('overwrite', 'false')
-  form.set('signature', signature)
-  const response = await retryFetch(() =>
-    fetch(
-      `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
-      { method: 'POST', body: form },
-    ),
-  )
   let data
-  if (response.status === 409) {
-    const authorization = Buffer.from(
-      `${process.env.CLOUDINARY_API_KEY}:${process.env.CLOUDINARY_API_SECRET}`,
-    ).toString('base64')
-    const existing = await retryFetch(() =>
-      fetch(
-        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/resources/image/upload/${encodeURIComponent(publicId)}`,
-        { headers: { Authorization: `Basic ${authorization}` } },
-      ),
+  try {
+    data = await retry(() =>
+      cloudinary.uploader.upload(derivative, {
+        public_id: publicId,
+        overwrite: false,
+        unique_filename: false,
+        resource_type: 'image',
+      }),
     )
-    if (!existing.ok)
-      throw new Error(
-        `Cloudinary idempotency lookup failed (${existing.status}): ${await existing.text()}`,
-      )
-    data = await existing.json()
-  } else if (!response.ok) {
-    throw new Error(
-      `Cloudinary upload failed (${response.status}): ${await response.text()}`,
+  } catch (error) {
+    const status = error?.http_code ?? error?.error?.http_code
+    if (status !== 409) throw error
+    data = await retry(() =>
+      cloudinary.api.resource(publicId, {
+        resource_type: 'image',
+        type: 'upload',
+      }),
     )
-  } else data = await response.json()
+  }
   return {
     id,
     kind: 'image',
@@ -156,15 +177,6 @@ async function publishImage(item, id) {
   }
 }
 
-const muxFetch = (url, init = {}) =>
-  fetch(`https://api.mux.com${url}`, {
-    ...init,
-    headers: {
-      Authorization: `Basic ${Buffer.from(`${process.env.MUX_TOKEN_ID}:${process.env.MUX_TOKEN_SECRET}`).toString('base64')}`,
-      'Content-Type': 'application/json',
-      ...init.headers,
-    },
-  })
 async function publishVideo(item, id) {
   const extension = path.extname(item.sourcePath).toLowerCase() || '.mov'
   const derivative = path.join(
@@ -190,23 +202,15 @@ async function publishVideo(item, id) {
   let uploadId = state.muxUploadId
   let uploadUrl = state.muxUploadUrl
   if (!uploadId) {
-    const created = await retryFetch(() =>
-      muxFetch('/video/v1/uploads', {
-        method: 'POST',
-        body: JSON.stringify({
-          cors_origin: '*',
-          new_asset_settings: {
-            playback_policy: ['public'],
-            passthrough: item.hash,
-          },
-        }),
+    const upload = await retry(() =>
+      mux.video.uploads.create({
+        cors_origin: '*',
+        new_asset_settings: {
+          playback_policies: ['public'],
+          passthrough: item.hash,
+        },
       }),
     )
-    if (!created.ok)
-      throw new Error(
-        `Mux upload creation failed (${created.status}): ${await created.text()}`,
-      )
-    const upload = (await created.json()).data
     uploadId = upload.id
     uploadUrl = upload.url
     state = {
@@ -218,30 +222,49 @@ async function publishVideo(item, id) {
     await checkpoint(item.hash, state)
   }
 
-  const uploadStatus = await retryFetch(() =>
-    muxFetch(`/video/v1/uploads/${uploadId}`),
-  )
-  if (!uploadStatus.ok)
-    throw new Error(`Mux upload lookup failed (${uploadStatus.status})`)
-  let assetId = (await uploadStatus.json()).data.asset_id
+  const uploadStatus = await retry(() => mux.video.uploads.retrieve(uploadId))
+  let assetId = uploadStatus.asset_id
   if (!assetId && state.stage !== 'uploaded') {
     if (!uploadUrl)
       throw new Error(`Mux upload ${uploadId} has no resumable URL`)
-    const bytes = await readFile(derivative)
-    const put = await retryFetch(() =>
-      fetch(uploadUrl, { method: 'PUT', body: bytes }),
-    )
-    if (!put.ok) throw new Error(`Mux upload failed (${put.status})`)
+    const fileSize = (await stat(derivative)).size
+    const file = await open(derivative, 'r')
+    const chunkSize = 20 * 1024 * 1024
+    let uploadedBytes = state.uploadedBytes ?? 0
+    try {
+      while (uploadedBytes < fileSize) {
+        const length = Math.min(chunkSize, fileSize - uploadedBytes)
+        const bytes = Buffer.allocUnsafe(length)
+        await file.read(bytes, 0, length, uploadedBytes)
+        const put = await retryFetch(() =>
+          fetch(uploadUrl, {
+            method: 'PUT',
+            headers: {
+              'Content-Length': String(length),
+              'Content-Range': `bytes ${uploadedBytes}-${uploadedBytes + length - 1}/${fileSize}`,
+            },
+            body: bytes,
+          }),
+        )
+        if (put.status !== 308 && !put.ok)
+          throw new Error(`Mux upload failed (${put.status})`)
+        uploadedBytes = nextUploadedByte(
+          put.headers.get('range'),
+          uploadedBytes + length,
+        )
+        state = { ...state, uploadedBytes }
+        await checkpoint(item.hash, state)
+      }
+    } finally {
+      await file.close()
+    }
     state = { ...state, stage: 'uploaded' }
     await checkpoint(item.hash, state)
   }
   for (let attempt = 0; attempt < 90; attempt++) {
-    const status = await retryFetch(() =>
-      muxFetch(`/video/v1/uploads/${uploadId}`),
-    )
-    const data = (await status.json()).data
-    if (data.asset_id) {
-      assetId = data.asset_id
+    const upload = await retry(() => mux.video.uploads.retrieve(uploadId))
+    if (upload.asset_id) {
+      assetId = upload.asset_id
       break
     }
     await new Promise((resolve) => setTimeout(resolve, 2000))
@@ -250,10 +273,7 @@ async function publishVideo(item, id) {
     throw new Error('Mux upload did not create an asset before timeout')
   let asset
   for (let attempt = 0; attempt < 150; attempt++) {
-    const status = await retryFetch(() =>
-      muxFetch(`/video/v1/assets/${assetId}`),
-    )
-    asset = (await status.json()).data
+    asset = await retry(() => mux.video.assets.retrieve(assetId))
     if (asset.status === 'ready') break
     if (asset.status === 'errored')
       throw new Error(`Mux processing failed for ${assetId}`)
@@ -279,13 +299,14 @@ async function publishVideo(item, id) {
   }
 }
 
-const records = []
+const records = Array(selected.length)
 let cursor = 0
 async function worker() {
   while (cursor < selected.length) {
-    const item = selected[cursor++]
+    const index = cursor++
+    const item = selected[index]
     if (checkpoints[item.hash]?.complete) {
-      records.push(checkpoints[item.hash].record)
+      records[index] = checkpoints[item.hash].record
       continue
     }
     const id = `log-${item.hash.slice(0, 16)}`
@@ -294,7 +315,7 @@ async function worker() {
         ? await publishImage(item, id)
         : await publishVideo(item, id)
     await checkpoint(item.hash, { complete: true, record })
-    records.push(record)
+    records[index] = record
   }
 }
 await Promise.all(
@@ -306,13 +327,8 @@ const catalog = JSON.parse(await readFile(catalogPath, 'utf8'))
 const byId = new Map(catalog.assets.map((asset) => [asset.id, asset]))
 for (const record of records) byId.set(record.id, record)
 catalog.assets = [...byId.values()].sort((a, b) => a.id.localeCompare(b.id))
-await writeFile(catalogPath, `${JSON.stringify(catalog, null, 2)}\n`)
+mediaCatalogSchema.parse(catalog)
 
-const entry = manifest.entry ?? {}
-if (!/^\d{4}-\d{2}-\d{2}$/.test(entry.date ?? ''))
-  throw new Error('entry.date must be YYYY-MM-DD')
-if (!/^[a-z0-9-]+$/.test(entry.slug ?? ''))
-  throw new Error('entry.slug must be lowercase kebab-case')
 const logPath = path.join(
   process.cwd(),
   'content/log',
@@ -323,10 +339,22 @@ try {
   console.warn(`Draft already exists; preserving prose: ${logPath}`)
 } catch {
   const ids = records.map((record) => record.id)
-  const escaped = (value = '') => String(value).replaceAll('"', '\\"')
-  const mdx = `---\ntype: "${records.some((record) => record.kind === 'video') ? 'clip' : 'photo'}"\ndate: "${entry.date}"\ntitle: "${escaped(entry.title)}"\nsummary: "${escaped(entry.summary)}"\ncover: "${ids[0]}"\ngallery: [${ids.map((id) => `"${id}"`).join(', ')}]\nlayout: "${entry.layout ?? 'standard'}"\nvisibility: "${entry.visibility ?? 'private'}"\nflags: { draft: true }\n---\n\n<!-- Add prose here. log:publish will never overwrite this file. -->\n`
-  await writeFile(logPath, mdx)
+  const coverIndex = selected.findIndex((item) => item.cover)
+  const frontmatter = logFrontmatterSchema.parse({
+    type: records.some((record) => record.kind === 'video') ? 'clip' : 'photo',
+    date: entry.date,
+    title: entry.title,
+    summary: entry.summary,
+    cover: ids[coverIndex],
+    gallery: ids,
+    layout: entry.layout ?? 'standard',
+    visibility: 'private',
+    flags: {},
+  })
+  const mdx = `---\n${stringifyYaml(frontmatter).trimEnd()}\n---\n\n<!-- Add prose here. log:publish will never overwrite this file. -->\n`
+  await atomicWrite(logPath, mdx)
 }
+await atomicWrite(catalogPath, `${JSON.stringify(catalog, null, 2)}\n`)
 console.log(
   `Published ${records.length} assets. Preview /log/${entry.date}-${entry.slug}`,
 )

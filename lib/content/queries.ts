@@ -5,11 +5,7 @@ import { getSiteModel } from './model'
 const isProd = process.env.NODE_ENV === 'production'
 const visibleLog = (): readonly LogEntry[] =>
   getSiteModel().log.filter(
-    (entry) =>
-      !isProd ||
-      (!entry.flags.draft &&
-        entry.visibility !== 'private' &&
-        !entry.flags.private),
+    (entry) => !isProd || entry.visibility !== 'private',
   )
 
 export const getWritingIndex = (): WritingPost[] =>
@@ -40,12 +36,15 @@ export const getFeaturedLog = (limit = 6): LogEntry[] =>
   getLogFeed().slice(0, limit)
 export const getAsset = (id?: string) =>
   id ? getSiteModel().assets[id] : undefined
-export const getRecentLogByTypes = (types: LogEntry['type'][], limit = 4) =>
-  getLogFeed()
-    .filter((entry) => types.includes(entry.type))
-    .slice(0, limit)
+export const getLogBySlugs = (slugs: readonly string[]): LogEntry[] => {
+  const entries = new Map(getLogFeed().map((entry) => [entry.slug, entry]))
+  return slugs.flatMap((slug) => {
+    const entry = entries.get(slug)
+    return entry ? [entry] : []
+  })
+}
 
-export const LOG_PAGE_SIZE = 20
+const LOG_PAGE_SIZE = 20
 
 export function paginateLogEntries<T>(
   entries: readonly T[],

@@ -58,8 +58,8 @@ export function pageMetadata(input: {
  * every page's graph point back to one canonical Person/WebSite entity, which
  * is what search and AI engines use to merge signals into a single profile.
  */
-export const PERSON_ID = `${baseUrl}/#person`
-export const WEBSITE_ID = `${baseUrl}/#website`
+const PERSON_ID = `${baseUrl}/#person`
+const WEBSITE_ID = `${baseUrl}/#website`
 const PROFILE_ID = `${baseUrl}/#profilepage`
 
 /** Profiles that prove this site and the person are the same entity. */

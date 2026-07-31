@@ -5,7 +5,7 @@ import { parseSource, type RawContentEntry } from './load'
 
 const DETAIL_PAGE_MIN_PLAINTEXT = 280
 
-export function plainTextLength(body?: string): number {
+function plainTextLength(body?: string): number {
   if (!body) return 0
   return body
     .replace(/```[\s\S]*?```/g, ' ')

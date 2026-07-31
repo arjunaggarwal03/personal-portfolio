@@ -34,7 +34,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }))
 
   const log: MetadataRoute.Sitemap = getLogWithDetailPages()
-    .filter((entry) => entry.visibility === 'public' && !entry.flags.draft)
+    .filter((entry) => entry.visibility === 'public')
     .map((entry) => ({
       url: `${baseUrl}/log/${entry.slug}`,
       lastModified: entry.updated ?? entry.date,

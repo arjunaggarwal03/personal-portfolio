@@ -1,5 +1,6 @@
 import { pageMetadata } from 'lib/seo'
 import { ExternalLink } from 'app/components/external-link'
+import { typeStyles } from 'lib/typography'
 
 export const metadata = pageMetadata({
   title: 'Accessibility',
@@ -13,7 +14,7 @@ const feedbackEmail = 'arjun@arjunaggarwal.dev'
 export default function AccessibilityPage() {
   return (
     <section className="max-w-prose">
-      <h1 className="font-serif text-2xl tracking-tight">Accessibility</h1>
+      <h1 className={typeStyles.indexTitle}>Accessibility</h1>
 
       <div className="article mt-8">
         <p>

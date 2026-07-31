@@ -7,6 +7,7 @@ import { getAsset, hasDetailPage } from 'lib/content/queries'
 import { RatingBadge } from './rating-badge'
 import { TagList } from './tag-pill'
 import { PersonalMediaCover } from './personal-media-cover'
+import { typeStyles } from 'lib/typography'
 
 function metaLine(entry: LogEntry): string {
   const parts = [formatDateShort(entry.date), entry.type]
@@ -32,21 +33,19 @@ export function LogEntryCard({ entry }: { entry: LogEntry }) {
   return (
     <article className="border-t border-border py-5 first:border-t-0">
       <div className="flex items-baseline justify-between gap-3">
-        <p className="font-mono text-xs text-subtle">{metaLine(entry)}</p>
+        <p className={`${typeStyles.caption} text-subtle`}>{metaLine(entry)}</p>
         <RatingBadge rating={entry.rating} />
       </div>
 
       {titleNode ? (
-        <h2 className="mt-1.5 font-serif text-lg tracking-tight">
-          {titleNode}
-        </h2>
+        <h2 className={`${typeStyles.cardTitle} mt-1.5`}>{titleNode}</h2>
       ) : null}
 
       {entry.summary ? (
         <p
           className={`${
             titleNode ? 'mt-1' : 'mt-1.5'
-          } text-[0.95rem] leading-relaxed text-ink`}
+          } ${typeStyles.smallBody} text-ink`}
         >
           {entry.summary}
         </p>
@@ -56,7 +55,7 @@ export function LogEntryCard({ entry }: { entry: LogEntry }) {
         <p className="mt-1.5">
           <ExternalLink
             href={entry.url}
-            className={`font-mono text-xs text-muted ${inlineLink}`}
+            className={`${typeStyles.caption} text-muted ${inlineLink}`}
           >
             {entry.source ?? new URL(entry.url).hostname.replace('www.', '')}
           </ExternalLink>

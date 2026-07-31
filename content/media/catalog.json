@@ -1,43 +1,4 @@
 {
   "version": 1,
-  "assets": [
-    {
-      "id": "fixture-editorial-image",
-      "kind": "image",
-      "provider": "cloudinary",
-      "sourceId": "samples/landscapes/nature-mountains",
-      "width": 1600,
-      "height": 1067,
-      "alt": "Abstract warm-toned landscape fixture for media integration tests",
-      "caption": "Fixture asset — not part of Arjun's photo library.",
-      "visibility": "public",
-      "fixturePath": "/media/editorial-image-fixture.png"
-    },
-    {
-      "id": "fixture-editorial-video",
-      "kind": "video",
-      "provider": "mux",
-      "sourceId": "fixture-only",
-      "playbackId": "EcHgOK9coz5K4rjSwOkoE7Y7O01201YMIC200RI6lNxnhs",
-      "width": 1280,
-      "height": 720,
-      "duration": 12,
-      "alt": "Warm geometric motion fixture for video integration tests",
-      "caption": "Fixture asset — no personal video is committed.",
-      "visibility": "public",
-      "fixturePosterPath": "/media/editorial-video-poster.svg"
-    },
-    {
-      "id": "fixture-editorial-image-secondary",
-      "kind": "image",
-      "provider": "cloudinary",
-      "sourceId": "samples/landscapes/beach-boat",
-      "width": 1600,
-      "height": 1067,
-      "alt": "Second abstract warm-toned fixture for lazy gallery coverage",
-      "caption": "Secondary fixture asset — not part of Arjun's photo library.",
-      "visibility": "public",
-      "fixturePath": "/media/editorial-image-fixture.png"
-    }
-  ]
+  "assets": []
 }

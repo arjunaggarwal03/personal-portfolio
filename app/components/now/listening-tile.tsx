@@ -1,95 +1,39 @@
 import Image from 'next/image'
+import { ExternalLink } from 'app/components/external-link'
 import { getListening } from 'lib/now/spotify'
-import { relativeTime } from 'lib/now/format'
-import type { NowPlaying as NowPlayingData } from 'lib/now/types'
-import { NowTile } from './now-tile'
-import { NowPlaying } from './now-playing'
+import { typeStyles } from 'lib/typography'
+import { inlineLink } from 'lib/ui'
 
-const EYEBROW = 'Listening'
+export async function ListeningNote() {
+  const result = await getListening()
+  if (result.state !== 'ok' || !result.data) return null
 
-export async function ListeningTile() {
-  const { state, data, fetchedAt } = await getListening()
-
-  if (state !== 'ok' || !data) {
-    return (
-      <NowTile eyebrow={EYEBROW} fetchedAt={fetchedAt}>
-        <p className="font-mono text-xs text-subtle">
-          Listening data is unavailable right now.
-        </p>
-      </NowTile>
-    )
-  }
-
-  const headline = data.current ?? data.recent[0] ?? data.topTrack
-  if (!headline) {
-    return (
-      <NowTile eyebrow={EYEBROW} fetchedAt={fetchedAt}>
-        <p className="font-mono text-xs text-subtle">
-          Nothing recent from Spotify.
-        </p>
-      </NowTile>
-    )
-  }
-
-  // Seed the live client poller with the server's first read so there's real
-  // content on first paint (and without JS); it takes over ticking from here.
-  const initial: NowPlayingData = {
-    isPlaying: Boolean(data.current),
-    track: headline,
-    progressMs: data.progressMs,
-    durationMs: data.durationMs,
-  }
-
-  // Recently-played feed beneath the hero — skip whatever track is already the
-  // headline so the top of the feed never duplicates the now-playing cover.
-  const feed = data.recent.filter((t) => t.url !== headline.url).slice(0, 3)
+  const track =
+    result.data.current ?? result.data.recent[0] ?? result.data.topTrack
+  if (!track) return null
 
   return (
-    <NowTile eyebrow={EYEBROW} fetchedAt={fetchedAt}>
-      <div className="flex flex-col gap-4">
-        <NowPlaying initial={initial} />
-
-        {feed.length > 0 ? (
-          <div className="flex flex-col gap-2.5 border-t border-border-soft pt-3">
-            <p className="font-mono text-[0.7rem] uppercase tracking-wider text-subtle">
-              recently played
-            </p>
-            <ul className="flex flex-col gap-2.5">
-              {feed.map((t) => (
-                <li
-                  key={`${t.url}-${t.playedAt}`}
-                  className="flex items-center gap-3"
-                >
-                  <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded border border-border-soft bg-surface-muted">
-                    {t.image ? (
-                      <Image
-                        src={t.image}
-                        alt=""
-                        fill
-                        sizes="36px"
-                        className="object-cover"
-                      />
-                    ) : null}
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm leading-tight text-ink">
-                      {t.title}
-                    </p>
-                    <p className="truncate text-xs leading-tight text-subtle">
-                      {t.artist}
-                    </p>
-                  </div>
-                  {t.playedAt ? (
-                    <span className="shrink-0 font-mono text-[0.7rem] text-subtle">
-                      {relativeTime(t.playedAt)}
-                    </span>
-                  ) : null}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ) : null}
+    <div className="mt-7 flex items-center gap-4 border-t border-border-soft pt-5">
+      {track.image ? (
+        <Image
+          src={track.image}
+          alt=""
+          width={56}
+          height={56}
+          className="h-14 w-14 rounded object-cover"
+        />
+      ) : null}
+      <div className="min-w-0">
+        <p className={`${typeStyles.caption} text-subtle`}>
+          {result.data.current ? 'Listening now' : 'Recently played'}
+        </p>
+        <p className={`${typeStyles.smallBody} truncate`}>
+          <ExternalLink className={inlineLink} href={track.url}>
+            {track.title}
+          </ExternalLink>
+          <span className="text-muted"> by {track.artist}</span>
+        </p>
       </div>
-    </NowTile>
+    </div>
   )
 }

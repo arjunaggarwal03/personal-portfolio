@@ -100,14 +100,6 @@ export const externalLinks = {
   lightfield: 'https://lightfield.app',
 } as const
 
-/** External profiles, reused by the footer and the About page. */
-export const socialLinks: SiteLink[] = [
-  { label: 'LinkedIn', href: social.linkedin },
-  { label: 'GitHub', href: social.github },
-  { label: 'X', href: social.x },
-  { label: 'Email', href: social.email },
-]
-
 /** Footer links: social profiles plus the internal Accessibility link. */
 export const footerLinks: SiteLink[] = [
   { label: 'LinkedIn', href: social.linkedin },

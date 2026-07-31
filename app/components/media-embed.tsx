@@ -2,6 +2,7 @@ import Image from 'next/image'
 import type { LogEmbed } from 'lib/content/schemas/log'
 import { SpotifyEmbed } from './spotify-embed'
 import { NewTabIndicator } from './external-link'
+import { youtubeEmbedUrl } from 'lib/media/embed-urls'
 
 const IMAGE_SIZES = '(max-width: 760px) 100vw, 760px'
 const DEFAULT_ASPECT_RATIO = '16:9'
@@ -16,16 +17,8 @@ const aspectClass: Record<string, string> = {
 
 const FALLBACK_ASPECT_CLASS = 'aspect-video'
 
-const YOUTUBE_URL_PATTERN =
-  /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]{11})/
-const YOUTUBE_EMBED_BASE = 'https://www.youtube.com/embed/'
 const YOUTUBE_IFRAME_ALLOW =
   'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-
-function youtubeEmbedUrl(url: string): string {
-  const match = url.match(YOUTUBE_URL_PATTERN)
-  return match ? `${YOUTUBE_EMBED_BASE}${match[1]}` : url
-}
 
 function Frame({
   children,
@@ -111,7 +104,7 @@ export function MediaEmbed({ item }: { item: LogEmbed }) {
       content = (
         <Frame ratio={ratio}>
           <iframe
-            src={youtubeEmbedUrl(item.url)}
+            src={youtubeEmbedUrl(item.url) ?? undefined}
             title={item.alt ?? 'YouTube video'}
             allow={YOUTUBE_IFRAME_ALLOW}
             allowFullScreen

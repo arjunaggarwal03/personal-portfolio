@@ -1,29 +1,33 @@
-# Local Log media publishing
+# Publishing personal Log media
 
-## Export from Apple Photos
+The publishing tools turn a local Apple Photos export into catalog records and a private Log draft. Originals and previews remain outside Git.
 
-In Photos, select the items, choose **File → Export → Export Unmodified Original**, include filename information if useful, and export into a new local directory. The scanner reads that directory recursively; it never reads the Photos library database.
+## Scan and select
+
+Export unmodified originals from Photos into a new local directory, then run:
 
 ```bash
 npm run log:scan -- /absolute/path/to/export
 open .log-workspace/contact-sheet.html
 ```
 
-The scan hashes every supported photo/video, detects exact duplicates, groups likely Live Photo pairs by directory and basename, reads dimensions/duration, and creates small local previews. Edit `.log-workspace/selection.json`: set `selected` on chosen items, supply alt text/captions, and replace the entry placeholder values. Re-running against identical bytes produces the same item IDs and previews.
+The scanner reads the export recursively, hashes supported files, detects exact duplicates, pairs likely Live Photos, extracts only the metadata needed for selection, and creates local previews. It does not read the Photos library database or upload anything.
 
-No scan uploads data. Originals are never changed. The scanner does not request, retain, or emit GPS or face metadata. The ignored `.log-workspace` does contain absolute local paths and previews, so it should still be treated as private local state.
+Use the contact sheet to select and order media, choose the cover, and write alt text and captions. Save the resulting selection manifest in `.log-workspace`. Treat that directory as private because it contains previews and local paths.
 
-## Dry run and publish
+## Plan and publish
 
 ```bash
 npm run log:publish -- .log-workspace/selection.json --dry-run
 npm run log:publish -- .log-workspace/selection.json
 ```
 
-Dry-run validates selected files, dimensions, duration, and alt text and prints the exact provider plan without credentials. Publishing requires the Cloudinary or Mux variables documented in `.env.example`.
+Dry run validates every selected item and reports the exact plan without credentials. Publishing reads provider settings from `.env.local`, uploads images through the Cloudinary SDK, and creates resumable direct uploads through the Mux SDK.
 
-Images are rotated, bounded to 2400 px, encoded as WebP, and written without source EXIF before upload. Videos are remuxed with ffmpeg and all container metadata removed before Mux upload. Export privacy still remains the author's responsibility: review both the visual content and any provider-side settings before publishing. Upload IDs derive from content hashes. Three workers run concurrently with exponential retry. `.log-workspace/publish-checkpoints.json` records provider upload stages and complete records, so reruns resume Mux processing and skip completed bytes instead of creating a second asset. The committed catalog is updated only after every selected item is complete.
+The tool strips image metadata, removes video container metadata, and uses content-derived provider IDs. Checkpoints record completed provider stages so a rerun can recover without creating duplicate assets. Catalog and MDX updates use temporary files and atomic renames after every upload succeeds.
 
-The tool creates a private draft MDX entry and prints its preview route. If the file already exists, it preserves all hand-written prose and only reports the path; it never overwrites it.
+The generated Log entry is private. Review its ordering, cover, alt text, captions, and prose locally before changing visibility.
 
-Committed: schemas, catalog records, MDX, source code, SVG fixtures. Not committed: exports, originals, derivatives, thumbnails, selection manifests, checkpoints, credentials, GPS data, or face metadata.
+## Repository boundary
+
+Commit source code, schemas, catalog metadata, and reviewed Log MDX. Do not commit originals, generated previews, contact sheets, selection manifests, checkpoints, credentials, or provider exports. Deterministic integration fixtures belong under `tests/fixtures/`, not in the public media catalog.

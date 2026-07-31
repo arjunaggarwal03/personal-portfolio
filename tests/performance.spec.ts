@@ -1,4 +1,3 @@
-import { gzipSync } from 'node:zlib'
 import { expect, test, type Page } from '@playwright/test'
 
 const VIDEO_BYTES = /(?:\.m3u8|\.m4s|\.mp4|\.ts)(?:\?|$)|stream\.mux\.com/i
@@ -6,6 +5,18 @@ const VIDEO_BYTES = /(?:\.m3u8|\.m4s|\.mp4|\.ts)(?:\?|$)|stream\.mux\.com/i
 async function routeBytes(page: Page, route: string) {
   const resources = new Map<string, { type: string; bytes: number }>()
   let authoringLeak = false
+  const session = await page.context().newCDPSession(page)
+  const requestTypes = new Map<string, string>()
+  await session.send('Network.enable')
+  session.on('Network.responseReceived', ({ requestId, response, type }) => {
+    if (response.url.startsWith('http://localhost:3100')) {
+      requestTypes.set(requestId, type.toLowerCase())
+    }
+  })
+  session.on('Network.loadingFinished', ({ requestId, encodedDataLength }) => {
+    const type = requestTypes.get(requestId)
+    if (type) resources.set(requestId, { type, bytes: encodedDataLength })
+  })
   page.on('response', async (response) => {
     const request = response.request()
     if (!response.url().startsWith('http://localhost:3100')) return
@@ -16,10 +27,6 @@ async function routeBytes(page: Page, route: string) {
         /log-scan|log-publish|\.log-workspace/.test(body.toString('utf8'))
       )
         authoringLeak = true
-      resources.set(response.url(), {
-        type: request.resourceType(),
-        bytes: gzipSync(body).byteLength,
-      })
     } catch {}
   })
   await page.goto(route, { waitUntil: 'networkidle' })
@@ -59,10 +66,12 @@ test('@perf image detail has stable responsive lazy media without double optimiz
       largestImage = Math.max(largestImage, (await response.body()).byteLength)
     } catch {}
   })
-  await page.goto('/log/fixture-image-gallery', { waitUntil: 'networkidle' })
+  await page.goto('/test-media-fixture?case=image', {
+    waitUntil: 'networkidle',
+  })
   const image = page.locator('[data-gallery-layout] img').first()
-  await expect(image).toHaveAttribute('width', '1600')
-  await expect(image).toHaveAttribute('height', '1067')
+  await expect(image).toHaveAttribute('width', '1200')
+  await expect(image).toHaveAttribute('height', '800')
   await expect(image).toHaveAttribute('sizes', /100vw/)
   await expect(image).toHaveAttribute('srcset', /\S/)
   await expect(image).not.toHaveAttribute('loading', 'lazy')
@@ -102,12 +111,12 @@ test('@perf video detail is poster-first and does not request video before inter
     if (VIDEO_BYTES.test(request.url())) videoRequests.push(request.url())
   })
   page.on('response', async (response) => {
-    if (!response.url().includes('editorial-video-poster')) return
+    if (!response.url().includes('video-poster')) return
     try {
       posterBytes = (await response.body()).byteLength
     } catch {}
   })
-  await page.goto('/log/fixture-video-gallery', {
+  await page.goto('/test-media-fixture?case=video', {
     waitUntil: 'domcontentloaded',
   })
   await expect(page.locator('mux-player')).toHaveCount(0)

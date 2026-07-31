@@ -2,6 +2,7 @@ import { experiments, experimentGroupOrder } from 'content/experiments'
 import { pageMetadata } from 'lib/seo'
 import { inlineLink } from 'lib/ui'
 import { ExternalLink } from 'app/components/external-link'
+import { typeStyles } from 'lib/typography'
 
 export const metadata = pageMetadata({
   title: 'Early Experiments',
@@ -17,7 +18,7 @@ export default function ExperimentsPage() {
 
   return (
     <section className="text-sm">
-      <h1 className="font-serif text-2xl tracking-tight">Early Experiments</h1>
+      <h1 className={typeStyles.indexTitle}>Early Experiments</h1>
       <p className="mt-2 max-w-prose text-muted">
         These are old school, weekend, and hackathon projects. Some were useful;
         some were mainly excuses to learn a model or system by building the
@@ -40,7 +41,9 @@ export default function ExperimentsPage() {
                 .map((exp) => (
                   <div key={exp.title} id={exp.id} className="scroll-mt-8">
                     <div className="flex items-baseline justify-between gap-3">
-                      <h3 className="text-[0.95rem] font-medium text-ink">
+                      <h3
+                        className={`${typeStyles.smallBody} font-medium text-ink`}
+                      >
                         {exp.title}
                       </h3>
                       {exp.year ? (

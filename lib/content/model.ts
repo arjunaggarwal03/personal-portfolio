@@ -1,3 +1,4 @@
+import 'server-only'
 import { cache } from 'react'
 import { experiments } from 'content/experiments'
 import { work } from 'content/work'
@@ -49,7 +50,13 @@ export const getSiteModel = cache((): SiteModel => {
   )
   const log = sortByDateDesc(loadMdxCollection('log').map(normalizeLog))
   const assets = loadMediaCatalog()
-  validateContent({ writing, log, assets })
+  const now = loadCuratedNow()
+  validateContent({
+    writing,
+    log,
+    assets,
+    rotationSlugs: now.rotation.logSlugs,
+  })
   return freeze({
     identity: parseSource(siteIdentitySchema, site, 'lib/site.ts'),
     work: work.map((item, index) =>
@@ -61,6 +68,6 @@ export const getSiteModel = cache((): SiteModel => {
     writing,
     log,
     assets: Object.fromEntries(assets.map((asset) => [asset.id, asset])),
-    now: loadCuratedNow(),
+    now,
   })
 })

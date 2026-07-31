@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import { spotifyUri } from 'lib/media/embed-urls'
 
 type SpotifyIframeApi = {
   createController: (
@@ -18,8 +19,6 @@ declare global {
 }
 
 const SPOTIFY_IFRAME_API_SRC = 'https://open.spotify.com/embed/iframe-api/v1'
-const SPOTIFY_URL_PATTERN =
-  /open\.spotify\.com\/(?:embed\/)?(track|album|playlist|artist|show|episode)\/([a-zA-Z0-9]+)/
 
 let apiPromise: Promise<SpotifyIframeApi> | null = null
 
@@ -39,12 +38,6 @@ function loadSpotifyApi(): Promise<SpotifyIframeApi> {
     })
   }
   return apiPromise
-}
-
-/** Convert an open.spotify.com URL to a `spotify:type:id` URI. */
-function toSpotifyUri(url: string): string {
-  const match = url.match(SPOTIFY_URL_PATTERN)
-  return match ? `spotify:${match[1]}:${match[2]}` : url
 }
 
 export function SpotifyEmbed({ url }: { url: string }) {
@@ -76,7 +69,9 @@ export function SpotifyEmbed({ url }: { url: string }) {
       observer.observe(container, { childList: true, subtree: true })
       // Let the IFrame API own sizing: it auto-resizes the iframe to fit content,
       // so playlists/albums render full-height with no empty gap.
-      api.createController(placeholder, { uri: toSpotifyUri(url) }, (c) => {
+      const uri = spotifyUri(url)
+      if (!uri) return
+      api.createController(placeholder, { uri }, (c) => {
         controller = c
       })
     })

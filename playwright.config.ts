@@ -28,7 +28,7 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: `npm run start -- -p ${PORT}`,
+    command: `MEDIA_TEST_FIXTURES=1 npm run start -- -p ${PORT}`,
     url: baseURL,
     timeout: 120_000,
     reuseExistingServer: !process.env.CI,

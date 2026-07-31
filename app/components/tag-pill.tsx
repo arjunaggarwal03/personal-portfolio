@@ -4,7 +4,7 @@ const TAG_BASE_CLASS =
   'inline-block rounded-full border border-border-soft px-2 py-0.5 font-mono text-xs text-muted no-underline'
 const TAG_HOVER_CLASS = 'hover:border-accent hover:text-accent'
 
-export function TagPill({ tag, href }: { tag: string; href?: string }) {
+function TagPill({ tag, href }: { tag: string; href?: string }) {
   if (href) {
     return (
       <Link href={href} className={`${TAG_BASE_CLASS} ${TAG_HOVER_CLASS}`}>

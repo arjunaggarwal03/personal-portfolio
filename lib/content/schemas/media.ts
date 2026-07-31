@@ -8,8 +8,6 @@ export const assetIdSchema = z
   )
   .brand<'AssetId'>()
 
-export type AssetId = z.infer<typeof assetIdSchema>
-
 const dimensions = {
   width: z.number().int().positive(),
   height: z.number().int().positive(),
@@ -27,39 +25,49 @@ const shared = {
   visibility: z.enum(['public', 'private']).default('public'),
 }
 
-export const imageAssetSchema = z.object({
-  ...shared,
-  ...dimensions,
-  kind: z.literal('image'),
-  provider: z.literal('cloudinary'),
-  sourceId: z.string().trim().min(1),
-  focalPoint: z
-    .object({ x: z.number().min(0).max(1), y: z.number().min(0).max(1) })
-    .optional(),
-  fixturePath: z.string().startsWith('/media/').optional(),
-})
+export const imageAssetSchema = z
+  .object({
+    ...shared,
+    ...dimensions,
+    kind: z.literal('image'),
+    provider: z.literal('cloudinary'),
+    sourceId: z.string().trim().min(1),
+    focalPoint: z
+      .object({ x: z.number().min(0).max(1), y: z.number().min(0).max(1) })
+      .strict()
+      .optional(),
+    fixturePath: z.string().startsWith('/test-media-fixture/files/').optional(),
+  })
+  .strict()
 
-export const videoAssetSchema = z.object({
-  ...shared,
-  ...dimensions,
-  kind: z.literal('video'),
-  provider: z.literal('mux'),
-  sourceId: z.string().trim().min(1),
-  playbackId: z.string().trim().min(1),
-  duration: z.number().positive(),
-  posterTime: z.number().nonnegative().optional(),
-  fixturePosterPath: z.string().startsWith('/media/').optional(),
-})
+export const videoAssetSchema = z
+  .object({
+    ...shared,
+    ...dimensions,
+    kind: z.literal('video'),
+    provider: z.literal('mux'),
+    sourceId: z.string().trim().min(1),
+    playbackId: z.string().trim().min(1),
+    duration: z.number().positive(),
+    posterTime: z.number().nonnegative().optional(),
+    fixturePosterPath: z
+      .string()
+      .startsWith('/test-media-fixture/files/')
+      .optional(),
+  })
+  .strict()
 
 export const mediaAssetSchema = z.discriminatedUnion('kind', [
   imageAssetSchema,
   videoAssetSchema,
 ])
 
-export const mediaCatalogSchema = z.object({
-  version: z.literal(1),
-  assets: z.array(mediaAssetSchema),
-})
+export const mediaCatalogSchema = z
+  .object({
+    version: z.literal(1),
+    assets: z.array(mediaAssetSchema),
+  })
+  .strict()
 
 export type ImageAsset = z.infer<typeof imageAssetSchema>
 export type VideoAsset = z.infer<typeof videoAssetSchema>

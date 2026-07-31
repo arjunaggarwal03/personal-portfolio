@@ -18,6 +18,7 @@ export function validateContent(input: {
   writing: WritingPost[]
   log: LogEntry[]
   assets: MediaAsset[]
+  rotationSlugs?: readonly string[]
 }): ValidationResult {
   const errors: string[] = []
   for (const slug of duplicates(input.writing.map((item) => item.slug)))
@@ -26,6 +27,15 @@ export function validateContent(input: {
     errors.push(`duplicate Log slug "${slug}"`)
   for (const id of duplicates(input.assets.map((asset) => asset.id)))
     errors.push(`duplicate asset ID "${id}"`)
+  const publicLogSlugs = new Set(
+    input.log
+      .filter((entry) => entry.visibility === 'public')
+      .map((entry) => entry.slug),
+  )
+  for (const slug of input.rotationSlugs ?? []) {
+    if (!publicLogSlugs.has(slug))
+      errors.push(`Now rotation references missing public Log slug "${slug}"`)
+  }
   const assets = new Map(input.assets.map((asset) => [asset.id, asset]))
   const referenced = new Set<string>()
   for (const entry of input.log) {
@@ -43,6 +53,12 @@ export function validateContent(input: {
     }
     if (entry.gallery.length && !entry.cover)
       errors.push(`${entry.slug}: visual entry must declare a cover`)
+    if (
+      entry.cover &&
+      entry.gallery.length &&
+      !entry.gallery.includes(entry.cover)
+    )
+      errors.push(`${entry.slug}: cover must also appear in gallery`)
     if (
       entry.layout === 'pair' &&
       entry.gallery.length > 0 &&

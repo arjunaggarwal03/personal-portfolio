@@ -25,6 +25,7 @@ import { ExternalLink } from 'app/components/external-link'
 import { PersonalMediaGallery } from 'app/components/personal-media'
 import { cloudinaryImageUrl } from 'lib/media/cloudinary'
 import { muxPosterUrl } from 'lib/media/mux'
+import { typeStyles } from 'lib/typography'
 
 export async function generateStaticParams() {
   return getLogWithDetailPages().map((entry) => ({ slug: entry.slug }))
@@ -141,9 +142,7 @@ export default async function LogDetail({
         · {formatDate(entry.date)} · {entry.type}
       </p>
 
-      <h1 className="mt-2 font-serif text-3xl leading-tight tracking-tight">
-        {title}
-      </h1>
+      <h1 className={`${typeStyles.detailTitle} mt-2`}>{title}</h1>
 
       <div className="mt-2 flex flex-wrap items-center gap-x-3">
         <RatingBadge rating={entry.rating} />

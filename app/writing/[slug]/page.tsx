@@ -9,6 +9,7 @@ import { articleGraph, breadcrumbGraph, ogImageUrl } from 'lib/seo'
 import { CustomMDX } from 'app/components/mdx'
 import { JsonLd } from 'app/components/json-ld'
 import { TagList } from 'app/components/tag-pill'
+import { typeStyles } from 'lib/typography'
 
 export async function generateStaticParams() {
   return getPublishedWriting().map((post) => ({ slug: post.slug }))
@@ -82,9 +83,7 @@ export default async function WritingDetail({
       />
 
       <header>
-        <h1 className="font-serif text-3xl leading-tight tracking-tight">
-          {post.title}
-        </h1>
+        <h1 className={typeStyles.detailTitle}>{post.title}</h1>
         {post.subtitle ? (
           <p className="mt-2 text-lg text-muted">{post.subtitle}</p>
         ) : null}
