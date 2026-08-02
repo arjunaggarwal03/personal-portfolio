@@ -15,6 +15,8 @@ The scanner reads the export recursively, hashes supported files, detects exact 
 
 Use the contact sheet to select and order media, choose the cover, and write alt text and captions. Save the resulting selection manifest in `.log-workspace`. Treat that directory as private because it contains previews and local paths.
 
+Live Photos retain a pair ID in the manifest. The contact sheet presents the still and motion clip with that shared label. Select the still, motion clip, or both deliberately. Publishing never expands a pair automatically or treats the two files as unrelated discoveries.
+
 ## Plan and publish
 
 ```bash
@@ -26,7 +28,19 @@ Dry run validates every selected item and reports the exact plan without credent
 
 The tool strips image metadata, removes video container metadata, and uses content-derived provider IDs. Checkpoints record completed provider stages so a rerun can recover without creating duplicate assets. Catalog and MDX updates use temporary files and atomic renames after every upload succeeds.
 
-The generated Log entry is private. Review its ordering, cover, alt text, captions, and prose locally before changing visibility.
+The generated Log entry defaults to private. Review its ordering, cover, alt text, captions, and prose locally before choosing a broader visibility.
+
+## Recovery
+
+`.log-workspace/publish-checkpoints.json` is the recovery record. It can contain Cloudinary records, Mux upload IDs, signed Mux upload URLs, acknowledged byte counts, and completed catalog records. Keep it private.
+
+- If Cloudinary accepts an image and a later step fails, rerunning uses the same content-derived public ID. A provider conflict triggers an SDK lookup of the existing image instead of uploading a duplicate.
+- If Mux has created an upload but bytes or processing are incomplete, rerunning retrieves the same upload, resumes after the acknowledged byte range, and waits for the existing asset.
+- If every provider operation completed but repository files were not written, completed checkpoint records let a rerun regenerate the catalog and MDX without uploading bytes again.
+- If the catalog was written but the MDX rename failed, the matching completed checkpoints make the catalog records safe to reuse on the next run.
+- An existing MDX target or an unexplained catalog ID collision is a conflict. The publisher reports it before contacting a provider and does not overwrite the file.
+
+To abandon a partial Mux operation, record its upload ID, cancel or delete it in the Mux dashboard as appropriate, then remove only that hash entry from the local checkpoint before retrying. Cloudinary partials use content-derived IDs and can be inspected or removed in the Cloudinary dashboard. Never delete the whole checkpoint until every partial provider operation has been reviewed.
 
 ## Repository boundary
 

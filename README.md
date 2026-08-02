@@ -48,6 +48,7 @@ npm run typecheck    # tsc --noEmit
 npm run content:validate
 npm run knip         # unused files, exports, and dependencies
 npm run analyze      # interactive Next.js bundle report
+npm run links:external # external content links (scheduled CI)
 npm run check:fast   # copy/content edit gate
 npm run check        # complete build, browser, a11y, and performance gate
 ```

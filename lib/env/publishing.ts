@@ -1,17 +1,7 @@
-import { z } from 'zod'
-
-const publishingSchema = z
-  .object({
-    cloudinaryCloudName: z.string().trim().min(1).optional(),
-    cloudinaryApiKey: z.string().trim().min(1).optional(),
-    cloudinaryApiSecret: z.string().trim().min(1).optional(),
-    muxTokenId: z.string().trim().min(1).optional(),
-    muxTokenSecret: z.string().trim().min(1).optional(),
-  })
-  .strict()
+import { publishingEnvironmentSchema } from './schema'
 
 export function publishingEnv() {
-  return publishingSchema.parse({
+  return publishingEnvironmentSchema.parse({
     cloudinaryCloudName:
       process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || undefined,
     cloudinaryApiKey: process.env.CLOUDINARY_API_KEY || undefined,

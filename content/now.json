@@ -1,9 +1,9 @@
 {
-  "lastUpdated": "2026-06-08",
+  "lastUpdated": "2026-08-02",
   "workingOn": {
-    "title": "Workflow state for agents",
-    "summary": "Working on the product and systems that turn ambiguous requests into changes people can understand, review, and trust.",
-    "revised": "2026-06-08",
+    "title": "Agent workflows at Lightfield",
+    "summary": "Working across the APIs, agent tools, workflows, and product surfaces behind Lightfield's CRM.",
+    "revised": "2026-08-02",
     "href": "https://lightfield.app"
   },
   "question": {
@@ -21,6 +21,7 @@
   "rotation": {
     "logSlugs": [
       "2026-06-07-mkgee-two-star",
+      "2026-05-28-jai-paul-str",
       "2026-06-06-heat",
       "2026-06-06-tresind-studio",
       "2026-06-03-dubai-note"

@@ -121,6 +121,9 @@ export default function NowPage() {
             </p>
           </div>
         </div>
+        <p className={`${typeStyles.caption} mt-5 text-subtle`}>
+          Revised {formatDate(current.changedMyMind.revised)}
+        </p>
       </EditorialSection>
 
       <EditorialSection label="Current rotation">

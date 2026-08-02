@@ -2,7 +2,10 @@ import assert from 'node:assert/strict'
 import test from 'node:test'
 import { logEntrySchema } from '../../lib/content/schemas/log'
 import { mediaAssetSchema } from '../../lib/content/schemas/media'
-import { writingPostSchema } from '../../lib/content/schemas/writing'
+import {
+  isoDateSchema,
+  writingPostSchema,
+} from '../../lib/content/schemas/writing'
 import { validateContent } from '../../lib/content/validate'
 import { paginateLogEntries } from '../../lib/content/queries'
 
@@ -109,6 +112,54 @@ test('requires a visual cover to belong to its gallery', () => {
         assets: [asset, second],
       }),
     /cover must also appear in gallery/,
+  )
+})
+
+test('rejects public entries that reference private media', () => {
+  const privateAsset = mediaAssetSchema.parse({
+    ...asset,
+    visibility: 'private',
+  })
+  assert.throws(
+    () =>
+      validateContent({
+        writing: [writing],
+        log: [entry],
+        assets: [privateAsset],
+      }),
+    /public entry references private asset/,
+  )
+})
+
+test('rejects impossible dates and lookalike provider embed URLs', () => {
+  assert.equal(isoDateSchema.safeParse('2026-02-30').success, false)
+  assert.equal(
+    logEntrySchema.safeParse({
+      ...entry,
+      media: [
+        {
+          kind: 'youtube',
+          url: 'https://youtube.com.attacker.example/watch?v=dQw4w9WgXcQ',
+        },
+      ],
+    }).success,
+    false,
+  )
+})
+
+test('rejects incomplete video records', () => {
+  assert.equal(
+    mediaAssetSchema.safeParse({
+      id: 'video-one',
+      kind: 'video',
+      provider: 'mux',
+      sourceId: 'mux-asset',
+      width: 1280,
+      height: 720,
+      duration: 2,
+      alt: 'A video without playback configuration',
+    }).success,
+    false,
   )
 })
 

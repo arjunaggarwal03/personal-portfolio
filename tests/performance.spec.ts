@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
+import { isCloudinaryDeliveryUrl } from '../lib/media/cloudinary'
 
 const VIDEO_BYTES = /(?:\.m3u8|\.m4s|\.mp4|\.ts)(?:\?|$)|stream\.mux\.com/i
 
@@ -94,7 +95,7 @@ test('@perf image detail has stable responsive lazy media without double optimiz
       if (delivery.pathname !== '/_next/image') return false
       const nested = delivery.searchParams.get('url')
       if (!nested) return false
-      return new URL(nested, delivery).hostname === 'res.cloudinary.com'
+      return isCloudinaryDeliveryUrl(new URL(nested, delivery).toString())
     }),
   )
   expect(doubleOptimized).toBe(false)

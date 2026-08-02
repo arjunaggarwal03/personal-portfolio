@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { assetIdSchema } from './media'
 import { isoDateSchema } from './writing'
+import { spotifyUri, youtubeEmbedUrl } from 'lib/media/embed-urls'
 
 const logTypeSchema = z.enum([
   'thought',
@@ -40,6 +41,40 @@ const embedSchema = z
     aspectRatio: z.enum(['1:1', '4:3', '16:9', '3:4', 'auto']).optional(),
   })
   .strict()
+  .superRefine((embed, context) => {
+    let parsed: URL
+    try {
+      parsed = new URL(embed.url)
+    } catch {
+      context.addIssue({
+        code: 'custom',
+        path: ['url'],
+        message: 'must be a valid URL',
+      })
+      return
+    }
+    if (parsed.protocol !== 'https:') {
+      context.addIssue({
+        code: 'custom',
+        path: ['url'],
+        message: 'must use HTTPS',
+      })
+    }
+    if (embed.kind === 'youtube' && !youtubeEmbedUrl(embed.url)) {
+      context.addIssue({
+        code: 'custom',
+        path: ['url'],
+        message: 'must use an exact YouTube host and video URL',
+      })
+    }
+    if (embed.kind === 'spotify' && !spotifyUri(embed.url)) {
+      context.addIssue({
+        code: 'custom',
+        path: ['url'],
+        message: 'must use an exact Spotify host and supported resource URL',
+      })
+    }
+  })
 
 const ratingSchema = z
   .object({

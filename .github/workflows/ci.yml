@@ -77,3 +77,25 @@ jobs:
         run: npm run test:perf
       - if: github.event_name != 'pull_request'
         run: npm run test:perf:full
+
+  maintenance:
+    name: Dependency and bundle audit
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm audit
+      - run: npm run knip
+      - run: npm run analyze
+      - run: npm run links:external
+      - uses: actions/upload-artifact@v4
+        with:
+          name: next-bundle-analysis
+          path: .next/diagnostics/analyze
+          include-hidden-files: true
+          retention-days: 14

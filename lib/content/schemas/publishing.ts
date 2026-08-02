@@ -36,9 +36,11 @@ export const selectionManifestSchema = z
         date: isoDateSchema,
         summary: z.string(),
         layout: galleryLayoutSchema,
-        visibility: z.literal('private'),
+        visibility: z.enum(['public', 'unlisted', 'private']),
       })
       .strict(),
     items: z.array(selectionItemSchema).min(1),
   })
   .strict()
+
+export type SelectionItem = z.infer<typeof selectionItemSchema>

@@ -25,6 +25,7 @@
     "test:perf": "playwright test tests/performance.spec.ts && node scripts/lighthouse-audit.mjs",
     "test:perf:full": "playwright test tests/performance.spec.ts && node scripts/lighthouse-audit.mjs --full",
     "analyze": "next experimental-analyze --output",
+    "links:external": "node scripts/external-links.mjs",
     "knip": "knip",
     "check:fast": "npm run content:validate && npm run typecheck && npm run lint && npm run format:check && npm run test:unit",
     "check": "npm run check:fast && npm run build && npm run test:browser && npm run test:perf"

@@ -12,3 +12,12 @@ export function cloudinaryImageUrl(
   const encodedId = sourceId.split('/').map(encodeURIComponent).join('/')
   return `https://${CLOUDINARY_HOST}/${encodeURIComponent(cloudName)}/image/upload/f_auto,q_auto,w_${safeWidth}/${encodedId}`
 }
+
+export function isCloudinaryDeliveryUrl(value: string): boolean {
+  try {
+    const url = new URL(value)
+    return url.protocol === 'https:' && url.hostname === CLOUDINARY_HOST
+  } catch {
+    return false
+  }
+}
