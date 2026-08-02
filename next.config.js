@@ -16,11 +16,6 @@ const AGENT_LINK_HEADER = [
 const nextConfig = {
   pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
   outputFileTracingRoot: __dirname,
-  // Baked in at build time (= deploy time on Vercel) so the /now "This site"
-  // tile can show how long ago the running build shipped, without an API call.
-  env: {
-    BUILD_TIME: new Date().toISOString(),
-  },
   // The OG route reads this font from disk at runtime; make sure it ships in
   // the serverless function bundle.
   outputFileTracingIncludes: {
@@ -33,6 +28,8 @@ const nextConfig = {
     // arbitrary remote images — a cost/abuse vector Next explicitly warns
     // against. Add a pattern here when introducing images from a new host.
     remotePatterns: [
+      { protocol: 'https', hostname: 'res.cloudinary.com', pathname: '/**' },
+      { protocol: 'https', hostname: 'image.mux.com', pathname: '/**' },
       { protocol: 'https', hostname: 'i.scdn.co' },
       { protocol: 'https', hostname: '**.scdn.co' },
       { protocol: 'https', hostname: '**.spotifycdn.com' },

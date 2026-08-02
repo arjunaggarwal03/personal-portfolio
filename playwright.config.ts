@@ -1,6 +1,6 @@
 import { defineConfig, devices } from '@playwright/test'
 
-const PORT = 3000
+const PORT = 3100
 const baseURL = `http://localhost:${PORT}`
 
 /**
@@ -12,6 +12,7 @@ const baseURL = `http://localhost:${PORT}`
  */
 export default defineConfig({
   testDir: './tests',
+  testIgnore: ['unit/**'],
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: 0,
@@ -27,7 +28,7 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'npm run start',
+    command: `MEDIA_TEST_FIXTURES=1 npm run start -- -p ${PORT}`,
     url: baseURL,
     timeout: 120_000,
     reuseExistingServer: !process.env.CI,

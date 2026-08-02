@@ -1,4 +1,4 @@
-import type { WorkItem } from 'lib/types'
+import type { WorkItem } from 'lib/content/schemas/site'
 
 // Reverse-chronological. Narrative summaries, not resume bullets.
 // Lightfield claims should be fact-checked before merge (ownership + public-safety).

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { work, workDateRange } from 'content/work'
-import { getFeaturedWriting, getFeaturedLog } from 'lib/content'
+import { getFeaturedWriting, getFeaturedLog } from 'lib/content/queries'
 import { formatDateShort } from 'lib/dates'
 import { externalLinks, site } from 'lib/site'
 import { homeGraph, ogImageUrl } from 'lib/seo'
@@ -9,6 +9,7 @@ import { ExternalLink } from 'app/components/external-link'
 import { SectionHeader } from 'app/components/section-header'
 import { IndexRow } from 'app/components/index-row'
 import { JsonLd } from 'app/components/json-ld'
+import { typeStyles } from 'lib/typography'
 
 export const metadata: Metadata = {
   description: site.homeDescription,
@@ -41,10 +42,8 @@ export default function HomePage() {
     <div className="flex flex-col gap-14">
       <JsonLd data={homeGraph()} />
       <section>
-        <h1 className="font-serif text-3xl leading-tight tracking-tight">
-          Arjun Aggarwal
-        </h1>
-        <p className="mt-4 max-w-prose text-md leading-relaxed">
+        <h1 className={typeStyles.displayTitle}>Arjun Aggarwal</h1>
+        <p className={`${typeStyles.proseBody} mt-4 max-w-prose`}>
           I&rsquo;m a founding engineer at{' '}
           <ExternalLink href={externalLinks.lightfield}>
             Lightfield
@@ -52,7 +51,7 @@ export default function HomePage() {
           in San Francisco, where I work across the APIs, agent tools,
           workflows, and product surfaces behind our CRM.
         </p>
-        <p className="mt-4 max-w-prose text-muted">
+        <p className={`${typeStyles.uiBody} mt-4 max-w-prose text-muted`}>
           This site is where I explain what I&rsquo;m learning and keep track of
           restaurants, cities, films, music, and things I don&rsquo;t want to
           forget.
@@ -122,10 +121,10 @@ export default function HomePage() {
                 key={entry.id}
                 className="border-t border-border py-3 first:border-t-0"
               >
-                <p className="font-mono text-xs text-subtle">
+                <p className={`${typeStyles.caption} text-subtle`}>
                   {formatDateShort(entry.date)} · {entry.type}
                 </p>
-                <p className="mt-1 text-[0.95rem] leading-relaxed">
+                <p className={`${typeStyles.smallBody} mt-1`}>
                   {entry.title ? (
                     <span className="text-ink">{entry.title}</span>
                   ) : null}

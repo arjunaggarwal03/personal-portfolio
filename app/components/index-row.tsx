@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { titleLink } from 'lib/ui'
+import { typeStyles } from 'lib/typography'
 import { TagList } from './tag-pill'
 
 export type IndexRowProps = {
@@ -40,21 +41,19 @@ export function IndexRow({
   return (
     <div className="border-t border-border py-5 first:border-t-0">
       <div className="flex items-baseline justify-between gap-4">
-        <Heading className="font-serif text-lg tracking-tight">
-          {titleNode}
-        </Heading>
+        <Heading className={typeStyles.cardTitle}>{titleNode}</Heading>
         {metaSlot ??
           (meta ? (
-            <span className="shrink-0 font-mono text-xs text-subtle">
+            <span className={`${typeStyles.caption} shrink-0 text-subtle`}>
               {meta}
             </span>
           ) : null)}
       </div>
       {kicker ? (
-        <p className="mt-0.5 font-mono text-xs text-subtle">{kicker}</p>
+        <p className={`${typeStyles.caption} mt-0.5 text-subtle`}>{kicker}</p>
       ) : null}
       {description ? (
-        <p className="mt-2 text-[0.95rem] leading-relaxed text-muted">
+        <p className={`${typeStyles.smallBody} mt-2 text-muted`}>
           {description}
         </p>
       ) : null}

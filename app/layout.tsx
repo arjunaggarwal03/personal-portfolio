@@ -16,14 +16,15 @@ const inter = Inter({
 
 const newsreader = Newsreader({
   subsets: ['latin'],
+  weight: '600',
   variable: '--font-newsreader',
   display: 'swap',
-  style: ['normal', 'italic'],
+  style: 'normal',
 })
 
 const ibmPlexMono = IBM_Plex_Mono({
   subsets: ['latin'],
-  weight: ['400', '500'],
+  weight: '400',
   variable: '--font-ibm-plex-mono',
   display: 'swap',
 })
@@ -132,8 +133,8 @@ export default function RootLayout({
           </main>
           <Footer />
         </div>
-        <Analytics />
-        <SpeedInsights />
+        {process.env.VERCEL ? <Analytics /> : null}
+        {process.env.VERCEL ? <SpeedInsights /> : null}
       </body>
     </html>
   )

@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { externalLinks, person, site, social } from 'lib/site'
 import { pageMetadata } from 'lib/seo'
 import { ExternalLink } from 'app/components/external-link'
+import { typeStyles } from 'lib/typography'
 
 export const metadata = pageMetadata({
   title: 'About',
@@ -24,8 +25,8 @@ export default function AboutPage() {
           className="rounded-lg border border-border object-cover"
         />
         <div>
-          <h1 className="font-serif text-2xl tracking-tight">About</h1>
-          <p className="mt-1 font-mono text-xs text-subtle">
+          <h1 className={typeStyles.indexTitle}>About</h1>
+          <p className={`${typeStyles.caption} mt-1 text-subtle`}>
             {person.jobTitle} at {person.company} · {site.location}
           </p>
         </div>

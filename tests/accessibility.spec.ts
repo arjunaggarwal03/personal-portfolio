@@ -19,6 +19,8 @@ const ROUTES = [
   '/accessibility',
   '/writing/why-this-site-exists',
   '/log/2026-06-02-public-api-build',
+  '/test-media-fixture?case=image',
+  '/test-media-fixture?case=video',
 ] as const
 
 // The WCAG 2.2 Level A + AA success criteria, which is exactly what the

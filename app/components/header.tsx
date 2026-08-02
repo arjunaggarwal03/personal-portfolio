@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { typeStyles } from 'lib/typography'
 import { usePathname } from 'next/navigation'
 import { navItems, site } from 'lib/site'
 
@@ -12,7 +13,7 @@ export function Header() {
       <div className="flex flex-col gap-3 md:flex-row md:items-baseline md:justify-between">
         <Link
           href="/"
-          className="-my-1 py-1 font-serif text-lg tracking-tight no-underline hover:text-accent"
+          className={`${typeStyles.cardTitle} -my-1 py-1 no-underline hover:text-accent`}
         >
           {site.name}
         </Link>

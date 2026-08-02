@@ -5,9 +5,12 @@ import type {
   WebSite,
   BlogPosting,
   BreadcrumbList,
+  ImageObject,
+  VideoObject,
   WithContext,
   Graph,
 } from 'schema-dts'
+import type { MediaAsset } from 'lib/content/schemas/media'
 import { baseUrl, site, person, social } from 'lib/site'
 
 type SchemaGraph = Graph & { '@context': 'https://schema.org' }
@@ -55,8 +58,8 @@ export function pageMetadata(input: {
  * every page's graph point back to one canonical Person/WebSite entity, which
  * is what search and AI engines use to merge signals into a single profile.
  */
-export const PERSON_ID = `${baseUrl}/#person`
-export const WEBSITE_ID = `${baseUrl}/#website`
+const PERSON_ID = `${baseUrl}/#person`
+const WEBSITE_ID = `${baseUrl}/#website`
 const PROFILE_ID = `${baseUrl}/#profilepage`
 
 /** Profiles that prove this site and the person are the same entity. */
@@ -160,5 +163,34 @@ export function breadcrumbGraph(
       name: crumb.name,
       item: `${baseUrl}${crumb.path}`,
     })),
+  }
+}
+
+export function mediaObjectGraph(input: {
+  asset: MediaAsset
+  name: string
+  url: string
+  date: string
+}): WithContext<ImageObject> | WithContext<VideoObject> {
+  if (input.asset.kind === 'image') {
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'ImageObject',
+      name: input.name,
+      description: input.asset.alt,
+      contentUrl: input.url,
+      width: `${input.asset.width} px`,
+      height: `${input.asset.height} px`,
+    }
+  }
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'VideoObject',
+    name: input.name,
+    description: input.asset.alt,
+    contentUrl: `https://stream.mux.com/${encodeURIComponent(input.asset.playbackId)}.m3u8`,
+    thumbnailUrl: input.url,
+    uploadDate: input.asset.takenAt ?? input.date,
+    duration: `PT${Math.round(input.asset.duration)}S`,
   }
 }

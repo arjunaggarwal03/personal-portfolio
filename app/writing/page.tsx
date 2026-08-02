@@ -1,6 +1,7 @@
-import { getWritingIndex } from 'lib/content'
+import { getWritingIndex } from 'lib/content/queries'
 import { pageMetadata } from 'lib/seo'
 import { IndexRow } from 'app/components/index-row'
+import { typeStyles } from 'lib/typography'
 
 export const metadata = pageMetadata({
   title: 'Writing',
@@ -24,7 +25,7 @@ export default function WritingPage() {
 
   return (
     <section>
-      <h1 className="font-serif text-2xl tracking-tight">Writing</h1>
+      <h1 className={typeStyles.indexTitle}>Writing</h1>
       <p className="mt-2 max-w-prose text-muted">
         I write to clarify what I think, especially when implementation makes
         the clean explanation stop working. Most pieces begin with something I
@@ -56,9 +57,7 @@ export default function WritingPage() {
       {rest.length > 0 ? (
         <div className={featured.length > 0 ? 'mt-10' : 'mt-8'}>
           {featured.length > 0 ? (
-            <p className="mb-1 font-mono text-xs uppercase tracking-wider text-subtle">
-              More
-            </p>
+            <p className={`${typeStyles.metadata} mb-1 text-subtle`}>More</p>
           ) : null}
           {rest.map((post) => (
             <WritingRow key={post.slug} post={post} />
@@ -67,7 +66,7 @@ export default function WritingPage() {
       ) : null}
 
       <div className="mt-12 max-w-prose">
-        <h2 className="font-serif text-xl tracking-tight">
+        <h2 className={typeStyles.sectionTitle}>
           Questions I&rsquo;m working through
         </h2>
         <p className="mt-2 text-muted">

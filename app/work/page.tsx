@@ -1,6 +1,7 @@
 import { work, workDateRange } from 'content/work'
 import { pageMetadata } from 'lib/seo'
 import { IndexRow } from 'app/components/index-row'
+import { typeStyles } from 'lib/typography'
 
 export const metadata = pageMetadata({
   title: 'Work',
@@ -12,7 +13,7 @@ export const metadata = pageMetadata({
 export default function WorkPage() {
   return (
     <section>
-      <h1 className="font-serif text-2xl tracking-tight">Work</h1>
+      <h1 className={typeStyles.indexTitle}>Work</h1>
       <p className="mt-2 max-w-prose text-muted">
         I&rsquo;ve spent most of my career moving between product and systems
         work: graph data, financial event processing, developer tools, and now

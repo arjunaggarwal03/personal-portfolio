@@ -1,4 +1,4 @@
-import type { Rating } from 'lib/types'
+import type { Rating } from 'lib/content/schemas/log'
 
 export function RatingBadge({ rating }: { rating?: Rating }) {
   if (!rating) return null
