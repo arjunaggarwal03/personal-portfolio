@@ -35,7 +35,7 @@
     "@shikijs/rehype": "^4.2.0",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
-    "feed": "^5.2.1",
+    "feed": "^6.0.0",
     "gray-matter": "^4.0.3",
     "next": "^16.2.12",
     "next-mdx-remote-client": "^2.1.11",
