@@ -8,7 +8,6 @@ import { inlineLink } from 'lib/ui'
 import { articleGraph, breadcrumbGraph, ogImageUrl } from 'lib/seo'
 import { CustomMDX } from 'app/components/mdx'
 import { JsonLd } from 'app/components/json-ld'
-import { TagList } from 'app/components/tag-pill'
 import { typeStyles } from 'lib/typography'
 
 export async function generateStaticParams() {
@@ -91,11 +90,6 @@ export default async function WritingDetail({
           {formatDate(post.date)}
           {post.readingTime ? ` · ${post.readingTime}` : ''}
         </p>
-        {post.tags.length > 0 ? (
-          <div className="mt-3">
-            <TagList tags={post.tags} />
-          </div>
-        ) : null}
       </header>
 
       <div className="article mt-8">

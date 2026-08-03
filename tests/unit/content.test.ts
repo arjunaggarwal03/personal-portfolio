@@ -78,6 +78,23 @@ test('rejects duplicate slugs and odd pair layouts', () => {
   )
 })
 
+test('rejects duplicate Now selections', () => {
+  const publicEntry = logEntrySchema.parse({
+    ...entry,
+    visibility: 'public',
+  })
+  assert.throws(
+    () =>
+      validateContent({
+        writing: [writing],
+        log: [publicEntry],
+        assets: [asset],
+        rotationSlugs: [publicEntry.slug, publicEntry.slug],
+      }),
+    /duplicate Now selection/,
+  )
+})
+
 test('reports orphaned assets as warnings', () => {
   const textOnly = logEntrySchema.parse({
     ...entry,

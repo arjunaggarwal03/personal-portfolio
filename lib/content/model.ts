@@ -55,7 +55,7 @@ export const getSiteModel = cache((): SiteModel => {
     writing,
     log,
     assets,
-    rotationSlugs: now.rotation.logSlugs,
+    rotationSlugs: now.rotation.selections.map(({ slug }) => slug),
   })
   return freeze({
     identity: parseSource(siteIdentitySchema, site, 'lib/site.ts'),

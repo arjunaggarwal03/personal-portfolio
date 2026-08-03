@@ -30,7 +30,17 @@ export const curatedNowSchema = z
       .strict(),
     rotation: z
       .object({
-        logSlugs: z.array(z.string().min(1)).min(1).max(6),
+        selections: z
+          .array(
+            z
+              .object({
+                slug: z.string().min(1),
+                whyNow: z.string().min(1),
+              })
+              .strict(),
+          )
+          .min(1)
+          .max(6),
       })
       .strict(),
   })

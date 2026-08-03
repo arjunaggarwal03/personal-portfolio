@@ -111,6 +111,14 @@
     text-wrap: pretty;
   }
 
+  .type-editorial-annotation {
+    font-family: var(--font-sans);
+    font-size: var(--text-xs);
+    font-weight: 500;
+    line-height: 1.5;
+    letter-spacing: 0.035em;
+  }
+
   .type-metadata,
   .type-caption {
     font-family: var(--font-mono);
@@ -125,6 +133,64 @@
 
   .type-caption {
     color: var(--color-subtle);
+  }
+
+  .page-introduction {
+    padding-bottom: 2.5rem;
+  }
+
+  .editorial-section {
+    display: grid;
+    gap: 1.25rem;
+    border-top: 1px solid var(--color-border);
+    padding-block: 2rem;
+  }
+
+  .editorial-section-prominent {
+    padding-block: 2.75rem;
+  }
+
+  .archive-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  @media (min-width: 640px) {
+    .page-introduction {
+      padding-bottom: 3rem;
+    }
+
+    .editorial-section {
+      grid-template-columns: 8.5rem minmax(0, 1fr);
+      gap: 2rem;
+      padding-block: 2.25rem;
+    }
+
+    .editorial-section-prominent {
+      grid-template-columns: minmax(0, 1fr);
+      padding-block: 3.5rem;
+    }
+
+    .archive-grid {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: 1.5rem;
+    }
+
+    .archive-entry {
+      grid-column: 1 / -1;
+    }
+
+    .archive-entry[data-treatment='compact'] {
+      grid-column: 3 / -1;
+    }
+
+    .archive-entry[data-treatment='marginalia'] {
+      grid-column: 2 / 11;
+    }
+
+    .archive-entry[data-treatment='visual'] {
+      grid-column: 1 / -1;
+    }
   }
 }
 
@@ -203,25 +269,6 @@
 
 .skip-link:focus {
   transform: translateY(0);
-}
-
-/* Equalizer bars for the /now "Listening" tile — a quiet sign of life while a
-   track is actually playing. Each bar sets its own --eq-delay inline so they
-   fall out of phase. Neutralized by the reduced-motion block below. */
-@keyframes now-eq {
-  0%,
-  100% {
-    transform: scaleY(0.3);
-  }
-  50% {
-    transform: scaleY(1);
-  }
-}
-
-.now-eq-bar {
-  transform-origin: bottom;
-  animation: now-eq 900ms ease-in-out infinite;
-  animation-delay: var(--eq-delay, 0ms);
 }
 
 /* Respect reduced motion globally */

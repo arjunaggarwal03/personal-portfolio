@@ -5,7 +5,7 @@ export function FilterBar({ query }: { query: LogQuery }) {
   return (
     <nav
       aria-label="Filter log entries"
-      className="flex flex-wrap items-center gap-x-3 gap-y-1.5 border-y border-border-soft py-3 font-mono text-xs"
+      className="flex flex-wrap items-center gap-x-3 gap-y-1.5 border-y border-border-soft py-3 text-sm"
     >
       {LOG_FILTERS.map((filter) => {
         const href = filter.query ? `/log?${filter.query}` : '/log'

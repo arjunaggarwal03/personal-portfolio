@@ -7,9 +7,10 @@ import { externalLinks, site } from 'lib/site'
 import { homeGraph, ogImageUrl } from 'lib/seo'
 import { ExternalLink } from 'app/components/external-link'
 import { SectionHeader } from 'app/components/section-header'
-import { IndexRow } from 'app/components/index-row'
 import { JsonLd } from 'app/components/json-ld'
+import { MetadataLine } from 'app/components/editorial'
 import { typeStyles } from 'lib/typography'
+import { inlineLink, titleLink } from 'lib/ui'
 
 export const metadata: Metadata = {
   description: site.homeDescription,
@@ -24,22 +25,21 @@ export const metadata: Metadata = {
   },
 }
 
-const SELECTED_COMPANIES = ['Lightfield', 'Amazon Web Services', 'Capital One']
-const FEATURED_WRITING_COUNT = 4
-const LATEST_LOG_COUNT = 5
-
 export default function HomePage() {
-  const selectedWork = SELECTED_COMPANIES.map((name) =>
-    work.find((w) => w.company === name),
-  ).filter((w): w is NonNullable<typeof w> => Boolean(w))
-
-  const featuredWriting = getFeaturedWriting(FEATURED_WRITING_COUNT).filter(
+  const currentWork = work.find((item) => item.current)
+  const featuredWriting = getFeaturedWriting(1).filter(
     (post) => post.status === 'published',
   )
-  const latestLog = getFeaturedLog(LATEST_LOG_COUNT)
+  const observations = getFeaturedLog(12)
+    .filter(
+      (entry, index, entries) =>
+        entries.findIndex((candidate) => candidate.type === entry.type) ===
+        index,
+    )
+    .slice(0, 3)
 
   return (
-    <div className="flex flex-col gap-14">
+    <div className="flex flex-col gap-16">
       <JsonLd data={homeGraph()} />
       <section>
         <h1 className={typeStyles.displayTitle}>Arjun Aggarwal</h1>
@@ -48,99 +48,104 @@ export default function HomePage() {
           <ExternalLink href={externalLinks.lightfield}>
             Lightfield
           </ExternalLink>{' '}
-          in San Francisco, where I work across the APIs, agent tools,
-          workflows, and product surfaces behind our CRM.
+          in San Francisco. I build across product and systems where ambiguous
+          requests have to become changes people can understand and trust.
         </p>
         <p className={`${typeStyles.uiBody} mt-4 max-w-prose text-muted`}>
-          This site is where I explain what I&rsquo;m learning and keep track of
-          restaurants, cities, films, music, and things I don&rsquo;t want to
-          forget.
+          This is a working record of the decisions, arguments, and observations
+          that shape that work.
         </p>
       </section>
 
       <section>
         <SectionHeader
-          eyebrow="Selected work"
-          title="A few things I've worked on"
+          eyebrow="Current work"
+          title="Judgment under real constraints"
           href="/work"
-          hrefLabel="all work"
+          hrefLabel="Work record"
         />
-        <div>
-          {selectedWork.map((item) => (
-            <IndexRow
-              key={item.company}
-              title={item.company}
-              kicker={item.role}
-              meta={workDateRange(item)}
-              description={item.homeSummary ?? item.summary}
-              headingLevel={3}
-            />
-          ))}
-        </div>
+        {currentWork ? (
+          <div className="border-t border-border py-6">
+            <MetadataLine>
+              {currentWork.role} · {workDateRange(currentWork)}
+            </MetadataLine>
+            <h3 className={`${typeStyles.sectionTitle} mt-2`}>
+              {currentWork.company}
+            </h3>
+            <p className={`${typeStyles.uiBody} mt-3 max-w-2xl text-muted`}>
+              {currentWork.homeSummary ?? currentWork.summary}
+            </p>
+          </div>
+        ) : null}
       </section>
 
       <section>
         <SectionHeader
-          eyebrow="Selected writing"
-          title="Recent writing"
+          eyebrow="One argument"
+          title="A position worth defending"
           href="/writing"
-          hrefLabel="all writing"
+          hrefLabel="Published writing"
         />
         {featuredWriting.length > 0 ? (
-          <div>
+          <div className="border-t border-border py-6">
             {featuredWriting.map((post) => (
-              <IndexRow
-                key={post.slug}
-                title={post.title}
-                href={`/writing/${post.slug}`}
-                description={post.summary}
-                headingLevel={3}
-              />
+              <article key={post.slug}>
+                <h3 className={typeStyles.sectionTitle}>
+                  <Link href={`/writing/${post.slug}`} className={titleLink}>
+                    {post.title}
+                  </Link>
+                </h3>
+                <p className={`${typeStyles.uiBody} mt-2 max-w-2xl text-muted`}>
+                  {post.summary}
+                </p>
+              </article>
             ))}
           </div>
         ) : (
           <p className="max-w-prose text-muted">
-            I&rsquo;m working on the first few pieces. I&rsquo;d rather leave
-            this sparse than publish an argument before I understand it.{' '}
-            <Link href="/writing">all writing →</Link>
+            Published arguments will appear here when they are ready.{' '}
+            <Link href="/writing" className={inlineLink}>
+              Visit Writing
+            </Link>
           </p>
         )}
       </section>
 
       <section>
         <SectionHeader
-          eyebrow="Log"
-          title="From the log"
+          eyebrow="Recent observations"
+          title="What has crossed my attention"
           href="/log"
-          hrefLabel="full log"
+          hrefLabel="Field Index"
         />
-        {latestLog.length > 0 ? (
-          <div className="flex flex-col">
-            {latestLog.map((entry) => (
+        {observations.length > 0 ? (
+          <div className="grid border-t border-border sm:grid-cols-3 sm:divide-x sm:divide-border-soft">
+            {observations.map((entry) => (
               <div
                 key={entry.id}
-                className="border-t border-border py-3 first:border-t-0"
+                className="border-b border-border-soft py-4 last:border-b-0 sm:border-b-0 sm:px-4 sm:first:pl-0 sm:last:pr-0"
               >
-                <p className={`${typeStyles.caption} text-subtle`}>
+                <MetadataLine>
                   {formatDateShort(entry.date)} · {entry.type}
-                </p>
-                <p className={`${typeStyles.smallBody} mt-1`}>
-                  {entry.title ? (
-                    <span className="text-ink">{entry.title}</span>
-                  ) : null}
-                  {entry.title && entry.summary ? (
-                    <span className="text-muted">: {entry.summary}</span>
-                  ) : (
-                    <span className="text-ink">{entry.summary}</span>
-                  )}
+                </MetadataLine>
+                <p className={`${typeStyles.smallBody} mt-2`}>
+                  <Link
+                    href={
+                      entry.hasDetailPage
+                        ? `/log/${entry.slug}`
+                        : `/log#entry-${entry.slug}`
+                    }
+                    className={inlineLink}
+                  >
+                    {entry.title ?? entry.summary}
+                  </Link>
                 </p>
               </div>
             ))}
           </div>
         ) : (
           <p className="max-w-prose text-muted">
-            A running record of restaurants, cities, films, music, links, and
-            things I want to remember. <Link href="/log">full log →</Link>
+            The Log holds observations that are not yet arguments.
           </p>
         )}
       </section>

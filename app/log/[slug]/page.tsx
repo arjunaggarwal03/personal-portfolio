@@ -18,8 +18,7 @@ import {
 } from 'lib/seo'
 import { CustomMDX } from 'app/components/mdx'
 import { JsonLd } from 'app/components/json-ld'
-import { RatingBadge } from 'app/components/rating-badge'
-import { TagList } from 'app/components/tag-pill'
+import { TagLinks } from 'app/components/tag-links'
 import { MediaEmbed } from 'app/components/media-embed'
 import { ExternalLink } from 'app/components/external-link'
 import { PersonalMediaGallery } from 'app/components/personal-media'
@@ -145,7 +144,11 @@ export default async function LogDetail({
       <h1 className={`${typeStyles.detailTitle} mt-2`}>{title}</h1>
 
       <div className="mt-2 flex flex-wrap items-center gap-x-3">
-        <RatingBadge rating={entry.rating} />
+        {entry.rating?.label ? (
+          <span className={`${typeStyles.metadata} text-subtle`}>
+            {entry.rating.label}
+          </span>
+        ) : null}
         {location ? (
           <span className="font-mono text-xs text-subtle">{location}</span>
         ) : null}
@@ -185,7 +188,7 @@ export default async function LogDetail({
 
       {entry.tags && entry.tags.length > 0 ? (
         <div className="mt-6">
-          <TagList tags={entry.tags} hrefBase="/log?tag=" />
+          <TagLinks tags={entry.tags} />
         </div>
       ) : null}
     </article>

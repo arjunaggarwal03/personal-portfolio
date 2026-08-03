@@ -20,7 +20,9 @@ export function SectionHeader({
   return (
     <div className="mb-5">
       {eyebrow ? (
-        <p className={`${typeStyles.metadata} mb-1 text-subtle`}>{eyebrow}</p>
+        <p className={`${typeStyles.editorialAnnotation} mb-1 text-subtle`}>
+          {eyebrow}
+        </p>
       ) : null}
       <div className="flex items-baseline justify-between gap-4">
         <h2 className={typeStyles.sectionTitle}>{title}</h2>

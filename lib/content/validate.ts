@@ -27,6 +27,8 @@ export function validateContent(input: {
     errors.push(`duplicate Log slug "${slug}"`)
   for (const id of duplicates(input.assets.map((asset) => asset.id)))
     errors.push(`duplicate asset ID "${id}"`)
+  for (const slug of duplicates([...(input.rotationSlugs ?? [])]))
+    errors.push(`duplicate Now selection "${slug}"`)
   const publicLogSlugs = new Set(
     input.log
       .filter((entry) => entry.visibility === 'public')

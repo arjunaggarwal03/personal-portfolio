@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import { titleLink } from 'lib/ui'
 import { typeStyles } from 'lib/typography'
-import { TagList } from './tag-pill'
 
 export type IndexRowProps = {
   title: string
@@ -10,8 +9,6 @@ export type IndexRowProps = {
   description?: string
   meta?: string
   metaSlot?: React.ReactNode
-  tags?: string[]
-  tagHrefBase?: string
   /** Heading level for the row title. Use 2 at the top of a page (directly
    *  under the h1) and 3 when nested under an h2 section header. */
   headingLevel?: 2 | 3
@@ -24,8 +21,6 @@ export function IndexRow({
   description,
   meta,
   metaSlot,
-  tags,
-  tagHrefBase,
   headingLevel = 2,
 }: IndexRowProps) {
   const titleNode = href ? (
@@ -56,11 +51,6 @@ export function IndexRow({
         <p className={`${typeStyles.smallBody} mt-2 text-muted`}>
           {description}
         </p>
-      ) : null}
-      {tags && tags.length > 0 ? (
-        <div className="mt-3">
-          <TagList tags={tags} hrefBase={tagHrefBase} />
-        </div>
       ) : null}
     </div>
   )

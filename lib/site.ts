@@ -34,8 +34,6 @@ export const site = {
   /** Short machine-readable page summary for AI-facing and structured surfaces. */
   summary:
     'Work, writing, and a personal record from Arjun Aggarwal, a founding engineer at Lightfield in San Francisco.',
-  /** Small rotating-feel line shown in the footer. */
-  currentlyThinking: 'what software assumes when a person is operating it',
 } as const
 
 /**

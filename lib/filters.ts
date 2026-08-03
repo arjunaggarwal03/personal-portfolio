@@ -5,6 +5,7 @@ export type LogQuery = {
   view?: string
   tag?: string
   page?: string
+  pair?: string
 }
 
 type FilterDef = {
@@ -45,9 +46,7 @@ export const LOG_FILTERS: FilterDef[] = [
     matches: typeGroup(['travel', 'city', 'photo']),
   },
   { label: 'Clips', query: 'type=clip', matches: typeGroup(['clip']) },
-  { label: 'Essays', query: 'type=essay', matches: typeGroup(['essay']) },
   { label: 'Builds', query: 'type=build', matches: typeGroup(['build']) },
-  { label: 'Books', query: 'type=book', matches: typeGroup(['book']) },
   {
     label: 'Canon',
     query: 'view=canon',

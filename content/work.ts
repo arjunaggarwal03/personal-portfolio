@@ -13,6 +13,14 @@ export const work: WorkItem[] = [
       "I work across the product and systems behind Lightfield's CRM. I've helped turn product operations into a public API and Python SDK used by our own agent, built tools for creating and editing CRM tasks, and worked on workflow automation, human review, notifications, and core product surfaces. The recurring challenge is translating an ambiguous request into a change that is understandable to the user and correct in the product.",
     homeSummary:
       'Helped turn product operations into a public API and Python SDK used by Lightfield’s own agent, while building the task, review, and workflow systems around it.',
+    context:
+      'Lightfield is building a CRM for companies where sales, product, engineering, and delivery all participate in the customer relationship.',
+    ownership:
+      'I work across the APIs, agent tools, workflows, and product surfaces behind the CRM, including task creation and editing, human review, notifications, and core product surfaces.',
+    constraint:
+      'The recurring challenge is translating an ambiguous request into a change that is understandable to the user and correct in the product.',
+    change:
+      'I helped turn product operations into a public API and Python SDK used by our own agent.',
     tags: ['AI products', 'APIs', 'workflows', 'CRM'],
   },
   {
@@ -21,6 +29,8 @@ export const work: WorkItem[] = [
     startDate: '2025',
     summary:
       "I joined YouTube's Living Room team and left after a week to join Lightfield. I wanted more ownership and a shorter distance between a product decision and the customer affected by it. It was also a high-variance bet made with limited information; that was part of the appeal.",
+    reflection:
+      'I wanted more ownership and a shorter distance between a product decision and the customer affected by it. It was a high-variance bet made with limited information; that was part of the appeal.',
     tags: ['consumer product', 'connected TV'],
   },
   {
@@ -30,6 +40,10 @@ export const work: WorkItem[] = [
     endDate: '2025',
     summary:
       'We built an intelligent service catalog for internal engineering knowledge: natural-language service search, organized documentation spaces, and a support agent grounded in team documentation. We applied to Y Combinator but did not turn Plato into a lasting company. It was my first attempt to choose the problem, build the product, and convince other people it should exist.',
+    change:
+      'We built natural-language service search, organized documentation spaces, and a support agent grounded in team documentation.',
+    reflection:
+      'We applied to Y Combinator but did not turn Plato into a lasting company. It was my first attempt to choose the problem, build the product, and convince other people it should exist.',
     tags: ['developer tools', 'search', 'knowledge systems'],
   },
   {

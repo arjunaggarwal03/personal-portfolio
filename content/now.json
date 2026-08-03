@@ -19,12 +19,23 @@
     "revised": "2026-06-08"
   },
   "rotation": {
-    "logSlugs": [
-      "2026-06-07-mkgee-two-star",
-      "2026-05-28-jai-paul-str",
-      "2026-06-06-heat",
-      "2026-06-06-tresind-studio",
-      "2026-06-03-dubai-note"
+    "selections": [
+      {
+        "slug": "2026-06-07-mkgee-two-star",
+        "whyNow": "It is still growing on me, which makes it a better record of attention than an instant verdict."
+      },
+      {
+        "slug": "2026-05-28-jai-paul-str",
+        "whyNow": "Returning to it after years away changed what I heard in it."
+      },
+      {
+        "slug": "2026-06-06-heat",
+        "whyNow": "The relationship between competence and loneliness keeps surviving the film itself."
+      },
+      {
+        "slug": "2026-06-06-tresind-studio",
+        "whyNow": "I keep thinking about how pacing and the room became inseparable from the food."
+      }
     ]
   }
 }
