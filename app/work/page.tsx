@@ -7,7 +7,7 @@ import { typeStyles } from 'lib/typography'
 export const metadata = pageMetadata({
   title: 'Work',
   description:
-    'A history of the products and systems Arjun Aggarwal has worked on, organized around ownership, constraints, decisions, and consequences.',
+    'A selection of the products and systems Arjun Aggarwal has worked on.',
   path: '/work',
 })
 
@@ -18,8 +18,8 @@ export default function WorkPage() {
     <div>
       <PageIntroduction title="Work">
         <p>
-          A record of what I owned, what made the work difficult, and what
-          changed—not a complete resume.
+          A few roles and projects that shaped how I build. This is the context
+          behind the r&eacute;sum&eacute; bullets.
         </p>
       </PageIntroduction>
 
@@ -37,9 +37,9 @@ export default function WorkPage() {
         ) : null}
         <dl className="mt-8 grid gap-6 sm:grid-cols-2">
           {[
-            ['Ownership', current.ownership],
-            ['Constraint', current.constraint],
-            ['Change', current.change],
+            ['What I work on', current.ownership],
+            ['What makes it hard', current.constraint],
+            ['What changed', current.change],
           ].map(([label, value]) =>
             value ? (
               <div key={label}>
@@ -56,10 +56,7 @@ export default function WorkPage() {
       </section>
 
       <section className="border-t border-border py-9">
-        <h2 className={typeStyles.sectionTitle}>Defining decisions</h2>
-        <p className={`${typeStyles.uiBody} mt-2 max-w-prose text-muted`}>
-          Choosing agency without pretending the outcome was certain.
-        </p>
+        <h2 className={typeStyles.sectionTitle}>Two choices</h2>
         <div className="mt-6 grid gap-8 sm:grid-cols-2">
           {[google, plato].map((item) => (
             <article key={item.company}>

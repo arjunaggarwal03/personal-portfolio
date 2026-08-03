@@ -31,8 +31,8 @@ export default function NowPage() {
         meta={`Updated ${formatDate(current.lastUpdated)}`}
       >
         <p>
-          A short record of what has my attention. I update it when the answer
-          changes.
+          A short list of what I&rsquo;m working on, thinking about, and coming
+          back to lately.
         </p>
       </PageIntroduction>
 
@@ -42,16 +42,14 @@ export default function NowPage() {
         </h2>
         <div className="mt-7 grid gap-6 sm:grid-cols-2">
           <div>
-            <h3 className={`${typeStyles.smallBody} font-medium`}>
-              Current view
-            </h3>
+            <h3 className={`${typeStyles.smallBody} font-medium`}>My take</h3>
             <p className={`${typeStyles.uiBody} mt-2 text-muted`}>
               {current.question.currentView}
             </p>
           </div>
           <div>
             <h3 className={`${typeStyles.smallBody} font-medium`}>
-              Strongest counterargument
+              The case against it
             </h3>
             <p className={`${typeStyles.uiBody} mt-2 text-muted`}>
               {current.question.counterargument}
@@ -60,7 +58,7 @@ export default function NowPage() {
         </div>
         <div className="mt-6 max-w-2xl">
           <h3 className={`${typeStyles.smallBody} font-medium`}>
-            What would change my mind
+            What I&rsquo;m watching for
           </h3>
           <p className={`${typeStyles.uiBody} mt-2 text-muted`}>
             {current.question.wouldChange}
@@ -69,7 +67,9 @@ export default function NowPage() {
       </section>
 
       <section className="border-t border-border py-8 sm:py-9">
-        <h2 className={typeStyles.sectionTitle}>What stayed with me</h2>
+        <h2 className={typeStyles.sectionTitle}>
+          Things I keep coming back to
+        </h2>
         <div className="mt-5 divide-y divide-border-soft">
           {rotation.map((entry) => {
             const detail = entry.hasDetailPage

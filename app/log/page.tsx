@@ -59,8 +59,8 @@ export default async function LogPage({
     <section>
       <PageIntroduction title="Log">
         <p>
-          A chronological record of restaurants, cities, films, music, links,
-          work, and things I want to remember.
+          A running list of restaurants, cities, films, music, links, work, and
+          whatever else I want to remember.
         </p>
       </PageIntroduction>
 

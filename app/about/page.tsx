@@ -9,7 +9,7 @@ import { typeStyles } from 'lib/typography'
 export const metadata = pageMetadata({
   title: 'About',
   description:
-    'About Arjun Aggarwal, the choices behind his path, and the interests that sit outside his professional record.',
+    'About Arjun Aggarwal, how he got here, and what he likes outside work.',
   path: '/about',
 })
 
@@ -18,9 +18,9 @@ export default function AboutPage() {
     <article>
       <PageIntroduction title="About">
         <p>
-          I&rsquo;m Arjun, a software engineer in San Francisco. The
-          professional record is in Work; this page is about the choices around
-          it.
+          I&rsquo;m Arjun, a software engineer in San Francisco. Work has the
+          r&eacute;sum&eacute;-ish version; here&rsquo;s a little more about how
+          I got here and what I like outside it.
         </p>
       </PageIntroduction>
 
@@ -39,51 +39,48 @@ export default function AboutPage() {
             <ExternalLink href={externalLinks.lightfield}>
               Lightfield
             </ExternalLink>{' '}
-            in San Francisco. I like work where the product and the underlying
-            system cannot be understood separately.
+            in San Francisco. I like working close enough to the problem that I
+            can move between the code, the product, and the people using it.
           </p>
         </div>
       </div>
 
       <section className="grid gap-5 border-t border-border py-9 sm:grid-cols-[11rem_1fr] sm:gap-8">
         <div>
-          <h2 className={typeStyles.sectionTitle}>Choosing uncertainty</h2>
+          <h2 className={typeStyles.sectionTitle}>One week at Google</h2>
           <div className="mt-1">
-            <MetadataLine>One week · 2025</MetadataLine>
+            <MetadataLine>2025</MetadataLine>
           </div>
         </div>
         <div className="article mt-0">
           <p>
-            Before Lightfield, I briefly joined YouTube&rsquo;s Living Room team
-            at Google. I left after a week because I wanted more ownership and a
-            shorter distance between the work and the customer. The decision was
-            not as inevitable as a retrospective career narrative can make it
-            sound. It was a bet on what I would learn, made with limited
-            information.
+            Before Lightfield, I joined YouTube&rsquo;s Living Room team at
+            Google. A week later, I left to join Lightfield. I wanted more
+            ownership and a shorter path between what I built and the people
+            using it. It was a real gamble; I only knew that it felt worth
+            taking.
           </p>
           <p>
-            Plato was an earlier attempt to choose the problem as well as the
-            implementation. We did not turn it into a lasting company. It
-            remains part of the record because it was my first attempt to choose
-            the problem, build the product, and convince other people it should
-            exist.
+            Before that, I co-founded Plato, a service catalog for internal
+            engineering knowledge. It did not become a lasting company, but it
+            taught me what it feels like to pick the problem, build the product,
+            and try to convince people it should exist.
           </p>
           <p>
-            Looking backward makes the path seem more deliberate than it was.
-            Some choices came from intellectual interest, some from opportunity,
-            and some from wanting to move faster.
+            None of this followed a grand plan. Some choices came from
+            curiosity, some from opportunity, and some from wanting to move
+            faster.
           </p>
         </div>
       </section>
 
       <section className="grid gap-5 border-t border-border py-9 sm:grid-cols-[11rem_1fr] sm:gap-8">
-        <h2 className={typeStyles.sectionTitle}>Outside the work</h2>
+        <h2 className={typeStyles.sectionTitle}>Away from the laptop</h2>
         <div className="article mt-0">
           <p>
             Outside work, I spend a lot of time on restaurants, films, music,
-            cities, soccer, and travel. Those interests live mostly in the{' '}
-            <Link href="/log">Log</Link>, where they are allowed to remain
-            interests rather than become metaphors for software.
+            cities, soccer, and travel. That&rsquo;s mostly what the{' '}
+            <Link href="/log">Log</Link> is for.
           </p>
           <p>
             The best way to reach me is <a href={social.email}>email</a>. You

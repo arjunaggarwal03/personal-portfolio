@@ -27,7 +27,7 @@ export const site = {
   role: 'Founding engineer at Lightfield',
   location: 'San Francisco',
   description:
-    'Founding engineer at Lightfield in San Francisco. I work across product and systems, and write about what changes when models begin operating software alongside people.',
+    'Founding engineer at Lightfield in San Francisco. I write about software, the work behind it, and whatever else has my attention.',
   /** Homepage-specific meta description (slightly more concrete than site-wide). */
   homeDescription:
     'Founding engineer at Lightfield in San Francisco, working across AI product development, APIs, workflows, and CRM systems.',

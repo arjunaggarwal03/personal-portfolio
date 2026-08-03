@@ -21,8 +21,8 @@ export default function ExperimentsPage() {
     <section>
       <PageIntroduction title="Early Experiments">
         <p>
-          Old school, weekend, and hackathon projects. I keep them because they
-          show the path, not because they represent my best work.
+          Old school, weekend, and hackathon projects. Some are rough, but I
+          still like having them around.
         </p>
       </PageIntroduction>
 

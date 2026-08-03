@@ -2,39 +2,39 @@
   "lastUpdated": "2026-08-02",
   "workingOn": {
     "title": "Agent workflows at Lightfield",
-    "summary": "Working across the APIs, agent tools, workflows, and product surfaces behind Lightfield's CRM.",
+    "summary": "Lately I’ve been working on APIs, agent tools, and the task and review workflows behind Lightfield’s CRM.",
     "revised": "2026-08-02",
     "href": "https://lightfield.app"
   },
   "question": {
     "prompt": "How much of an agent's intermediate state should a person have to see?",
-    "currentView": "Visible proposals, ownership, and state make consequential work easier to inspect and recover.",
-    "counterargument": "Better defaults, reversibility, and a clear activity record may create more trust than constant confirmation.",
-    "wouldChange": "I would update this view after seeing which controls people actually use when an agent has reliable rollback and a legible history."
+    "currentView": "I think people should be able to see proposals, ownership, and state when the work has real consequences.",
+    "counterargument": "Good defaults, easy rollback, and a useful activity log might matter more than seeing every step.",
+    "wouldChange": "I’m curious which controls people actually use once rollback is reliable and the history is clear."
   },
   "changedMyMind": {
-    "previous": "Chat was mostly a temporary interface for demonstrating models.",
-    "changed": "Working on longer-running tasks made the gap between a useful conversation and durable work impossible to ignore.",
-    "current": "Chat can remain useful while intent is forming, provided durable workflow state exists outside the conversation.",
+    "previous": "I thought chat was mostly a temporary way to show off what models could do.",
+    "changed": "Longer-running tasks made it hard to ignore the gap between a good conversation and work that needs to last.",
+    "current": "I still think chat is useful while intent is taking shape. The actual workflow just needs to live somewhere sturdier.",
     "revised": "2026-06-08"
   },
   "rotation": {
     "selections": [
       {
         "slug": "2026-06-07-mkgee-two-star",
-        "whyNow": "It is still growing on me, which makes it a better record of attention than an instant verdict."
+        "whyNow": "It’s still growing on me. That feels more honest than pretending I had an instant verdict."
       },
       {
         "slug": "2026-05-28-jai-paul-str",
-        "whyNow": "Returning to it after years away changed what I heard in it."
+        "whyNow": "I came back to it after years away and heard it differently."
       },
       {
         "slug": "2026-06-06-heat",
-        "whyNow": "The relationship between competence and loneliness keeps surviving the film itself."
+        "whyNow": "I keep thinking about the way competence and loneliness sit next to each other."
       },
       {
         "slug": "2026-06-06-tresind-studio",
-        "whyNow": "I keep thinking about how pacing and the room became inseparable from the food."
+        "whyNow": "I keep thinking about how much the pacing and the room shaped the meal."
       }
     ]
   }

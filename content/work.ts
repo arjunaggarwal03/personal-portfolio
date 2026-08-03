@@ -12,7 +12,7 @@ export const work: WorkItem[] = [
     summary:
       "I work across the product and systems behind Lightfield's CRM. I've helped turn product operations into a public API and Python SDK used by our own agent, built tools for creating and editing CRM tasks, and worked on workflow automation, human review, notifications, and core product surfaces. The recurring challenge is translating an ambiguous request into a change that is understandable to the user and correct in the product.",
     homeSummary:
-      'Helped turn product operations into a public API and Python SDK used by Lightfield’s own agent, while building the task, review, and workflow systems around it.',
+      'At Lightfield I’ve worked on a public API and Python SDK used by our own agent, along with the task, review, and workflow systems around it.',
     context:
       'Lightfield is building a CRM for companies where sales, product, engineering, and delivery all participate in the customer relationship.',
     ownership:
@@ -28,9 +28,9 @@ export const work: WorkItem[] = [
     role: 'Software Engineer',
     startDate: '2025',
     summary:
-      "I joined YouTube's Living Room team and left after a week to join Lightfield. I wanted more ownership and a shorter distance between a product decision and the customer affected by it. It was also a high-variance bet made with limited information; that was part of the appeal.",
+      "I joined YouTube's Living Room team and left a week later to join Lightfield.",
     reflection:
-      'I wanted more ownership and a shorter distance between a product decision and the customer affected by it. It was a high-variance bet made with limited information; that was part of the appeal.',
+      'I wanted more ownership and a shorter path between what I built and the people using it. I did not know how the choice would turn out; I only knew it felt worth trying.',
     tags: ['consumer product', 'connected TV'],
   },
   {

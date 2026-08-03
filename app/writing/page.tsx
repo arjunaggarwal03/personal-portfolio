@@ -6,7 +6,7 @@ import { PageIntroduction } from 'app/components/editorial'
 export const metadata = pageMetadata({
   title: 'Writing',
   description:
-    'Essays and working questions about software, AI products, technical decisions, startups, and the beliefs that change while building them.',
+    'Essays about software, AI products, technical decisions, and what changes while building them.',
   path: '/writing',
 })
 
@@ -17,15 +17,16 @@ export default function WritingPage() {
     <section>
       <PageIntroduction title="Writing">
         <p>
-          I write when implementation makes the clean explanation stop working.
-          Only positions I am ready to defend belong here.
+          I mostly write when building something changes my mind or makes an
+          idea harder to explain. I&rsquo;d rather publish a few finished pieces
+          than a long list of drafts.
         </p>
       </PageIntroduction>
 
       {posts.length === 0 ? (
         <p className="mt-8 text-muted">
-          Nothing published yet. Current questions live in Now until they become
-          arguments.
+          Nothing published yet. I&rsquo;m still working through a few things in
+          Now.
         </p>
       ) : null}
 

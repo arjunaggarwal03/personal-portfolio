@@ -47,12 +47,13 @@ export default function HomePage() {
           <ExternalLink href={externalLinks.lightfield}>
             Lightfield
           </ExternalLink>{' '}
-          in San Francisco. I build across product and systems where ambiguous
-          requests have to become changes people can understand and trust.
+          in San Francisco. I spend most of my time moving between product and
+          systems: APIs, agent workflows, and the details that make software
+          easier to understand and use.
         </p>
         <p className={`${typeStyles.uiBody} mt-4 max-w-prose text-muted`}>
-          This is a working record of the decisions, arguments, and observations
-          that shape that work.
+          I use this site to write through ideas and keep track of work,
+          restaurants, films, music, and places I want to remember.
         </p>
       </section>
 
@@ -95,10 +96,7 @@ export default function HomePage() {
           </div>
         ) : (
           <p className="max-w-prose text-muted">
-            Published arguments will appear here when they are ready.{' '}
-            <Link href="/writing" className={inlineLink}>
-              Visit Writing
-            </Link>
+            Nothing here yet. I&rsquo;ll add something when it&rsquo;s ready.
           </p>
         )}
         <p className={`${typeStyles.smallBody} mt-2`}>
@@ -136,9 +134,7 @@ export default function HomePage() {
             ))}
           </div>
         ) : (
-          <p className="max-w-prose text-muted">
-            The Log holds observations that are not yet arguments.
-          </p>
+          <p className="max-w-prose text-muted">Nothing in the Log yet.</p>
         )}
         <p className={`${typeStyles.smallBody} mt-3`}>
           <Link href="/log" className={inlineLink}>
