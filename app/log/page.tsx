@@ -1,19 +1,16 @@
 import { getLogFeed, paginateLogEntries } from 'lib/content/queries'
 import { getSiteModel } from 'lib/content/model'
 import { applyLogFilter, activeFilterLabel, type LogQuery } from 'lib/filters'
-import { selectLogPair, utcDayKey } from 'lib/log/pairing'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { pageMetadata } from 'lib/seo'
 import { FilterBar } from 'app/components/filter-bar'
 import { LogEntryCard } from 'app/components/log-entry-card'
-import { MetadataLine, PageIntroduction } from 'app/components/editorial'
-import { inlineLink } from 'lib/ui'
+import { PageIntroduction } from 'app/components/editorial'
+import { typeStyles } from 'lib/typography'
 
 const description =
   "A working index of what I'm noticing: work, cities, meals, music, films, links, clips, and half-formed thoughts."
-
-export const revalidate = 3600
 
 export async function generateMetadata({
   searchParams,
@@ -35,7 +32,6 @@ function pageHref(query: LogQuery, page: number): string {
   if (query.type) params.set('type', query.type)
   if (query.view) params.set('view', query.view)
   if (query.tag) params.set('tag', query.tag)
-  if (query.pair) params.set('pair', query.pair)
   if (page > 1) params.set('page', String(page))
   const value = params.toString()
   return value ? `/log?${value}` : '/log'
@@ -50,8 +46,6 @@ export default async function LogPage({
   const model = getSiteModel()
   const filtered = applyLogFilter(getLogFeed(), query)
   const requestedPage = Math.max(1, Number.parseInt(query.page ?? '1', 10) || 1)
-  const pairIteration = Math.max(0, Number.parseInt(query.pair ?? '0', 10) || 0)
-  const pair = selectLogPair(model.log, utcDayKey(new Date()), pairIteration)
   const onView = new Set(
     model.now.rotation.selections.map((selection) => selection.slug),
   )
@@ -63,54 +57,25 @@ export default async function LogPage({
 
   return (
     <section>
-      <PageIntroduction title="The Field Index" eyebrow="Log">
+      <PageIntroduction title="Log">
         <p>
-          A working archive of what crosses my attention. Chronology preserves
-          the record; tags and occasional pairings create paths back through it.
+          A chronological record of restaurants, cities, films, music, links,
+          work, and things I want to remember.
         </p>
       </PageIntroduction>
 
-      {pair ? (
-        <section className="border-y border-border py-7">
-          <div className="flex flex-wrap items-baseline justify-between gap-3">
-            <div>
-              <MetadataLine>Place two things beside each other</MetadataLine>
-              <h2 className="sr-only">Today&rsquo;s pairing</h2>
-            </div>
-            <Link
-              href={`/log?pair=${pairIteration + 1}`}
-              className={inlineLink}
-            >
-              Another pair
-            </Link>
-          </div>
-          <div className="mt-3 grid gap-6 sm:grid-cols-2 sm:divide-x sm:divide-border-soft">
-            {pair.map((entry) => (
-              <div key={entry.id} className="sm:pr-6 sm:last:pr-0 sm:last:pl-6">
-                <LogEntryCard
-                  entry={entry}
-                  onView={onView.has(entry.slug)}
-                  anchor={false}
-                  paired
-                />
-              </div>
-            ))}
-          </div>
-        </section>
-      ) : null}
-
-      <div className="mt-9">
+      <div>
         <FilterBar query={query} />
       </div>
 
       {label !== 'All' ? (
-        <p className="mt-4 font-mono text-xs text-subtle">
+        <p className={`${typeStyles.caption} mt-4 text-subtle`}>
           {filtered.length} {filtered.length === 1 ? 'entry' : 'entries'} ·{' '}
           {label}
         </p>
       ) : null}
 
-      <div className="archive-grid mt-3">
+      <div className="mt-3">
         {entries.length > 0 ? (
           entries.map((entry) => (
             <LogEntryCard
@@ -127,7 +92,7 @@ export default async function LogPage({
       {totalPages > 1 ? (
         <nav
           aria-label="Log pagination"
-          className="mt-8 flex items-center justify-between border-t border-border pt-4 font-mono text-xs"
+          className={`${typeStyles.caption} mt-8 flex items-center justify-between border-t border-border pt-4`}
         >
           {page > 1 ? (
             <Link href={pageHref(query, page - 1)}>← Newer</Link>

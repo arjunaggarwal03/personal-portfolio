@@ -10,5 +10,4 @@ export const typeStyles = {
   smallBody: 'type-small-body',
   metadata: 'type-metadata',
   caption: 'type-caption',
-  editorialAnnotation: 'type-editorial-annotation',
 } as const

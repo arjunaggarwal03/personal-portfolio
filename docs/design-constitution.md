@@ -60,7 +60,8 @@ The footer owns contact, location, accessibility, and provenance only.
 
 - Serif type names arguments, entries, and page-level ideas.
 - Sans-serif type carries prose and interface copy.
-- Monospaced type is reserved for coordinates: dates, places, sources, entry types, and revision states.
+- Sans-serif type carries metadata as well as prose so dates, places, sources, and entry types remain legible without becoming a competing visual system.
+- Monospaced type is reserved for code and system diagrams.
 - Accent indicates selection or change: active navigation, `on view`, and revision. It is not decoration.
 - Routes share type, color, measure, and spacing without sharing one universal page template.
 - Images are evidence or artifacts, never atmosphere.
@@ -80,4 +81,4 @@ The redesign starts from `origin/main` at `66e11f3`. The most recent verified me
 
 ## Current verification
 
-The redesign branch passes the complete repository gate: content validation, type checking, linting, formatting, 26 unit tests, a production build, 53 browser tests, and five performance contracts. The dedicated accessibility run passes 13 routes. Lighthouse reports `0.97` performance and `1.00` accessibility, best practices, and SEO. `knip` reports no unused code, and `npm audit` reports zero vulnerabilities.
+The redesign branch passes the complete repository gate: content validation, type checking, linting, formatting, 22 unit tests, a production build, 53 browser tests, and five performance contracts. The browser suite includes accessibility checks across 13 routes. Lighthouse reports `0.98` performance and `1.00` accessibility, best practices, and SEO. `knip` and `npm audit` are run separately at handoff.

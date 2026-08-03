@@ -1,12 +1,13 @@
 import type { MediaAsset } from 'lib/content/schemas/media'
 import { PersonalImage } from './personal-image'
 import { MuxVideo } from './mux-video'
+import { typeStyles } from 'lib/typography'
 
 const sizes = '(max-width: 760px) 100vw, 760px'
 
 function caption(asset: MediaAsset) {
   return asset.caption ? (
-    <figcaption className="mt-1.5 font-mono text-xs text-subtle">
+    <figcaption className={`${typeStyles.caption} mt-1.5 text-subtle`}>
       {asset.caption}
     </figcaption>
   ) : null

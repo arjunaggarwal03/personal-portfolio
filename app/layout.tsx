@@ -1,6 +1,6 @@
 import './global.css'
 import type { Metadata, Viewport } from 'next'
-import { Inter, Newsreader, IBM_Plex_Mono } from 'next/font/google'
+import { Inter, Newsreader } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { Header } from './components/header'
@@ -20,13 +20,6 @@ const newsreader = Newsreader({
   variable: '--font-newsreader',
   display: 'swap',
   style: 'normal',
-})
-
-const ibmPlexMono = IBM_Plex_Mono({
-  subsets: ['latin'],
-  weight: '400',
-  variable: '--font-ibm-plex-mono',
-  display: 'swap',
 })
 
 const defaultOgImage = ogImageUrl(site.name)
@@ -114,10 +107,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html
-      lang="en"
-      className={`${inter.variable} ${newsreader.variable} ${ibmPlexMono.variable}`}
-    >
+    <html lang="en" className={`${inter.variable} ${newsreader.variable}`}>
       <body className="min-h-screen">
         <a href="#main-content" className="skip-link">
           Skip to content

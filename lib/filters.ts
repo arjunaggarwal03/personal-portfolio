@@ -5,7 +5,6 @@ export type LogQuery = {
   view?: string
   tag?: string
   page?: string
-  pair?: string
 }
 
 type FilterDef = {

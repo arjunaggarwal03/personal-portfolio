@@ -2,6 +2,7 @@ import { experiments, experimentGroupOrder } from 'content/experiments'
 import { pageMetadata } from 'lib/seo'
 import { inlineLink } from 'lib/ui'
 import { ExternalLink } from 'app/components/external-link'
+import { PageIntroduction } from 'app/components/editorial'
 import { typeStyles } from 'lib/typography'
 
 export const metadata = pageMetadata({
@@ -17,46 +18,44 @@ export default function ExperimentsPage() {
   )
 
   return (
-    <section className="text-sm">
-      <h1 className={typeStyles.indexTitle}>Early Experiments</h1>
-      <p className="mt-2 max-w-prose text-muted">
-        These are old school, weekend, and hackathon projects. Some were useful;
-        some were mainly excuses to learn a model or system by building the
-        smallest thing that made it concrete.
-      </p>
-      <p className="mt-3 max-w-prose text-muted">
-        I keep them because they show the path, not because they represent my
-        best work.
-      </p>
+    <section>
+      <PageIntroduction title="Early Experiments">
+        <p>
+          Old school, weekend, and hackathon projects. I keep them because they
+          show the path, not because they represent my best work.
+        </p>
+      </PageIntroduction>
 
-      <div className="mt-10 flex flex-col gap-10">
+      <div className="flex flex-col gap-10">
         {groups.map((group) => (
           <div key={group}>
-            <h2 className="mb-3 font-mono text-xs font-normal uppercase tracking-wider text-subtle">
-              {group}
-            </h2>
-            <div className="flex flex-col gap-4">
+            <h2 className={typeStyles.sectionTitle}>{group}</h2>
+            <div className="mt-4 flex flex-col gap-5 border-t border-border pt-5">
               {experiments
                 .filter((e) => e.group === group)
                 .map((exp) => (
                   <div key={exp.title} id={exp.id} className="scroll-mt-8">
                     <div className="flex items-baseline justify-between gap-3">
                       <h3
-                        className={`${typeStyles.smallBody} font-medium text-ink`}
+                        className={`${typeStyles.uiBody} font-medium text-ink`}
                       >
                         {exp.title}
                       </h3>
                       {exp.year ? (
-                        <span className="shrink-0 font-mono text-xs text-subtle">
+                        <span
+                          className={`${typeStyles.caption} shrink-0 text-subtle`}
+                        >
                           {exp.year}
                         </span>
                       ) : null}
                     </div>
-                    <p className="mt-1 max-w-prose leading-relaxed text-muted">
+                    <p
+                      className={`${typeStyles.smallBody} mt-1 max-w-prose text-muted`}
+                    >
                       {exp.summary}
                     </p>
                     {exp.links && exp.links.length > 0 ? (
-                      <p className="mt-1 flex gap-3 font-mono text-xs">
+                      <p className={`${typeStyles.caption} mt-2 flex gap-3`}>
                         {exp.links.map((link) => (
                           <ExternalLink
                             key={link.url}

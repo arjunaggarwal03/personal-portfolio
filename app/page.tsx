@@ -6,7 +6,6 @@ import { formatDateShort } from 'lib/dates'
 import { externalLinks, site } from 'lib/site'
 import { homeGraph, ogImageUrl } from 'lib/seo'
 import { ExternalLink } from 'app/components/external-link'
-import { SectionHeader } from 'app/components/section-header'
 import { JsonLd } from 'app/components/json-ld'
 import { MetadataLine } from 'app/components/editorial'
 import { typeStyles } from 'lib/typography'
@@ -39,7 +38,7 @@ export default function HomePage() {
     .slice(0, 3)
 
   return (
-    <div className="flex flex-col gap-16">
+    <div className="flex flex-col gap-14">
       <JsonLd data={homeGraph()} />
       <section>
         <h1 className={typeStyles.displayTitle}>Arjun Aggarwal</h1>
@@ -58,39 +57,32 @@ export default function HomePage() {
       </section>
 
       <section>
-        <SectionHeader
-          eyebrow="Current work"
-          title="Judgment under real constraints"
-          href="/work"
-          hrefLabel="Work record"
-        />
+        <h2 className={typeStyles.sectionTitle}>Current work</h2>
         {currentWork ? (
-          <div className="border-t border-border py-6">
+          <div className="mt-4 border-t border-border py-5">
+            <h3 className={typeStyles.cardTitle}>{currentWork.company}</h3>
             <MetadataLine>
               {currentWork.role} · {workDateRange(currentWork)}
             </MetadataLine>
-            <h3 className={`${typeStyles.sectionTitle} mt-2`}>
-              {currentWork.company}
-            </h3>
-            <p className={`${typeStyles.uiBody} mt-3 max-w-2xl text-muted`}>
+            <p className={`${typeStyles.uiBody} mt-2 max-w-2xl text-muted`}>
               {currentWork.homeSummary ?? currentWork.summary}
             </p>
           </div>
         ) : null}
+        <p className={`${typeStyles.smallBody} mt-2`}>
+          <Link href="/work" className={inlineLink}>
+            More about my work →
+          </Link>
+        </p>
       </section>
 
       <section>
-        <SectionHeader
-          eyebrow="One argument"
-          title="A position worth defending"
-          href="/writing"
-          hrefLabel="Published writing"
-        />
+        <h2 className={typeStyles.sectionTitle}>Writing</h2>
         {featuredWriting.length > 0 ? (
-          <div className="border-t border-border py-6">
+          <div className="mt-4 border-t border-border py-5">
             {featuredWriting.map((post) => (
               <article key={post.slug}>
-                <h3 className={typeStyles.sectionTitle}>
+                <h3 className={typeStyles.cardTitle}>
                   <Link href={`/writing/${post.slug}`} className={titleLink}>
                     {post.title}
                   </Link>
@@ -109,17 +101,17 @@ export default function HomePage() {
             </Link>
           </p>
         )}
+        <p className={`${typeStyles.smallBody} mt-2`}>
+          <Link href="/writing" className={inlineLink}>
+            Read all writing →
+          </Link>
+        </p>
       </section>
 
       <section>
-        <SectionHeader
-          eyebrow="Recent observations"
-          title="What has crossed my attention"
-          href="/log"
-          hrefLabel="Field Index"
-        />
+        <h2 className={typeStyles.sectionTitle}>Recent from the log</h2>
         {observations.length > 0 ? (
-          <div className="grid border-t border-border sm:grid-cols-3 sm:divide-x sm:divide-border-soft">
+          <div className="mt-4 grid border-t border-border sm:grid-cols-3 sm:divide-x sm:divide-border-soft">
             {observations.map((entry) => (
               <div
                 key={entry.id}
@@ -148,6 +140,11 @@ export default function HomePage() {
             The Log holds observations that are not yet arguments.
           </p>
         )}
+        <p className={`${typeStyles.smallBody} mt-3`}>
+          <Link href="/log" className={inlineLink}>
+            Browse the log →
+          </Link>
+        </p>
       </section>
     </div>
   )

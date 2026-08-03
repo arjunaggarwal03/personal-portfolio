@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { externalLinks, person, site, social } from 'lib/site'
+import { externalLinks, person, social } from 'lib/site'
 import { pageMetadata } from 'lib/seo'
 import { ExternalLink } from 'app/components/external-link'
 import { MetadataLine, PageIntroduction } from 'app/components/editorial'
@@ -16,7 +16,7 @@ export const metadata = pageMetadata({
 export default function AboutPage() {
   return (
     <article>
-      <PageIntroduction title="About" eyebrow="Person, path, present tense">
+      <PageIntroduction title="About">
         <p>
           I&rsquo;m Arjun, a software engineer in San Francisco. The
           professional record is in Work; this page is about the choices around
@@ -34,7 +34,6 @@ export default function AboutPage() {
           className="aspect-square w-full max-w-56 rounded-lg border border-border object-cover"
         />
         <div className="article mt-0">
-          <MetadataLine>{site.location}</MetadataLine>
           <p>
             I&rsquo;m a founding engineer at{' '}
             <ExternalLink href={externalLinks.lightfield}>
@@ -48,10 +47,10 @@ export default function AboutPage() {
 
       <section className="grid gap-5 border-t border-border py-9 sm:grid-cols-[11rem_1fr] sm:gap-8">
         <div>
-          <MetadataLine>One week · 2025</MetadataLine>
-          <h2 className={`${typeStyles.sectionTitle} mt-1`}>
-            Choosing uncertainty
-          </h2>
+          <h2 className={typeStyles.sectionTitle}>Choosing uncertainty</h2>
+          <div className="mt-1">
+            <MetadataLine>One week · 2025</MetadataLine>
+          </div>
         </div>
         <div className="article mt-0">
           <p>

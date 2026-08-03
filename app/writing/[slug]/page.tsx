@@ -86,7 +86,7 @@ export default async function WritingDetail({
         {post.subtitle ? (
           <p className="mt-2 text-lg text-muted">{post.subtitle}</p>
         ) : null}
-        <p className="mt-3 font-mono text-xs text-subtle">
+        <p className={`${typeStyles.caption} mt-3 text-subtle`}>
           {formatDate(post.date)}
           {post.readingTime ? ` · ${post.readingTime}` : ''}
         </p>
@@ -98,7 +98,7 @@ export default async function WritingDetail({
 
       <nav
         aria-label="More writing"
-        className="mt-16 flex justify-between gap-4 border-t border-border pt-6 font-mono text-xs"
+        className={`${typeStyles.caption} mt-16 flex justify-between gap-4 border-t border-border pt-6`}
       >
         {older ? (
           <Link

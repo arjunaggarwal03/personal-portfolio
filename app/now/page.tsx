@@ -1,11 +1,6 @@
 import Link from 'next/link'
 import { ExternalLink } from 'app/components/external-link'
-import {
-  CuratorialAnnotation,
-  EditorialSection,
-  MetadataLine,
-  RevisionMark,
-} from 'app/components/editorial'
+import { PageIntroduction } from 'app/components/editorial'
 import { getSiteModel } from 'lib/content/model'
 import { getLogBySlugs } from 'lib/content/queries'
 import { formatDate } from 'lib/dates'
@@ -31,27 +26,23 @@ export default function NowPage() {
 
   return (
     <article>
-      <header className="page-introduction">
-        <div className="flex flex-wrap items-baseline justify-between gap-3">
-          <div>
-            <MetadataLine>Current edit</MetadataLine>
-            <h1 className={`${typeStyles.indexTitle} mt-1`}>Now</h1>
-          </div>
-          <MetadataLine>Updated {formatDate(current.lastUpdated)}</MetadataLine>
-        </div>
-        <p className={`${typeStyles.uiBody} mt-3 max-w-xl text-muted`}>
-          What survived my attention long enough to organize the present. Edited
-          when the answer changes.
+      <PageIntroduction
+        title="Now"
+        meta={`Updated ${formatDate(current.lastUpdated)}`}
+      >
+        <p>
+          A short record of what has my attention. I update it when the answer
+          changes.
         </p>
-      </header>
+      </PageIntroduction>
 
-      <EditorialSection label="The question holding the room" prominent>
-        <h2 className="type-detail-title max-w-3xl">
+      <section className="border-t border-border py-8 sm:py-9">
+        <h2 className={`${typeStyles.sectionTitle} max-w-2xl`}>
           {current.question.prompt}
         </h2>
-        <div className="mt-9 grid gap-7 sm:grid-cols-2">
+        <div className="mt-7 grid gap-6 sm:grid-cols-2">
           <div>
-            <h3 className={`${typeStyles.metadata} text-accent`}>
+            <h3 className={`${typeStyles.smallBody} font-medium`}>
               Current view
             </h3>
             <p className={`${typeStyles.uiBody} mt-2 text-muted`}>
@@ -59,7 +50,7 @@ export default function NowPage() {
             </p>
           </div>
           <div>
-            <h3 className={`${typeStyles.metadata} text-subtle`}>
+            <h3 className={`${typeStyles.smallBody} font-medium`}>
               Strongest counterargument
             </h3>
             <p className={`${typeStyles.uiBody} mt-2 text-muted`}>
@@ -67,76 +58,70 @@ export default function NowPage() {
             </p>
           </div>
         </div>
-        <div className="mt-8">
-          <RevisionMark label="What would change my mind">
-            <p className="max-w-2xl text-muted">
-              {current.question.wouldChange}
-            </p>
-          </RevisionMark>
+        <div className="mt-6 max-w-2xl">
+          <h3 className={`${typeStyles.smallBody} font-medium`}>
+            What would change my mind
+          </h3>
+          <p className={`${typeStyles.uiBody} mt-2 text-muted`}>
+            {current.question.wouldChange}
+          </p>
         </div>
-      </EditorialSection>
+      </section>
 
-      <EditorialSection
-        label="Four things that stayed"
-        title="Selected from the Field Index"
-      >
-        <ol className="divide-y divide-border-soft">
-          {rotation.map((entry, index) => {
+      <section className="border-t border-border py-8 sm:py-9">
+        <h2 className={typeStyles.sectionTitle}>What stayed with me</h2>
+        <div className="mt-5 divide-y divide-border-soft">
+          {rotation.map((entry) => {
             const detail = entry.hasDetailPage
               ? `/log/${entry.slug}`
               : `/log#entry-${entry.slug}`
             return (
-              <li key={entry.id} className="py-5 first:pt-0 last:pb-0">
-                <div className="flex items-baseline gap-3">
-                  <span className={`${typeStyles.metadata} text-subtle`}>
-                    {String(index + 1).padStart(2, '0')}
-                  </span>
-                  <h3 className={typeStyles.cardTitle}>
-                    <Link href={detail} className={titleLink}>
-                      {entry.title ?? entry.summary}
-                    </Link>
-                  </h3>
-                </div>
-                <div className="ml-8">
-                  <CuratorialAnnotation>
-                    {selections.get(entry.slug)?.whyNow}
-                  </CuratorialAnnotation>
-                </div>
-              </li>
+              <article key={entry.id} className="py-4 first:pt-0 last:pb-0">
+                <h3 className={typeStyles.cardTitle}>
+                  <Link href={detail} className={titleLink}>
+                    {entry.title ?? entry.summary}
+                  </Link>
+                </h3>
+                <p className={`${typeStyles.smallBody} mt-2 text-muted`}>
+                  {selections.get(entry.slug)?.whyNow}
+                </p>
+              </article>
             )
           })}
-        </ol>
-      </EditorialSection>
+        </div>
+      </section>
 
-      <EditorialSection label="Revision" title="Changed my mind">
-        <div className="grid gap-6 sm:grid-cols-[1fr_auto_1fr] sm:items-start">
+      <section className="border-t border-border py-8 sm:py-9">
+        <h2 className={typeStyles.sectionTitle}>Changed my mind</h2>
+        <div className="mt-5 grid gap-6 sm:grid-cols-2">
           <div>
-            <h3 className={`${typeStyles.metadata} text-subtle`}>Earlier</h3>
+            <h3 className={`${typeStyles.smallBody} font-medium`}>Earlier</h3>
             <p className={`${typeStyles.smallBody} mt-2 text-muted`}>
               {current.changedMyMind.previous}
             </p>
           </div>
-          <span aria-hidden="true" className="hidden text-accent sm:block">
-            →
-          </span>
           <div>
-            <h3 className={`${typeStyles.metadata} text-accent`}>Now</h3>
+            <h3 className={`${typeStyles.smallBody} font-medium`}>Now</h3>
             <p className={`${typeStyles.smallBody} mt-2`}>
               {current.changedMyMind.current}
             </p>
           </div>
         </div>
-        <p className={`${typeStyles.smallBody} mt-6 text-muted`}>
-          <span className="text-ink">What changed:</span>{' '}
+        <p className={`${typeStyles.smallBody} mt-5 text-muted`}>
+          <span className="font-medium text-ink">What changed:</span>{' '}
           {current.changedMyMind.changed}
         </p>
-        <p className={`${typeStyles.caption} mt-3 text-subtle`}>
+        <p className={`${typeStyles.caption} mt-2 text-subtle`}>
           Revised {formatDate(current.changedMyMind.revised)}
         </p>
-      </EditorialSection>
+      </section>
 
-      <EditorialSection label="From the studio" title={current.workingOn.title}>
-        <p className={`${typeStyles.uiBody} max-w-2xl text-muted`}>
+      <section className="border-t border-border py-8 sm:py-9">
+        <h2 className={typeStyles.sectionTitle}>Working on</h2>
+        <h3 className={`${typeStyles.cardTitle} mt-4`}>
+          {current.workingOn.title}
+        </h3>
+        <p className={`${typeStyles.uiBody} mt-2 max-w-2xl text-muted`}>
           {current.workingOn.summary}
         </p>
         {current.workingOn.href ? (
@@ -146,7 +131,7 @@ export default function NowPage() {
             </ExternalLink>
           </p>
         ) : null}
-      </EditorialSection>
+      </section>
     </article>
   )
 }

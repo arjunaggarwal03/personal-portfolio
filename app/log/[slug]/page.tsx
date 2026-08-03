@@ -134,7 +134,7 @@ export default async function LogDetail({
         ])}
       />
 
-      <p className="font-mono text-xs text-subtle">
+      <p className={`${typeStyles.caption} text-subtle`}>
         <Link href="/log" className={inlineLink}>
           Log
         </Link>{' '}
@@ -150,7 +150,9 @@ export default async function LogDetail({
           </span>
         ) : null}
         {location ? (
-          <span className="font-mono text-xs text-subtle">{location}</span>
+          <span className={`${typeStyles.caption} text-subtle`}>
+            {location}
+          </span>
         ) : null}
       </div>
 

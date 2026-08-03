@@ -30,8 +30,8 @@ are just MDX or TypeScript files under `content/`.
   for build-time syntax highlighting (warm theme in `app/components/code-theme.ts`)
 - **Content validation** via authoritative Zod schemas (`lib/content/schemas`): malformed
   content fails the build with a file-scoped error
-- Images via `next/image`; fonts: Newsreader (serif), Inter (sans), IBM Plex
-  Mono (mono) via `next/font`
+- Images via `next/image`; fonts: Newsreader (serif) and Inter (sans) via
+  `next/font`, with the system monospace stack reserved for code
 - **Oxlint** for linting (`.oxlintrc.json`: Next.js + jsx-a11y + react + import
   rules) and **Biome** for formatting (`biome.json`), both Rust-based
 

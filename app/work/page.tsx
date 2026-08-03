@@ -24,10 +24,12 @@ export default function WorkPage() {
       </PageIntroduction>
 
       <section className="border-t border-border py-9">
-        <MetadataLine>Current work · {workDateRange(current)}</MetadataLine>
-        <h2 className={`${typeStyles.indexTitle} mt-2`}>
+        <h2 className={typeStyles.sectionTitle}>
           {current.company}, {current.role}
         </h2>
+        <div className="mt-1">
+          <MetadataLine>{workDateRange(current)}</MetadataLine>
+        </div>
         {current.context ? (
           <p className={`${typeStyles.proseBody} mt-4 max-w-2xl text-muted`}>
             {current.context}
@@ -41,7 +43,7 @@ export default function WorkPage() {
           ].map(([label, value]) =>
             value ? (
               <div key={label}>
-                <dt className={`${typeStyles.metadata} text-subtle`}>
+                <dt className={`${typeStyles.smallBody} font-medium text-ink`}>
                   {label}
                 </dt>
                 <dd className={`${typeStyles.smallBody} mt-2 text-muted`}>
@@ -54,17 +56,19 @@ export default function WorkPage() {
       </section>
 
       <section className="border-t border-border py-9">
-        <MetadataLine>Defining decisions</MetadataLine>
-        <h2 className={`${typeStyles.sectionTitle} mt-2`}>
-          Choosing agency without pretending the outcome was certain
-        </h2>
+        <h2 className={typeStyles.sectionTitle}>Defining decisions</h2>
+        <p className={`${typeStyles.uiBody} mt-2 max-w-prose text-muted`}>
+          Choosing agency without pretending the outcome was certain.
+        </p>
         <div className="mt-6 grid gap-8 sm:grid-cols-2">
           {[google, plato].map((item) => (
             <article key={item.company}>
-              <MetadataLine>{workDateRange(item)}</MetadataLine>
-              <h3 className={`${typeStyles.cardTitle} mt-1`}>
+              <h3 className={typeStyles.cardTitle}>
                 {item.company}, {item.role}
               </h3>
+              <div className="mt-1">
+                <MetadataLine>{workDateRange(item)}</MetadataLine>
+              </div>
               <p className={`${typeStyles.smallBody} mt-3 text-muted`}>
                 {item.change ?? item.summary}
               </p>
@@ -79,7 +83,7 @@ export default function WorkPage() {
       </section>
 
       <section className="border-t border-border py-9">
-        <MetadataLine>Earlier trajectory</MetadataLine>
+        <h2 className={typeStyles.sectionTitle}>Earlier work</h2>
         <div className="mt-3">
           {earlier.map((item) => (
             <IndexRow
