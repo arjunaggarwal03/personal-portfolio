@@ -3,6 +3,7 @@ import type { LogEmbed } from 'lib/content/schemas/log'
 import { SpotifyEmbed } from './spotify-embed'
 import { NewTabIndicator } from './external-link'
 import { youtubeEmbedUrl } from 'lib/media/embed-urls'
+import { typeStyles } from 'lib/typography'
 
 const IMAGE_SIZES = '(max-width: 760px) 100vw, 760px'
 const DEFAULT_ASPECT_RATIO = '16:9'
@@ -70,7 +71,7 @@ export function MediaEmbed({ item }: { item: LogEmbed }) {
             />
           )}
           {item.caption ? (
-            <figcaption className="mt-1.5 font-mono text-xs text-subtle">
+            <figcaption className={`${typeStyles.caption} mt-1.5 text-subtle`}>
               {item.caption}
             </figcaption>
           ) : null}
@@ -92,7 +93,7 @@ export function MediaEmbed({ item }: { item: LogEmbed }) {
             }`}
           />
           {item.caption ? (
-            <figcaption className="mt-1.5 font-mono text-xs text-subtle">
+            <figcaption className={`${typeStyles.caption} mt-1.5 text-subtle`}>
               {item.caption}
             </figcaption>
           ) : null}
@@ -129,7 +130,7 @@ export function MediaEmbed({ item }: { item: LogEmbed }) {
           rel="noopener noreferrer"
           className="block rounded-lg border border-border-soft bg-surface px-4 py-3 no-underline hover:border-accent"
         >
-          <span className="font-mono text-xs text-subtle">
+          <span className={`${typeStyles.caption} text-subtle`}>
             {item.url}
             <NewTabIndicator />
           </span>

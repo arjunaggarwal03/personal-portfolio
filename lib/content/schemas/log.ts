@@ -78,17 +78,8 @@ const embedSchema = z
 
 const ratingSchema = z
   .object({
-    value: z.number().optional(),
-    max: z.number().optional(),
     label: z
-      .enum([
-        'canon',
-        'revisit',
-        'liked',
-        'skip',
-        'in rotation',
-        'still thinking',
-      ])
+      .enum(['canon', 'in rotation', 'returned to', 'still considering'])
       .optional(),
   })
   .strict()
@@ -151,4 +142,3 @@ export const logEntrySchema = logFrontmatterSchema.extend({
 export type LogEntry = z.infer<typeof logEntrySchema>
 export type LogEmbed = z.infer<typeof embedSchema>
 export type LogType = z.infer<typeof logTypeSchema>
-export type Rating = NonNullable<LogEntry['rating']>

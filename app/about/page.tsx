@@ -1,106 +1,96 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { externalLinks, person, site, social } from 'lib/site'
+import { externalLinks, person, social } from 'lib/site'
 import { pageMetadata } from 'lib/seo'
 import { ExternalLink } from 'app/components/external-link'
+import { MetadataLine, PageIntroduction } from 'app/components/editorial'
 import { typeStyles } from 'lib/typography'
 
 export const metadata = pageMetadata({
   title: 'About',
   description:
-    'About Arjun Aggarwal, a founding engineer at Lightfield in San Francisco working across AI products, APIs, workflows, and CRM systems.',
+    'About Arjun Aggarwal, how he got here, and what he likes outside work.',
   path: '/about',
 })
 
 export default function AboutPage() {
   return (
-    <section className="max-w-prose">
-      <header className="flex items-center gap-4">
+    <article>
+      <PageIntroduction title="About">
+        <p>
+          I&rsquo;m Arjun, a software engineer in San Francisco. Work has the
+          r&eacute;sum&eacute;-ish version; here&rsquo;s a little more about how
+          I got here and what I like outside it.
+        </p>
+      </PageIntroduction>
+
+      <div className="grid gap-8 border-t border-border py-9 sm:grid-cols-[14rem_1fr]">
         <Image
           src={person.image}
-          alt={`${person.name}, ${person.jobTitle} at ${person.company}`}
-          width={84}
-          height={84}
+          alt={person.name}
+          width={224}
+          height={224}
           priority
-          className="rounded-lg border border-border object-cover"
+          className="aspect-square w-full max-w-56 rounded-lg border border-border object-cover"
         />
-        <div>
-          <h1 className={typeStyles.indexTitle}>About</h1>
-          <p className={`${typeStyles.caption} mt-1 text-subtle`}>
-            {person.jobTitle} at {person.company} · {site.location}
+        <div className="article mt-0">
+          <p>
+            I&rsquo;m a founding engineer at{' '}
+            <ExternalLink href={externalLinks.lightfield}>
+              Lightfield
+            </ExternalLink>{' '}
+            in San Francisco. I like working close enough to the problem that I
+            can move between the code, the product, and the people using it.
           </p>
         </div>
-      </header>
-
-      <div className="article mt-8">
-        <p>
-          I&rsquo;m a founding engineer at{' '}
-          <ExternalLink href={externalLinks.lightfield}>
-            Lightfield
-          </ExternalLink>{' '}
-          in San Francisco. We are building a CRM for companies where sales,
-          product, engineering, and delivery all participate in the customer
-          relationship.
-        </p>
-
-        <p>
-          My work moves between product and systems. I&rsquo;ve helped turn
-          product operations into a public API and Python SDK used by our own
-          agent, built tools for creating and editing CRM tasks, and worked on
-          workflow automation, human review, notifications, and core product
-          surfaces.
-        </p>
-
-        <p>
-          I&rsquo;m interested in what changes when software is operated by a
-          model as well as a person. Human-facing products contain years of
-          implicit assumptions: people resolve ambiguous names, notice stale
-          records, recover from unclear errors, and understand when a
-          technically valid action would be socially wrong. When a model becomes
-          another operator, those assumptions become product and systems
-          decisions.
-        </p>
-
-        <p>
-          Before Lightfield, I briefly joined YouTube&rsquo;s Living Room team
-          at Google. I left after a week because I wanted more ownership and a
-          shorter distance between the work and the customer. The decision was
-          not as inevitable as a retrospective career narrative can make it
-          sound. It was a bet on what I would learn, made with limited
-          information.
-        </p>
-
-        <p>
-          Earlier, I built financial-event infrastructure at AWS, worked with a
-          roughly 900-million-edge graph at Capital One, automated risk testing
-          at Bank of America, joined Mindgrasp before it had traction, and
-          co-founded Plato, a service catalog for internal engineering
-          knowledge.
-        </p>
-
-        <p>
-          Looking backward, I can see a recurring attraction to systems that
-          make complicated domains easier to understand and operate. The path
-          was not as deliberate as that pattern sounds: some choices came from
-          intellectual interest, some from opportunity, and some from wanting to
-          move faster.
-        </p>
-
-        <p>
-          Outside work, I spend a lot of time on restaurants, films, music,
-          cities, soccer, and travel. Those interests live mostly in the{' '}
-          <Link href="/log">Log</Link>, where they are allowed to remain
-          interests rather than become metaphors for software.
-        </p>
-
-        <p>
-          The best way to reach me is <a href={social.email}>email</a>. You can
-          also find me on{' '}
-          <ExternalLink href={social.linkedin}>LinkedIn</ExternalLink>,{' '}
-          <ExternalLink href={social.github}>GitHub</ExternalLink>, and{' '}
-          <ExternalLink href={social.x}>X</ExternalLink>.
-        </p>
       </div>
-    </section>
+
+      <section className="grid gap-5 border-t border-border py-9 sm:grid-cols-[11rem_1fr] sm:gap-8">
+        <div>
+          <h2 className={typeStyles.sectionTitle}>One week at Google</h2>
+          <div className="mt-1">
+            <MetadataLine>2025</MetadataLine>
+          </div>
+        </div>
+        <div className="article mt-0">
+          <p>
+            Before Lightfield, I joined YouTube&rsquo;s Living Room team at
+            Google. A week later, I left to join Lightfield. I wanted more
+            ownership and a shorter path between what I built and the people
+            using it. It was a real gamble; I only knew that it felt worth
+            taking.
+          </p>
+          <p>
+            Before that, I co-founded Plato, a service catalog for internal
+            engineering knowledge. It did not become a lasting company, but it
+            taught me what it feels like to pick the problem, build the product,
+            and try to convince people it should exist.
+          </p>
+          <p>
+            None of this followed a grand plan. Some choices came from
+            curiosity, some from opportunity, and some from wanting to move
+            faster.
+          </p>
+        </div>
+      </section>
+
+      <section className="grid gap-5 border-t border-border py-9 sm:grid-cols-[11rem_1fr] sm:gap-8">
+        <h2 className={typeStyles.sectionTitle}>Away from the laptop</h2>
+        <div className="article mt-0">
+          <p>
+            Outside work, I spend a lot of time on restaurants, films, music,
+            cities, soccer, and travel. That&rsquo;s mostly what the{' '}
+            <Link href="/log">Log</Link> is for.
+          </p>
+          <p>
+            The best way to reach me is <a href={social.email}>email</a>. You
+            can also find me on{' '}
+            <ExternalLink href={social.linkedin}>LinkedIn</ExternalLink>,{' '}
+            <ExternalLink href={social.github}>GitHub</ExternalLink>, and{' '}
+            <ExternalLink href={social.x}>X</ExternalLink>.
+          </p>
+        </div>
+      </section>
+    </article>
   )
 }

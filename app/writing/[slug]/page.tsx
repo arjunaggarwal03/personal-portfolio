@@ -8,7 +8,6 @@ import { inlineLink } from 'lib/ui'
 import { articleGraph, breadcrumbGraph, ogImageUrl } from 'lib/seo'
 import { CustomMDX } from 'app/components/mdx'
 import { JsonLd } from 'app/components/json-ld'
-import { TagList } from 'app/components/tag-pill'
 import { typeStyles } from 'lib/typography'
 
 export async function generateStaticParams() {
@@ -87,15 +86,10 @@ export default async function WritingDetail({
         {post.subtitle ? (
           <p className="mt-2 text-lg text-muted">{post.subtitle}</p>
         ) : null}
-        <p className="mt-3 font-mono text-xs text-subtle">
+        <p className={`${typeStyles.caption} mt-3 text-subtle`}>
           {formatDate(post.date)}
           {post.readingTime ? ` · ${post.readingTime}` : ''}
         </p>
-        {post.tags.length > 0 ? (
-          <div className="mt-3">
-            <TagList tags={post.tags} />
-          </div>
-        ) : null}
       </header>
 
       <div className="article mt-8">
@@ -104,7 +98,7 @@ export default async function WritingDetail({
 
       <nav
         aria-label="More writing"
-        className="mt-16 flex justify-between gap-4 border-t border-border pt-6 font-mono text-xs"
+        className={`${typeStyles.caption} mt-16 flex justify-between gap-4 border-t border-border pt-6`}
       >
         {older ? (
           <Link

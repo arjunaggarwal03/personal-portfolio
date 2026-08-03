@@ -1,14 +1,16 @@
 import { getLogFeed, paginateLogEntries } from 'lib/content/queries'
+import { getSiteModel } from 'lib/content/model'
 import { applyLogFilter, activeFilterLabel, type LogQuery } from 'lib/filters'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { pageMetadata } from 'lib/seo'
 import { FilterBar } from 'app/components/filter-bar'
 import { LogEntryCard } from 'app/components/log-entry-card'
+import { PageIntroduction } from 'app/components/editorial'
 import { typeStyles } from 'lib/typography'
 
 const description =
-  "A messy index of what I'm noticing: work, cities, meals, music, films, links, clips, and half-formed thoughts."
+  "A working index of what I'm noticing: work, cities, meals, music, films, links, clips, and half-formed thoughts."
 
 export async function generateMetadata({
   searchParams,
@@ -41,8 +43,12 @@ export default async function LogPage({
   searchParams: Promise<LogQuery>
 }) {
   const query = await searchParams
+  const model = getSiteModel()
   const filtered = applyLogFilter(getLogFeed(), query)
   const requestedPage = Math.max(1, Number.parseInt(query.page ?? '1', 10) || 1)
+  const onView = new Set(
+    model.now.rotation.selections.map((selection) => selection.slug),
+  )
   const { entries, page, totalPages } = paginateLogEntries(
     filtered,
     requestedPage,
@@ -51,26 +57,33 @@ export default async function LogPage({
 
   return (
     <section>
-      <h1 className={typeStyles.indexTitle}>Log</h1>
-      <p className="mt-2 max-w-prose text-muted">
-        A messy index of what I&rsquo;m noticing: work, cities, meals, music,
-        films, links, clips, and half-formed thoughts.
-      </p>
+      <PageIntroduction title="Log">
+        <p>
+          A running list of restaurants, cities, films, music, links, work, and
+          whatever else I want to remember.
+        </p>
+      </PageIntroduction>
 
-      <div className="mt-6">
+      <div>
         <FilterBar query={query} />
       </div>
 
       {label !== 'All' ? (
-        <p className="mt-4 font-mono text-xs text-subtle">
+        <p className={`${typeStyles.caption} mt-4 text-subtle`}>
           {filtered.length} {filtered.length === 1 ? 'entry' : 'entries'} ·{' '}
           {label}
         </p>
       ) : null}
 
-      <div className="mt-2">
+      <div className="mt-3">
         {entries.length > 0 ? (
-          entries.map((entry) => <LogEntryCard key={entry.id} entry={entry} />)
+          entries.map((entry) => (
+            <LogEntryCard
+              key={entry.id}
+              entry={entry}
+              onView={onView.has(entry.slug)}
+            />
+          ))
         ) : (
           <p className="mt-6 text-muted">Nothing here yet.</p>
         )}
@@ -79,7 +92,7 @@ export default async function LogPage({
       {totalPages > 1 ? (
         <nav
           aria-label="Log pagination"
-          className="mt-8 flex items-center justify-between border-t border-border pt-4 font-mono text-xs"
+          className={`${typeStyles.caption} mt-8 flex items-center justify-between border-t border-border pt-4`}
         >
           {page > 1 ? (
             <Link href={pageHref(query, page - 1)}>← Newer</Link>

@@ -36,10 +36,11 @@
   --shadow-tile: inset 0 1px 0 rgba(255, 255, 255, 0.7),
     0 1px 2px rgba(67, 52, 33, 0.05), 0 6px 16px rgba(67, 52, 33, 0.05);
 
-  /* Font families (CSS variables come from next/font in layout.tsx) */
+  /* Two editorial families. Monospace is reserved for code, not interface
+     labels or metadata. */
   --font-sans: var(--font-inter), system-ui, sans-serif;
   --font-serif: var(--font-newsreader), Georgia, serif;
-  --font-mono: var(--font-ibm-plex-mono), 'SFMono-Regular', monospace;
+  --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
 
   /* Numeric tokens support the semantic roles below. Routes should use the
      role classes rather than choosing sizes independently. */
@@ -113,18 +114,28 @@
 
   .type-metadata,
   .type-caption {
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
     font-weight: 400;
     line-height: 1.5;
   }
 
   .type-metadata {
-    letter-spacing: 0.025em;
+    font-weight: 500;
   }
 
   .type-caption {
     color: var(--color-subtle);
+  }
+
+  .page-introduction {
+    padding-bottom: 2rem;
+  }
+
+  @media (min-width: 640px) {
+    .page-introduction {
+      padding-bottom: 2.5rem;
+    }
   }
 }
 
@@ -194,7 +205,7 @@
   border-radius: 0.375rem;
   background-color: var(--color-surface);
   padding: 0.5rem 1rem;
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: var(--text-sm);
   color: var(--color-ink);
   text-decoration: none;
@@ -203,25 +214,6 @@
 
 .skip-link:focus {
   transform: translateY(0);
-}
-
-/* Equalizer bars for the /now "Listening" tile — a quiet sign of life while a
-   track is actually playing. Each bar sets its own --eq-delay inline so they
-   fall out of phase. Neutralized by the reduced-motion block below. */
-@keyframes now-eq {
-  0%,
-  100% {
-    transform: scaleY(0.3);
-  }
-  50% {
-    transform: scaleY(1);
-  }
-}
-
-.now-eq-bar {
-  transform-origin: bottom;
-  animation: now-eq 900ms ease-in-out infinite;
-  animation-delay: var(--eq-delay, 0ms);
 }
 
 /* Respect reduced motion globally */

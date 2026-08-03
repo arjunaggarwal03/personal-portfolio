@@ -10,7 +10,6 @@ export const siteIdentitySchema = z
     description: z.string().min(1),
     homeDescription: z.string().min(1),
     summary: z.string().min(1),
-    currentlyThinking: z.string().min(1),
   })
   .strict()
 
@@ -24,6 +23,11 @@ export const workItemSchema = z
     current: z.boolean().optional(),
     summary: z.string().min(1),
     homeSummary: z.string().optional(),
+    context: z.string().optional(),
+    ownership: z.string().optional(),
+    constraint: z.string().optional(),
+    change: z.string().optional(),
+    reflection: z.string().optional(),
     details: z.array(z.string()).optional(),
     tags: z.array(z.string()).optional(),
     links: z.array(linkSchema).optional(),

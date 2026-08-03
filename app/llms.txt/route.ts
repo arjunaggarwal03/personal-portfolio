@@ -31,7 +31,7 @@ const PAGES: { label: string; path: string; blurb: string }[] = [
     blurb:
       'restaurants, cities, films, music, links, photographs, and personal notes',
   },
-  { label: 'Now', path: '/now', blurb: 'a live ambient snapshot' },
+  { label: 'Now', path: '/now', blurb: 'the current question and edit' },
   {
     label: 'About',
     path: '/about',

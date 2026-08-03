@@ -6,10 +6,10 @@ import { formatDateShort } from 'lib/dates'
 import { externalLinks, site } from 'lib/site'
 import { homeGraph, ogImageUrl } from 'lib/seo'
 import { ExternalLink } from 'app/components/external-link'
-import { SectionHeader } from 'app/components/section-header'
-import { IndexRow } from 'app/components/index-row'
 import { JsonLd } from 'app/components/json-ld'
+import { MetadataLine } from 'app/components/editorial'
 import { typeStyles } from 'lib/typography'
+import { inlineLink, titleLink } from 'lib/ui'
 
 export const metadata: Metadata = {
   description: site.homeDescription,
@@ -24,19 +24,18 @@ export const metadata: Metadata = {
   },
 }
 
-const SELECTED_COMPANIES = ['Lightfield', 'Amazon Web Services', 'Capital One']
-const FEATURED_WRITING_COUNT = 4
-const LATEST_LOG_COUNT = 5
-
 export default function HomePage() {
-  const selectedWork = SELECTED_COMPANIES.map((name) =>
-    work.find((w) => w.company === name),
-  ).filter((w): w is NonNullable<typeof w> => Boolean(w))
-
-  const featuredWriting = getFeaturedWriting(FEATURED_WRITING_COUNT).filter(
+  const currentWork = work.find((item) => item.current)
+  const featuredWriting = getFeaturedWriting(1).filter(
     (post) => post.status === 'published',
   )
-  const latestLog = getFeaturedLog(LATEST_LOG_COUNT)
+  const observations = getFeaturedLog(12)
+    .filter(
+      (entry, index, entries) =>
+        entries.findIndex((candidate) => candidate.type === entry.type) ===
+        index,
+    )
+    .slice(0, 3)
 
   return (
     <div className="flex flex-col gap-14">
@@ -48,101 +47,100 @@ export default function HomePage() {
           <ExternalLink href={externalLinks.lightfield}>
             Lightfield
           </ExternalLink>{' '}
-          in San Francisco, where I work across the APIs, agent tools,
-          workflows, and product surfaces behind our CRM.
+          in San Francisco. I spend most of my time moving between product and
+          systems: APIs, agent workflows, and the details that make software
+          easier to understand and use.
         </p>
         <p className={`${typeStyles.uiBody} mt-4 max-w-prose text-muted`}>
-          This site is where I explain what I&rsquo;m learning and keep track of
-          restaurants, cities, films, music, and things I don&rsquo;t want to
-          forget.
+          I use this site to write through ideas and keep track of work,
+          restaurants, films, music, and places I want to remember.
         </p>
       </section>
 
       <section>
-        <SectionHeader
-          eyebrow="Selected work"
-          title="A few things I've worked on"
-          href="/work"
-          hrefLabel="all work"
-        />
-        <div>
-          {selectedWork.map((item) => (
-            <IndexRow
-              key={item.company}
-              title={item.company}
-              kicker={item.role}
-              meta={workDateRange(item)}
-              description={item.homeSummary ?? item.summary}
-              headingLevel={3}
-            />
-          ))}
-        </div>
+        <h2 className={typeStyles.sectionTitle}>Current work</h2>
+        {currentWork ? (
+          <div className="mt-4 border-t border-border py-5">
+            <h3 className={typeStyles.cardTitle}>{currentWork.company}</h3>
+            <MetadataLine>
+              {currentWork.role} · {workDateRange(currentWork)}
+            </MetadataLine>
+            <p className={`${typeStyles.uiBody} mt-2 max-w-2xl text-muted`}>
+              {currentWork.homeSummary ?? currentWork.summary}
+            </p>
+          </div>
+        ) : null}
+        <p className={`${typeStyles.smallBody} mt-2`}>
+          <Link href="/work" className={inlineLink}>
+            More about my work →
+          </Link>
+        </p>
       </section>
 
       <section>
-        <SectionHeader
-          eyebrow="Selected writing"
-          title="Recent writing"
-          href="/writing"
-          hrefLabel="all writing"
-        />
+        <h2 className={typeStyles.sectionTitle}>Writing</h2>
         {featuredWriting.length > 0 ? (
-          <div>
+          <div className="mt-4 border-t border-border py-5">
             {featuredWriting.map((post) => (
-              <IndexRow
-                key={post.slug}
-                title={post.title}
-                href={`/writing/${post.slug}`}
-                description={post.summary}
-                headingLevel={3}
-              />
+              <article key={post.slug}>
+                <h3 className={typeStyles.cardTitle}>
+                  <Link href={`/writing/${post.slug}`} className={titleLink}>
+                    {post.title}
+                  </Link>
+                </h3>
+                <p className={`${typeStyles.uiBody} mt-2 max-w-2xl text-muted`}>
+                  {post.summary}
+                </p>
+              </article>
             ))}
           </div>
         ) : (
           <p className="max-w-prose text-muted">
-            I&rsquo;m working on the first few pieces. I&rsquo;d rather leave
-            this sparse than publish an argument before I understand it.{' '}
-            <Link href="/writing">all writing →</Link>
+            Nothing here yet. I&rsquo;ll add something when it&rsquo;s ready.
           </p>
         )}
+        <p className={`${typeStyles.smallBody} mt-2`}>
+          <Link href="/writing" className={inlineLink}>
+            Read all writing →
+          </Link>
+        </p>
       </section>
 
       <section>
-        <SectionHeader
-          eyebrow="Log"
-          title="From the log"
-          href="/log"
-          hrefLabel="full log"
-        />
-        {latestLog.length > 0 ? (
-          <div className="flex flex-col">
-            {latestLog.map((entry) => (
+        <h2 className={typeStyles.sectionTitle}>Recent from the log</h2>
+        {observations.length > 0 ? (
+          <div className="mt-4 grid border-t border-border sm:grid-cols-3 sm:divide-x sm:divide-border-soft">
+            {observations.map((entry) => (
               <div
                 key={entry.id}
-                className="border-t border-border py-3 first:border-t-0"
+                className="border-b border-border-soft py-4 last:border-b-0 sm:border-b-0 sm:px-4 sm:first:pl-0 sm:last:pr-0"
               >
-                <p className={`${typeStyles.caption} text-subtle`}>
+                <MetadataLine>
                   {formatDateShort(entry.date)} · {entry.type}
-                </p>
-                <p className={`${typeStyles.smallBody} mt-1`}>
-                  {entry.title ? (
-                    <span className="text-ink">{entry.title}</span>
-                  ) : null}
-                  {entry.title && entry.summary ? (
-                    <span className="text-muted">: {entry.summary}</span>
-                  ) : (
-                    <span className="text-ink">{entry.summary}</span>
-                  )}
+                </MetadataLine>
+                <p className={`${typeStyles.smallBody} mt-2`}>
+                  <Link
+                    href={
+                      entry.hasDetailPage
+                        ? `/log/${entry.slug}`
+                        : `/log#entry-${entry.slug}`
+                    }
+                    className={inlineLink}
+                  >
+                    {entry.title ?? entry.summary}
+                  </Link>
                 </p>
               </div>
             ))}
           </div>
         ) : (
-          <p className="max-w-prose text-muted">
-            A running record of restaurants, cities, films, music, links, and
-            things I want to remember. <Link href="/log">full log →</Link>
-          </p>
+          <p className="max-w-prose text-muted">Nothing in the Log yet.</p>
         )}
+        <p className={`${typeStyles.smallBody} mt-3`}>
+          <Link href="/log" className={inlineLink}>
+            Browse the log →
+          </Link>
+        </p>
       </section>
     </div>
   )
