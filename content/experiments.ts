@@ -7,7 +7,7 @@ export const experiments: Experiment[] = [
     year: '2024',
     group: 'AI / Search',
     summary:
-      'A Bitcamp prototype for semantic document search: query a collection by meaning and related language rather than exact wording.',
+      'A Bitcamp prototype that searched a document collection by meaning and related language rather than exact wording.',
     tags: ['nlp', 'semantic-search'],
     links: [
       { label: 'GitHub', url: 'https://github.com/arjunaggarwal03/bytesize' },
@@ -41,7 +41,7 @@ export const experiments: Experiment[] = [
     year: '2024',
     group: 'Systems',
     summary:
-      'A small shell with tokenization into a command tree, pipes, file redirection, boolean operators, and process control. Building it made operating-system abstractions considerably less abstract.',
+      'A small shell with tokenization into a command tree, pipes, file redirection, boolean operators, and process control. Building it made those operating-system concepts concrete.',
     tags: ['c', 'systems', 'os'],
   },
   {
@@ -58,7 +58,7 @@ export const experiments: Experiment[] = [
     year: '2021',
     group: 'Computer Vision',
     summary:
-      'A visualization of linear algebra: rotate Platonic solids in three dimensions and project them into two using transformation matrices and OpenCV.',
+      'A linear algebra visualization that rotates Platonic solids in three dimensions and projects them into two using transformation matrices and OpenCV.',
     tags: ['graphics', 'opencv', 'linear-algebra'],
     links: [
       {

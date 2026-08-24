@@ -83,7 +83,7 @@ export default function AboutPage() {
             <Link href="/log">Log</Link> is for.
           </p>
           <p>
-            The best way to reach me is <a href={social.email}>email</a>. You
+            <a href={social.email}>Email</a> is the best way to reach me. You
             can also find me on{' '}
             <ExternalLink href={social.linkedin}>LinkedIn</ExternalLink>,{' '}
             <ExternalLink href={social.github}>GitHub</ExternalLink>, and{' '}

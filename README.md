@@ -146,6 +146,7 @@ Edit the typed arrays in [`content/work.ts`](content/work.ts) and
 
 ## Architecture and media
 
+- [Writing system](docs/writing-system.md)
 - [Content/media architecture](docs/content-media-architecture.md)
 - [Local Apple Photos scan and publishing](docs/media-publishing.md)
 - [Performance contracts and CI](docs/performance.md)
