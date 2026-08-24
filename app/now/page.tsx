@@ -31,8 +31,8 @@ export default function NowPage() {
         meta={`Updated ${formatDate(current.lastUpdated)}`}
       >
         <p>
-          A short list of what I&rsquo;m working on, thinking about, and coming
-          back to lately.
+          A current edit of what has my attention. I update it when the answer
+          changes.
         </p>
       </PageIntroduction>
 

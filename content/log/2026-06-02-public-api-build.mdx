@@ -2,7 +2,7 @@
 type: "build"
 date: "2026-06-02"
 title: "Notes from building a public API"
-summary: "Internal and external primitives are not the same object. Shipping a public API forces you to decide what your product actually is."
+summary: "A public API needs its own primitives. Shipping one forces you to decide what your product actually is."
 tags: ["api", "devtools", "build"]
 flags:
   detail: true
@@ -21,6 +21,3 @@ never did:
   to call doesn't exist. The surface area includes the examples.
 - **Backwards compatibility is a feature you sell.** Stability is the thing that
   lets someone build on you at all.
-
-The throughline: a public API makes you commit. Internally you can be vague and
-patch it later. Externally, the contract is the product.

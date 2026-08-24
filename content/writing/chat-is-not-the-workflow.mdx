@@ -1,5 +1,5 @@
 ---
-title: "Chat is not the workflow"
+title: "Chat needs a workflow"
 subtitle: "Conversation is useful while intent is forming. It becomes brittle when it also has to carry state, ownership, and consequences."
 date: "2026-06-08"
 status: "published"
@@ -43,16 +43,10 @@ explicit representation of what has been proposed, which facts support it, who
 owns it, what state it is in, what it will change, and whether it can be
 reversed.
 
-This changed the way I think about the boundary between chat and workflow.
-
-The clean version of the argument is that chat should capture intent and a
-workflow system should execute it. Reality is messier. Intent often continues to
-evolve after execution begins. Users learn what they meant by seeing a proposed
-action. Review is not only a safety gate; it is another turn in the process of
-specifying the work.
-
-That makes the interface a product question, not simply an infrastructure
-choice.
+Chat can capture intent while a workflow system executes it, but intent often
+continues to evolve after execution begins. Users learn what they meant by seeing
+a proposed action. Review is both a safety gate and another turn in specifying
+the work.
 
 From the model’s perspective, a larger action space is more capable. From the
 engineer’s perspective, narrower operations are easier to validate, retry, and
@@ -87,14 +81,11 @@ real customer relationship. A coding agent operating inside a disposable branch
 can take more initiative because the environment is easier to inspect and
 reverse.
 
-So I no longer think the choice is chat or workflow. Chat is part of the
-workflow, especially while the work is still ambiguous. It becomes dangerous
-only when the product asks the transcript to carry responsibilities it was never
-designed to hold.
+Chat belongs inside the workflow, especially while the work is still ambiguous.
+It becomes dangerous when the product asks the transcript to carry
+responsibilities it was never designed to hold.
 
 The question I have not resolved is how much of the underlying state should be
 visible to the user. Too little, and the agent feels unpredictable. Too much,
 and the product makes people manage the machinery that was supposed to help
 them.
-
-That boundary will move as models improve. It will not disappear.
