@@ -1,7 +1,9 @@
 import { notFound } from 'next/navigation'
+import { MediaEmbed } from 'app/components/media-embed'
 import { PersonalImage } from 'app/components/personal-image'
 import { MuxVideo } from 'app/components/mux-video'
 import { ImageWithCaption } from 'app/components/prose'
+import type { LogEmbed } from 'lib/content/schemas/log'
 import { imageAssetSchema, videoAssetSchema } from 'lib/content/schemas/media'
 
 const image = imageAssetSchema.parse({
@@ -30,6 +32,17 @@ const video = videoAssetSchema.parse({
   fixturePosterPath: '/test-media-fixture/files/video-poster.svg',
 })
 
+const nativeVideo = {
+  kind: 'video',
+  url: 'https://media.example.test/test-video.mp4',
+  alt: 'Native video loading fixture',
+} satisfies LogEmbed
+
+const spotify = {
+  kind: 'spotify',
+  url: 'https://open.spotify.com/track/abc123',
+} satisfies LogEmbed
+
 export const dynamic = 'force-dynamic'
 
 export default async function TestMediaPage({
@@ -43,6 +56,10 @@ export default async function TestMediaPage({
     <div className="mx-auto max-w-3xl p-8">
       {fixtureCase === 'video' ? (
         <MuxVideo asset={video} />
+      ) : fixtureCase === 'native-video' ? (
+        <MediaEmbed item={nativeVideo} />
+      ) : fixtureCase === 'spotify' ? (
+        <MediaEmbed item={spotify} />
       ) : fixtureCase === 'prose-image' ? (
         <ImageWithCaption
           src="/arjun-aggarwal.jpg"

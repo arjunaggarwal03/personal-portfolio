@@ -31,7 +31,7 @@ export default function AboutPage() {
           width={224}
           height={224}
           sizes="224px"
-          priority
+          preload
           className="aspect-square w-full max-w-56 rounded-lg border border-border object-cover"
         />
         <div className="article mt-0">

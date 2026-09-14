@@ -11,6 +11,7 @@ export function FilterBar({ filters }: { filters: readonly LogFilterLink[] }) {
         <Link
           key={filter.label}
           href={filter.href}
+          prefetch={false}
           aria-current={filter.active ? 'true' : undefined}
           // py-1.5 lifts each filter to a >=24px-tall tap target (WCAG 2.5.8
           // Target Size, AA); the narrow labels clear the floor via the

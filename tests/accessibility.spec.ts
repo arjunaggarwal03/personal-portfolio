@@ -34,9 +34,8 @@ const WCAG_TAGS = [
 ] as const
 
 async function settle(page: Page) {
-  // Let third-party embeds (Spotify/YouTube) inject their iframes and our
-  // MutationObserver add the missing frame titles before axe scans. networkidle
-  // can hang on long-lived embed connections, so cap the wait and move on.
+  // Let lazy third-party embeds settle before axe scans. networkidle can hang on
+  // long-lived embed connections, so cap the wait and move on.
   await page.waitForLoadState('networkidle', { timeout: 5_000 }).catch(() => {})
 }
 

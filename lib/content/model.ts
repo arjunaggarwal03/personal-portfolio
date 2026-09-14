@@ -1,5 +1,4 @@
 import 'server-only'
-import { cache } from 'react'
 import { experiments } from 'content/experiments'
 import { work } from 'content/work'
 import { site } from 'lib/site'
@@ -44,7 +43,7 @@ function freeze<T>(value: T): T {
   return value
 }
 
-export const getSiteModel = cache((): SiteModel => {
+function buildSiteModel(): SiteModel {
   const writing = sortByDateDesc(
     loadMdxCollection('writing').map(normalizeWriting),
   )
@@ -70,4 +69,14 @@ export const getSiteModel = cache((): SiteModel => {
     assets: Object.fromEntries(assets.map((asset) => [asset.id, asset])),
     now,
   })
-})
+}
+
+// Content files are immutable for the lifetime of a production deployment.
+// Build and validate them once per server process instead of once per request;
+// React cache() is request-scoped and does not deduplicate these filesystem
+// reads across navigations or route handlers.
+const siteModel = buildSiteModel()
+
+export function getSiteModel(): SiteModel {
+  return siteModel
+}

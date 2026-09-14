@@ -1,9 +1,8 @@
-'use client'
-
-import Image, { type ImageLoader } from 'next/image'
+import type { ImageLoader } from 'next/image'
 import type { ImageAsset } from 'lib/content/schemas/media'
 import { cloudinaryImageUrl } from 'lib/media/cloudinary'
 import { publicEnv } from 'lib/env/public'
+import { OptimizedImage } from './optimized-image'
 
 const loader: ImageLoader = ({ src, width }) =>
   cloudinaryImageUrl(src, width) ?? '/media/unavailable.svg'
@@ -21,21 +20,21 @@ export function PersonalImage({
 }) {
   if (asset.fixturePath) {
     return (
-      <Image
+      <OptimizedImage
         src={asset.fixturePath}
         loader={fixtureLoader}
         alt={asset.alt}
         width={asset.width}
         height={asset.height}
         sizes={sizes}
-        priority={priority}
+        preload={priority}
         className="h-auto w-full"
       />
     )
   }
   if (!publicEnv.cloudinaryCloudName) {
     return (
-      <Image
+      <OptimizedImage
         src="/media/unavailable.svg"
         alt={asset.alt}
         width={asset.width}
@@ -49,14 +48,14 @@ export function PersonalImage({
     ? `${asset.focalPoint.x * 100}% ${asset.focalPoint.y * 100}%`
     : undefined
   return (
-    <Image
+    <OptimizedImage
       loader={loader}
       src={asset.sourceId}
       alt={asset.alt}
       width={asset.width}
       height={asset.height}
       sizes={sizes}
-      priority={priority}
+      preload={priority}
       unoptimized={false}
       className="h-auto w-full object-cover"
       style={{ objectPosition: focal }}

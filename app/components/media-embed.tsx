@@ -87,7 +87,7 @@ export function MediaEmbed({ item }: { item: LogEmbed }) {
             aria-label={item.alt ?? item.caption ?? 'Embedded video'}
             controls
             playsInline
-            preload="metadata"
+            preload="none"
             className={`w-full rounded-lg border border-border-soft ${
               ratio !== 'auto' ? `object-cover ${aspectClass[ratio]}` : ''
             }`}
