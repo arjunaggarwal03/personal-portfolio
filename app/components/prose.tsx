@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import { typeStyles } from 'lib/typography'
+import { isAllowedImageSource } from 'lib/media/image-sources'
 
 export function Callout({
   title,
@@ -51,18 +52,25 @@ export function ImageWithCaption({
   src,
   alt,
   caption,
+  width,
+  height,
 }: {
   src: string
   alt?: string
   caption?: string
+  width: number
+  height: number
 }) {
+  if (!isAllowedImageSource(src)) {
+    throw new Error(`Image source is not configured: ${src}`)
+  }
   return (
     <figure className="my-5">
       <Image
         src={src}
         alt={alt ?? caption ?? ''}
-        width={0}
-        height={0}
+        width={width}
+        height={height}
         sizes="(max-width: 760px) 100vw, 760px"
         className="h-auto w-full rounded-lg border border-border-soft"
       />

@@ -34,6 +34,8 @@ The generated Log entry defaults to private. Review its ordering, cover, alt tex
 
 `.log-workspace/publish-checkpoints.json` is the recovery record. It can contain Cloudinary records, Mux upload IDs, signed Mux upload URLs, acknowledged byte counts, and completed catalog records. Keep it private.
 
+Missing checkpoint files start a new publication. Unreadable, malformed, or schema-invalid checkpoint files stop the command before it contacts a provider; recovery state is never discarded implicitly.
+
 - If Cloudinary accepts an image and a later step fails, rerunning uses the same content-derived public ID. A provider conflict triggers an SDK lookup of the existing image instead of uploading a duplicate.
 - If Mux has created an upload but bytes or processing are incomplete, rerunning retrieves the same upload, resumes after the acknowledged byte range, and waits for the existing asset.
 - If every provider operation completed but repository files were not written, completed checkpoint records let a rerun regenerate the catalog and MDX without uploading bytes again.

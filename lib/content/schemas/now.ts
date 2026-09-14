@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { isoDateSchema } from './writing'
+import { isoDateSchema } from './shared'
 
 export const curatedNowSchema = z
   .object({

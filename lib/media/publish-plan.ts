@@ -1,15 +1,9 @@
 import path from 'node:path'
 import type { MediaAsset } from 'lib/content/schemas/media'
-import type { SelectionItem } from 'lib/content/schemas/publishing'
-
-export type PublishCheckpoint = {
-  complete?: boolean
-  stage?: 'created' | 'uploaded'
-  muxUploadId?: string
-  muxUploadUrl?: string
-  uploadedBytes?: number
-  record?: MediaAsset
-}
+import type {
+  PublishCheckpoint,
+  SelectionItem,
+} from 'lib/content/schemas/publishing'
 
 export type PublishAction =
   | 'new'

@@ -14,6 +14,12 @@ function duplicates(values: string[]): string[] {
   return [...repeated]
 }
 
+function hasUndimensionedMdxImage(body?: string): boolean {
+  if (!body) return false
+  const prose = body.replace(/```[\s\S]*?```/g, '').replace(/`[^`]*`/g, '')
+  return /!\[[^\]]*\]\([^)]+\)|<img(?:\s|>)/i.test(prose)
+}
+
 export function validateContent(input: {
   writing: WritingPost[]
   log: LogEntry[]
@@ -29,6 +35,13 @@ export function validateContent(input: {
     errors.push(`duplicate asset ID "${id}"`)
   for (const slug of duplicates([...(input.rotationSlugs ?? [])]))
     errors.push(`duplicate Now selection "${slug}"`)
+  for (const item of [...input.writing, ...input.log]) {
+    if (hasUndimensionedMdxImage(item.body)) {
+      errors.push(
+        `${item.slug}: Markdown images and <img> lack stable dimensions; use ImageWithCaption with width and height`,
+      )
+    }
+  }
   const publicLogSlugs = new Set(
     input.log
       .filter((entry) => entry.visibility === 'public')

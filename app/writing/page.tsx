@@ -11,7 +11,7 @@ export const metadata = pageMetadata({
 })
 
 export default function WritingPage() {
-  const posts = getWritingIndex().filter((p) => p.status === 'published')
+  const posts = getWritingIndex()
 
   return (
     <section>
@@ -32,20 +32,22 @@ export default function WritingPage() {
 
       {posts.length > 0 ? (
         <div>
-          {posts.map((post) => (
-            <WritingRow key={post.slug} post={post} />
-          ))}
+          {posts.map((post) =>
+            post.status === 'forthcoming' ? (
+              <ForthcomingWritingRow key={post.slug} post={post} />
+            ) : (
+              <PublishedWritingRow key={post.slug} post={post} />
+            ),
+          )}
         </div>
       ) : null}
     </section>
   )
 }
 
-function WritingRow({
-  post,
-}: {
-  post: ReturnType<typeof getWritingIndex>[number]
-}) {
+type WritingIndexPost = ReturnType<typeof getWritingIndex>[number]
+
+function PublishedWritingRow({ post }: { post: WritingIndexPost }) {
   return (
     <IndexRow
       title={post.title}
@@ -54,4 +56,8 @@ function WritingRow({
       meta={post.readingTime}
     />
   )
+}
+
+function ForthcomingWritingRow({ post }: { post: WritingIndexPost }) {
+  return <IndexRow title={post.title} meta="Forthcoming" />
 }

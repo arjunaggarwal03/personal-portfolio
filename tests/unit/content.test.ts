@@ -2,11 +2,14 @@ import assert from 'node:assert/strict'
 import test from 'node:test'
 import { logEntrySchema } from '../../lib/content/schemas/log'
 import { mediaAssetSchema } from '../../lib/content/schemas/media'
-import {
-  isoDateSchema,
-  writingPostSchema,
-} from '../../lib/content/schemas/writing'
+import { isoDateSchema } from '../../lib/content/schemas/shared'
+import { writingPostSchema } from '../../lib/content/schemas/writing'
 import { validateContent } from '../../lib/content/validate'
+import {
+  featuredWritingEntries,
+  writingIndexEntries,
+} from '../../lib/content/queries'
+import { normalizeWriting } from '../../lib/content/normalize'
 import { buildLogIndex } from '../../lib/log-index'
 
 const writing = writingPostSchema.parse({
@@ -161,6 +164,92 @@ test('rejects impossible dates and lookalike provider embed URLs', () => {
       ],
     }).success,
     false,
+  )
+})
+
+test('rejects slugs that cannot be one route segment', () => {
+  assert.throws(
+    () =>
+      normalizeWriting({
+        id: 'nested/post',
+        source: 'content/writing/nested/post.mdx',
+        data: { title: 'Nested', date: '2026-01-01' },
+        body: '',
+      }),
+    /lowercase kebab-case route segment/,
+  )
+  assert.equal(
+    writingPostSchema.safeParse({ ...writing, slug: '../about' }).success,
+    false,
+  )
+})
+
+test('image embeds require stable dimensions and a configured host', () => {
+  assert.equal(
+    logEntrySchema.safeParse({
+      ...entry,
+      media: [
+        {
+          kind: 'image',
+          url: 'https://attacker.example/image.avif',
+          width: 1200,
+          height: 800,
+        },
+      ],
+    }).success,
+    false,
+  )
+  assert.equal(
+    logEntrySchema.safeParse({
+      ...entry,
+      media: [
+        {
+          kind: 'image',
+          url: 'https://res.cloudinary.com/demo/image/upload/example.jpg',
+          width: 1200,
+          height: 800,
+        },
+      ],
+    }).success,
+    true,
+  )
+})
+
+test('requires dimensioned MDX image components outside code examples', () => {
+  assert.throws(
+    () =>
+      validateContent({
+        writing: [{ ...writing, body: '![Alt](/image.jpg)' }],
+        log: [entry],
+        assets: [asset],
+      }),
+    /ImageWithCaption with width and height/,
+  )
+  assert.doesNotThrow(() =>
+    validateContent({
+      writing: [{ ...writing, body: '`![Alt](/example.jpg)`' }],
+      log: [entry],
+      assets: [asset],
+    }),
+  )
+})
+
+test('forthcoming writing has an index-only variant', () => {
+  const forthcoming = writingPostSchema.parse({
+    ...writing,
+    id: 'coming-soon',
+    slug: 'coming-soon',
+    status: 'forthcoming',
+    showOnIndex: true,
+    hasDetailPage: false,
+  })
+  assert.deepEqual(
+    writingIndexEntries([writing, forthcoming]).map((post) => post.slug),
+    ['post', 'coming-soon'],
+  )
+  assert.deepEqual(
+    featuredWritingEntries([forthcoming, writing], 1).map((post) => post.slug),
+    ['post'],
   )
 })
 

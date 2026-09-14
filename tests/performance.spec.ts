@@ -2,6 +2,7 @@ import { expect, test, type Page } from '@playwright/test'
 import { isCloudinaryDeliveryUrl } from '../lib/media/cloudinary'
 
 const VIDEO_BYTES = /(?:\.m3u8|\.m4s|\.mp4|\.ts)(?:\?|$)|stream\.mux\.com/i
+const APP_ORIGIN = `http://localhost:${process.env.PORT ?? '3100'}`
 
 async function routeBytes(page: Page, route: string) {
   const resources = new Map<string, { type: string; bytes: number }>()
@@ -10,7 +11,7 @@ async function routeBytes(page: Page, route: string) {
   const requestTypes = new Map<string, string>()
   await session.send('Network.enable')
   session.on('Network.responseReceived', ({ requestId, response, type }) => {
-    if (response.url.startsWith('http://localhost:3100')) {
+    if (response.url.startsWith(APP_ORIGIN)) {
       requestTypes.set(requestId, type.toLowerCase())
     }
   })
@@ -20,7 +21,7 @@ async function routeBytes(page: Page, route: string) {
   })
   page.on('response', async (response) => {
     const request = response.request()
-    if (!response.url().startsWith('http://localhost:3100')) return
+    if (!response.url().startsWith(APP_ORIGIN)) return
     try {
       const body = await response.body()
       if (
@@ -91,7 +92,7 @@ test('@perf image detail has stable responsive lazy media without double optimiz
     source.split(',').some((candidate) => {
       const value = candidate.trim().split(/\s+/)[0]
       if (!value) return false
-      const delivery = new URL(value, 'http://localhost:3100')
+      const delivery = new URL(value, APP_ORIGIN)
       if (delivery.pathname !== '/_next/image') return false
       const nested = delivery.searchParams.get('url')
       if (!nested) return false
@@ -101,6 +102,18 @@ test('@perf image detail has stable responsive lazy media without double optimiz
   expect(doubleOptimized).toBe(false)
   expect(largestImage).toBeGreaterThan(0)
   expect(largestImage).toBeLessThanOrEqual(180 * 1024)
+})
+
+test('@perf prose images reserve their intrinsic dimensions', async ({
+  page,
+}) => {
+  await page.goto('/test-media-fixture?case=prose-image', {
+    waitUntil: 'networkidle',
+  })
+  const image = page.locator('main figure img')
+  await expect(image).toHaveAttribute('width', '800')
+  await expect(image).toHaveAttribute('height', '800')
+  await expect(image).toHaveAttribute('sizes', /100vw/)
 })
 
 test('@perf video detail is poster-first and does not request video before interaction', async ({

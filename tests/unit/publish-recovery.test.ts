@@ -1,7 +1,11 @@
 import assert from 'node:assert/strict'
+import { mkdtemp, rm, writeFile } from 'node:fs/promises'
+import { tmpdir } from 'node:os'
+import path from 'node:path'
 import test from 'node:test'
 import { uploadCloudinaryWithLookup } from '../../lib/media/cloudinary-publish'
 import { publishAction } from '../../lib/media/publish-plan'
+import { loadPublishCheckpoints } from '../../lib/media/publish-checkpoints'
 
 test('recovers a prior Cloudinary upload through idempotent lookup', async () => {
   let lookups = 0
@@ -65,4 +69,16 @@ test('refuses an unexplained catalog collision', () => {
     }),
     'conflicting',
   )
+})
+
+test('treats only a missing checkpoint file as new state', async (context) => {
+  const directory = await mkdtemp(path.join(tmpdir(), 'portfolio-checkpoints-'))
+  context.after(() => rm(directory, { recursive: true, force: true }))
+  const checkpoint = path.join(directory, 'publish-checkpoints.json')
+
+  assert.deepEqual(await loadPublishCheckpoints(checkpoint), {})
+  await writeFile(checkpoint, '{not-json')
+  await assert.rejects(loadPublishCheckpoints(checkpoint), /Unable to read/)
+  await writeFile(checkpoint, JSON.stringify({ invalid: { complete: true } }))
+  await assert.rejects(loadPublishCheckpoints(checkpoint), /Unable to read/)
 })

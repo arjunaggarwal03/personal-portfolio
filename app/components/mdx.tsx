@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import Link from 'next/link'
 import { MDXRemote, type MDXRemoteProps } from 'next-mdx-remote-client/rsc'
 import rehypeShiki from '@shikijs/rehype'
@@ -45,23 +44,15 @@ function CustomLink(props: React.AnchorHTMLAttributes<HTMLAnchorElement>) {
   )
 }
 
-function MdxImage({ src, alt }: { src?: string; alt?: string }) {
-  if (typeof src !== 'string') return null
-  return (
-    <Image
-      src={src}
-      alt={alt ?? ''}
-      width={0}
-      height={0}
-      sizes="(max-width: 760px) 100vw, 760px"
-      className="h-auto w-full rounded-lg border border-border-soft"
-    />
+function UnsupportedMdxImage({ src }: { src?: string }) {
+  throw new Error(
+    `Markdown image${src ? ` "${src}"` : ''} has no dimensions. Use ImageWithCaption with width and height.`,
   )
 }
 
 const components = {
   a: CustomLink,
-  img: MdxImage,
+  img: UnsupportedMdxImage,
   Callout,
   Aside,
   Quote,

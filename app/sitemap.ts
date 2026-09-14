@@ -18,13 +18,10 @@ const PRIORITY: Record<string, number> = {
   '/accessibility': 0.3,
 }
 
-const today = () => new Date().toISOString().split('T')[0]
-
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const routePaths = [...EXTRA_ROUTES, ...navItems.map((n) => n.path)]
   const staticRoutes: MetadataRoute.Sitemap = routePaths.map((route) => ({
     url: `${baseUrl}${route}`,
-    lastModified: today(),
     changeFrequency: route === '' ? 'weekly' : 'monthly',
     priority: PRIORITY[route] ?? 0.6,
   }))

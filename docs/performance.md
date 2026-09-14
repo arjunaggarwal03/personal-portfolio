@@ -17,6 +17,8 @@ Pull requests enforce these contracts with the production build and Playwright:
 
 The transfer checks use Chrome DevTools Protocol encoded byte counts. This measures network transfer instead of recompressing decoded response bodies. JavaScript, CSS, and total-route budgets count responses from the application origin. Separate request assertions cover provider activity, while credential-free fixture tests measure initial image and poster bytes served by the test origin. Real Cloudinary and Mux transfer trends begin only after real catalog assets exist.
 
+Browser and Lighthouse commands allocate an isolated local port for each run and never reuse an existing server, so a passing result always belongs to the current production build.
+
 ## Lighthouse
 
 The pull request gate runs one representative Lighthouse audit. The default branch and scheduled workflow run five representative routes three times and enforce the median. Thresholds live with the audit script so changes are reviewed beside the measurement code.

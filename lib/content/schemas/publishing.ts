@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { galleryLayoutSchema } from './log'
-import { isoDateSchema } from './writing'
+import { mediaAssetSchema } from './media'
+import { isoDateSchema, routeSegmentSchema } from './shared'
 
 const selectionItemSchema = z
   .object({
@@ -31,7 +32,7 @@ export const selectionManifestSchema = z
     sourceRoot: z.string().min(1),
     entry: z
       .object({
-        slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+        slug: routeSegmentSchema,
         title: z.string().min(1),
         date: isoDateSchema,
         summary: z.string(),
@@ -43,4 +44,21 @@ export const selectionManifestSchema = z
   })
   .strict()
 
+const publishCheckpointSchema = z
+  .object({
+    complete: z.boolean().optional(),
+    stage: z.enum(['created', 'uploaded']).optional(),
+    muxUploadId: z.string().min(1).optional(),
+    muxUploadUrl: z.url().optional(),
+    uploadedBytes: z.number().int().nonnegative().optional(),
+    record: mediaAssetSchema.optional(),
+  })
+  .strict()
+
+export const publishCheckpointsSchema = z.record(
+  z.string().regex(/^[a-f0-9]{64}$/),
+  publishCheckpointSchema,
+)
+
 export type SelectionItem = z.infer<typeof selectionItemSchema>
+export type PublishCheckpoint = z.infer<typeof publishCheckpointSchema>

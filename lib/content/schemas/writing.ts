@@ -1,19 +1,9 @@
 import { z } from 'zod'
-
-export const isoDateSchema = z
-  .string()
-  .regex(/^\d{4}-\d{2}-\d{2}(?:T.*)?$/, 'must start with YYYY-MM-DD')
-  .refine((value) => {
-    const date = value.slice(0, 10)
-    const parsedDate = new Date(`${date}T00:00:00.000Z`)
-    if (!Number.isFinite(parsedDate.getTime())) return false
-    if (parsedDate.toISOString().slice(0, 10) !== date) return false
-    return !value.includes('T') || Number.isFinite(Date.parse(value))
-  }, 'must be a real ISO date or datetime')
+import { isoDateSchema, routeSegmentSchema } from './shared'
 
 export const writingFrontmatterSchema = z
   .object({
-    slug: z.string().trim().min(1).optional(),
+    slug: routeSegmentSchema.optional(),
     title: z.string().trim().min(1),
     subtitle: z.string().trim().min(1).optional(),
     date: isoDateSchema,
@@ -28,8 +18,8 @@ export const writingFrontmatterSchema = z
   .strict()
 
 export const writingPostSchema = writingFrontmatterSchema.extend({
-  id: z.string().min(1),
-  slug: z.string().min(1),
+  id: routeSegmentSchema,
+  slug: routeSegmentSchema,
   body: z.string(),
   readingTime: z.string().optional(),
   hasDetailPage: z.boolean(),
