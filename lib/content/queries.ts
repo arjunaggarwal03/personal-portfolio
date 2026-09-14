@@ -32,6 +32,8 @@ export const getLogBySlug = (slug: string): LogEntry | undefined =>
 export const hasDetailPage = (entry: LogEntry): boolean => entry.hasDetailPage
 export const getLogWithDetailPages = (): LogEntry[] =>
   visibleLog().filter((entry) => entry.hasDetailPage)
+export const getPublicLogWithDetailPages = (): LogEntry[] =>
+  getLogWithDetailPages().filter((entry) => entry.visibility === 'public')
 export const getFeaturedLog = (limit = 6): LogEntry[] =>
   getLogFeed().slice(0, limit)
 export const getAsset = (id?: string) =>

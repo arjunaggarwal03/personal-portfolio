@@ -1,23 +1,28 @@
 ---
 type: "build"
 date: "2026-06-02"
-title: "Notes from building a public API"
-summary: "A public API needs its own primitives. Shipping one forces you to decide what your product actually is."
-tags: ["api", "devtools", "build"]
+title: "Building Lightfield's public API and Python SDK"
+summary: "I helped turn Lightfield's product operations into a public API and Python SDK used by our own agent. The same object now has to make sense in the product, the SDK, and a reviewable agent action."
+tags: ["lightfield", "api", "python", "agent workflows"]
 flags:
   detail: true
 ---
 
-A few things shipping a public API at a startup taught me that internal services
-never did:
+I've been helping turn Lightfield's product operations into a public API and
+Python SDK. Both are used by our own agent, so the same object has to make sense
+in the product, the SDK, and an action a person may need to review.
 
-- **The object model is the product.** Once external developers depend on your
-  resources, renaming a field is a breaking change, not a refactor. You're
-  forced to decide what your nouns really are.
-- **Internal primitives leak.** The shapes that were convenient for our own
-  services were almost never the shapes an outside developer wanted. The public
-  API is a second, more honest design pass.
-- **Docs and SDKs are part of the API.** An endpoint nobody can figure out how
-  to call doesn't exist. The surface area includes the examples.
-- **Backwards compatibility is a feature you sell.** Stability is the thing that
-  lets someone build on you at all.
+I keep returning to five questions:
+
+- What can be created or edited?
+- Who owns the action?
+- Which state is durable?
+- What can be retried?
+- What can a person inspect or reverse?
+
+A public API cannot rely on knowledge that lives in the team. Names, states,
+examples, and error behavior all become part of the product once someone else
+builds against them.
+
+Documentation has been a useful test. If an operation is hard to name or show
+in an example, the boundary underneath it is probably still unclear.

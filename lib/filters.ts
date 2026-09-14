@@ -16,7 +16,7 @@ type FilterDef = {
 
 const typeGroup = (types: LogType[]) => (e: LogEntry) => types.includes(e.type)
 
-export const LOG_FILTERS: FilterDef[] = [
+const LOG_FILTERS: FilterDef[] = [
   { label: 'All', query: null, matches: () => true },
   {
     label: 'Thoughts',
@@ -59,6 +59,12 @@ export const LOG_FILTERS: FilterDef[] = [
 ]
 
 const ALL_FILTER = LOG_FILTERS[0]
+
+export function availableLogFilters(entries: readonly LogEntry[]): FilterDef[] {
+  return LOG_FILTERS.filter(
+    (filter) => filter === ALL_FILTER || entries.some(filter.matches),
+  )
+}
 
 function findFilter(query: LogQuery): FilterDef {
   if (query.view) {

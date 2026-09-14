@@ -1,13 +1,20 @@
 import Link from 'next/link'
-import { LOG_FILTERS, isFilterActive, type LogQuery } from 'lib/filters'
+import { availableLogFilters, isFilterActive, type LogQuery } from 'lib/filters'
+import type { LogEntry } from 'lib/content/schemas/log'
 
-export function FilterBar({ query }: { query: LogQuery }) {
+export function FilterBar({
+  entries,
+  query,
+}: {
+  entries: readonly LogEntry[]
+  query: LogQuery
+}) {
   return (
     <nav
       aria-label="Filter log entries"
       className="flex flex-wrap items-center gap-x-3 gap-y-1.5 border-y border-border-soft py-3 text-sm"
     >
-      {LOG_FILTERS.map((filter) => {
+      {availableLogFilters(entries).map((filter) => {
         const href = filter.query ? `/log?${filter.query}` : '/log'
         const active = isFilterActive(filter, query)
         return (

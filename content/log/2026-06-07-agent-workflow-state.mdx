@@ -1,9 +1,20 @@
 ---
 type: "thought"
 date: "2026-06-07"
-title: "Agents need workflow state"
-summary: "The useful part often sits behind the chat: explicit tasks, ownership, state, and history."
+title: "Chat needs a workflow"
+summary: "A conversation can hold an incomplete request. Once that request becomes shared work, it needs an owner, a state, a history, and a way to undo it."
 tags: ["agents", "workflow", "product"]
 flags:
   featured: true
+  detail: true
 ---
+
+Chat is good at catching a request before the person has worked out every
+detail. The transcript becomes a bad place to keep the durable record once that
+request turns into shared work.
+
+The action should say what was proposed, who owns it, what state it is in, what
+it will change, and whether it can be reversed. The interface can hide most
+intermediate steps while still showing the parts that carry consequences.
+
+I wrote the longer version in [Chat needs a workflow](/writing/chat-is-not-the-workflow).

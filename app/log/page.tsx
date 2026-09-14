@@ -10,7 +10,7 @@ import { PageIntroduction } from 'app/components/editorial'
 import { typeStyles } from 'lib/typography'
 
 const description =
-  "A working index of what I'm noticing: work, cities, meals, music, films, links, clips, and half-formed thoughts."
+  'Notes from Arjun Aggarwal on building software, agent workflows, films, and music.'
 
 export async function generateMetadata({
   searchParams,
@@ -44,7 +44,8 @@ export default async function LogPage({
 }) {
   const query = await searchParams
   const model = getSiteModel()
-  const filtered = applyLogFilter(getLogFeed(), query)
+  const feed = getLogFeed()
+  const filtered = applyLogFilter(feed, query)
   const requestedPage = Math.max(1, Number.parseInt(query.page ?? '1', 10) || 1)
   const onView = new Set(
     model.now.rotation.selections.map((selection) => selection.slug),
@@ -59,13 +60,13 @@ export default async function LogPage({
     <section>
       <PageIntroduction title="Log">
         <p>
-          A running list of restaurants, cities, films, music, links, work, and
-          whatever else I want to remember.
+          Notes on software I&rsquo;m building, questions I&rsquo;m still
+          working through, and the films and music I keep returning to.
         </p>
       </PageIntroduction>
 
       <div>
-        <FilterBar query={query} />
+        <FilterBar entries={feed} query={query} />
       </div>
 
       {label !== 'All' ? (

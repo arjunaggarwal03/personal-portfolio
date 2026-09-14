@@ -8,6 +8,7 @@ import {
 } from '../../lib/content/schemas/writing'
 import { validateContent } from '../../lib/content/validate'
 import { paginateLogEntries } from '../../lib/content/queries'
+import { availableLogFilters } from '../../lib/filters'
 
 const writing = writingPostSchema.parse({
   id: 'post',
@@ -188,4 +189,16 @@ test('pagination deterministically limits large Log collections', () => {
     totalPages: 3,
   })
   assert.equal(paginateLogEntries(items, 99).page, 3)
+})
+
+test('the Log index offers only filters backed by visible entries', () => {
+  const thought = logEntrySchema.parse({
+    ...entry,
+    type: 'thought',
+    flags: { featured: true },
+  })
+  assert.deepEqual(
+    availableLogFilters([thought]).map((filter) => filter.label),
+    ['All', 'Thoughts'],
+  )
 })

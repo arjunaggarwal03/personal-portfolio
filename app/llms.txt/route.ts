@@ -1,4 +1,7 @@
-import { getPublishedWriting } from 'lib/content/queries'
+import {
+  getPublishedWriting,
+  getPublicLogWithDetailPages,
+} from 'lib/content/queries'
 import { baseUrl, person, social } from 'lib/site'
 
 export const dynamic = 'force-static'
@@ -28,8 +31,7 @@ const PAGES: { label: string; path: string; blurb: string }[] = [
   {
     label: 'Log',
     path: '/log',
-    blurb:
-      'restaurants, cities, films, music, links, photographs, and personal notes',
+    blurb: 'notes on current work, open questions, films, and music',
   },
   {
     label: 'Now',
@@ -50,6 +52,7 @@ const PAGES: { label: string; path: string; blurb: string }[] = [
  */
 export function GET() {
   const writing = getPublishedWriting()
+  const log = getPublicLogWithDetailPages()
 
   const lines: string[] = [
     `# ${person.name}`,
@@ -68,6 +71,12 @@ export function GET() {
     ...writing.map(
       (post) =>
         `- [${post.title}](${baseUrl}/writing/${post.slug})${post.summary ? `: ${post.summary}` : ''}`,
+    ),
+    '',
+    '## Log',
+    ...log.map(
+      (entry) =>
+        `- [${entry.title ?? entry.summary}](${baseUrl}/log/${entry.slug})${entry.title && entry.summary ? `: ${entry.summary}` : ''}`,
     ),
     '',
     '## Profiles',

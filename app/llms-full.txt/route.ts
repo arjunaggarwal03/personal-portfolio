@@ -1,4 +1,7 @@
-import { getPublishedWriting } from 'lib/content/queries'
+import {
+  getPublishedWriting,
+  getPublicLogWithDetailPages,
+} from 'lib/content/queries'
 import { baseUrl, person } from 'lib/site'
 import { formatDate } from 'lib/dates'
 
@@ -6,13 +9,18 @@ export const dynamic = 'force-static'
 
 const CONTENT_TYPE = 'text/plain; charset=utf-8'
 
+function absoluteInternalLinks(markdown: string): string {
+  return markdown.replaceAll('](/', `](${baseUrl}/`)
+}
+
 /**
  * /llms-full.txt — the llmstxt.org companion to /llms.txt: the full writing
- * corpus inlined as markdown so an AI engine can ingest everything in a single
- * fetch and cite it accurately, without crawling page by page.
+ * and public Log corpus inlined as markdown so an AI engine can ingest
+ * everything in a single fetch and cite it accurately.
  */
 export function GET() {
   const writing = getPublishedWriting()
+  const log = getPublicLogWithDetailPages()
 
   const header = [
     `# ${person.name} — Full Content`,
@@ -25,21 +33,44 @@ export function GET() {
     '',
   ]
 
-  const posts = writing.flatMap((post) => [
-    `# ${post.title}`,
+  const writingSection = [
+    '## Writing',
     '',
-    post.subtitle ? `*${post.subtitle}*` : '',
-    `URL: ${baseUrl}/writing/${post.slug}`,
-    `Published: ${formatDate(post.date)}`,
-    post.tags.length > 0 ? `Tags: ${post.tags.join(', ')}` : '',
-    '',
-    post.body?.trim() ?? '',
-    '',
-    '---',
-    '',
-  ])
+    ...writing.flatMap((post) => [
+      `### ${post.title}`,
+      '',
+      post.subtitle ? `*${post.subtitle}*` : '',
+      `URL: ${baseUrl}/writing/${post.slug}`,
+      `Published: ${formatDate(post.date)}`,
+      post.tags.length > 0 ? `Tags: ${post.tags.join(', ')}` : '',
+      '',
+      absoluteInternalLinks(post.body?.trim() ?? ''),
+      '',
+    ]),
+  ]
 
-  return new Response([...header, ...posts].join('\n'), {
-    headers: { 'Content-Type': CONTENT_TYPE },
-  })
+  const logSection = [
+    '## Log',
+    '',
+    ...log.flatMap((entry) => [
+      `### ${entry.title ?? `Log entry from ${formatDate(entry.date)}`}`,
+      '',
+      `URL: ${baseUrl}/log/${entry.slug}`,
+      `Recorded: ${formatDate(entry.date)}`,
+      `Type: ${entry.type}`,
+      entry.tags.length > 0 ? `Tags: ${entry.tags.join(', ')}` : '',
+      '',
+      entry.summary ?? '',
+      '',
+      absoluteInternalLinks(entry.body?.trim() ?? ''),
+      '',
+    ]),
+  ]
+
+  return new Response(
+    [...header, ...writingSection, ...logSection].join('\n'),
+    {
+      headers: { 'Content-Type': CONTENT_TYPE },
+    },
+  )
 }
