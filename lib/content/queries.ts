@@ -32,6 +32,8 @@ export const getLogBySlug = (slug: string): LogEntry | undefined =>
 export const hasDetailPage = (entry: LogEntry): boolean => entry.hasDetailPage
 export const getLogWithDetailPages = (): LogEntry[] =>
   visibleLog().filter((entry) => entry.hasDetailPage)
+export const getPublicLogWithDetailPages = (): LogEntry[] =>
+  getLogWithDetailPages().filter((entry) => entry.visibility === 'public')
 export const getFeaturedLog = (limit = 6): LogEntry[] =>
   getLogFeed().slice(0, limit)
 export const getAsset = (id?: string) =>
@@ -42,19 +44,4 @@ export const getLogBySlugs = (slugs: readonly string[]): LogEntry[] => {
     const entry = entries.get(slug)
     return entry ? [entry] : []
   })
-}
-
-const LOG_PAGE_SIZE = 20
-
-export function paginateLogEntries<T>(
-  entries: readonly T[],
-  requestedPage: number,
-) {
-  const totalPages = Math.max(1, Math.ceil(entries.length / LOG_PAGE_SIZE))
-  const page = Math.min(Math.max(1, requestedPage), totalPages)
-  return {
-    entries: entries.slice((page - 1) * LOG_PAGE_SIZE, page * LOG_PAGE_SIZE),
-    page,
-    totalPages,
-  }
 }

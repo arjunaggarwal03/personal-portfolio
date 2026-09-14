@@ -15,10 +15,10 @@ function metaLine(entry: LogEntry): string {
 
 export function LogEntryCard({
   entry,
-  onView = false,
+  inNow,
 }: {
   entry: LogEntry
-  onView?: boolean
+  inNow: boolean
 }) {
   const detail = hasDetailPage(entry) ? `/log/${entry.slug}` : null
   const cover = getAsset(entry.cover)
@@ -43,7 +43,7 @@ export function LogEntryCard({
           {entry.rating?.label ? (
             <span className="text-subtle">{entry.rating.label}</span>
           ) : null}
-          {onView ? (
+          {inNow ? (
             <Link href="/now" className={`text-accent ${inlineLink}`}>
               in Now
             </Link>

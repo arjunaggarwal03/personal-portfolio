@@ -1,23 +1,19 @@
 ---
 type: "build"
 date: "2026-06-02"
-title: "Notes from building a public API"
-summary: "A public API needs its own primitives. Shipping one forces you to decide what your product actually is."
-tags: ["api", "devtools", "build"]
+title: "Building Lightfield's public API"
+summary: "I've been working on Lightfield's public API and Python SDK, which our own agent uses too. A lot of the work is deciding what each operation should mean outside our codebase."
+tags: ["lightfield", "api", "python", "agent workflows"]
 flags:
   detail: true
 ---
 
-A few things shipping a public API at a startup taught me that internal services
-never did:
+Recently, I've been working on a public API and Python SDK at Lightfield. Our
+own agent uses both.
 
-- **The object model is the product.** Once external developers depend on your
-  resources, renaming a field is a breaking change, not a refactor. You're
-  forced to decide what your nouns really are.
-- **Internal primitives leak.** The shapes that were convenient for our own
-  services were almost never the shapes an outside developer wanted. The public
-  API is a second, more honest design pass.
-- **Docs and SDKs are part of the API.** An endpoint nobody can figure out how
-  to call doesn't exist. The surface area includes the examples.
-- **Backwards compatibility is a feature you sell.** Stability is the thing that
-  lets someone build on you at all.
+Making an internal operation public forces decisions that were easy to leave
+implicit. What is a task? Which fields can a developer depend on? What happens
+when an agent action needs approval or fails halfway through?
+
+Writing the docs has been a good test. If an operation takes a paragraph to
+explain, I probably haven't found the right boundary yet.

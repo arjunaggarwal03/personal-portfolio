@@ -7,7 +7,7 @@ import {
   writingPostSchema,
 } from '../../lib/content/schemas/writing'
 import { validateContent } from '../../lib/content/validate'
-import { paginateLogEntries } from '../../lib/content/queries'
+import { buildLogIndex } from '../../lib/log-index'
 
 const writing = writingPostSchema.parse({
   id: 'post',
@@ -180,12 +180,49 @@ test('rejects incomplete video records', () => {
   )
 })
 
-test('pagination deterministically limits large Log collections', () => {
-  const items = Array.from({ length: 45 }, (_, index) => index)
-  assert.deepEqual(paginateLogEntries(items, 2), {
-    entries: items.slice(20, 40),
-    page: 2,
-    totalPages: 3,
+test('the Log index exposes only useful filters and normalizes its query', () => {
+  const thought = logEntrySchema.parse({
+    ...entry,
+    type: 'thought',
+    flags: { featured: true },
   })
-  assert.equal(paginateLogEntries(items, 99).page, 3)
+  const index = buildLogIndex({
+    entries: [thought],
+    inNowSlugs: [thought.slug],
+    searchParams: { type: ['thought', 'film'], page: 'not-a-page' },
+  })
+  assert.deepEqual(
+    index.filters.map((filter) => filter.label),
+    ['All', 'Thoughts'],
+  )
+  assert.deepEqual(index.entries, [{ entry: thought, inNow: true }])
+  assert.deepEqual(index.pagination, { page: 1, totalPages: 1 })
+  assert.deepEqual(index.seo, {
+    title: 'Thoughts · Log',
+    canonicalPath: '/log?type=thought',
+    allowIndexing: false,
+  })
+})
+
+test('the Log index clamps pagination and preserves active filters in links', () => {
+  const entries = Array.from({ length: 45 }, (_, index) =>
+    logEntrySchema.parse({
+      ...entry,
+      id: `entry-${index}`,
+      slug: `entry-${index}`,
+      type: 'thought',
+    }),
+  )
+  const index = buildLogIndex({
+    entries,
+    inNowSlugs: [],
+    searchParams: { type: 'thought', page: '99' },
+  })
+  assert.equal(index.entries.length, 5)
+  assert.deepEqual(index.pagination, {
+    page: 3,
+    totalPages: 3,
+    newerHref: '/log?type=thought&page=2',
+  })
+  assert.equal(index.seo.canonicalPath, '/log?type=thought&page=3')
 })
