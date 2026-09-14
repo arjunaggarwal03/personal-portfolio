@@ -84,7 +84,9 @@ export default async function LogPage({
           className={`${typeStyles.caption} mt-8 flex items-center justify-between border-t border-border pt-4`}
         >
           {index.pagination.newerHref ? (
-            <Link href={index.pagination.newerHref}>← Newer</Link>
+            <Link href={index.pagination.newerHref} prefetch={false}>
+              ← Newer
+            </Link>
           ) : (
             <span />
           )}
@@ -92,7 +94,9 @@ export default async function LogPage({
             Page {index.pagination.page} of {index.pagination.totalPages}
           </span>
           {index.pagination.olderHref ? (
-            <Link href={index.pagination.olderHref}>Older →</Link>
+            <Link href={index.pagination.olderHref} prefetch={false}>
+              Older →
+            </Link>
           ) : (
             <span />
           )}

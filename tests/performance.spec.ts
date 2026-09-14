@@ -162,7 +162,32 @@ test('@perf Log index stays inside its initial-transfer contract', async ({
   page,
 }) => {
   const bytes = await routeBytes(page, '/log')
-  expect(bytes.script).toBeLessThanOrEqual(175 * 1024)
+  expect(bytes.script).toBeLessThanOrEqual(165 * 1024)
   expect(bytes.stylesheet).toBeLessThanOrEqual(35 * 1024)
   expect(bytes.total).toBeLessThanOrEqual(500 * 1024)
+})
+
+test('@perf low-intent Log links do not prefetch RSC payloads', async ({
+  page,
+}) => {
+  const rscRequests: string[] = []
+  page.on('request', (request) => {
+    if (request.url().includes('_rsc=')) rscRequests.push(request.url())
+  })
+
+  await page.goto('/log', { waitUntil: 'networkidle' })
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight))
+  await page.waitForTimeout(500)
+
+  const lowIntentRequests = rscRequests.filter((value) => {
+    const url = new URL(value)
+    return (
+      url.pathname === '/accessibility' ||
+      url.searchParams.has('type') ||
+      url.searchParams.has('view') ||
+      url.searchParams.has('tag') ||
+      url.searchParams.has('page')
+    )
+  })
+  expect(lowIntentRequests).toEqual([])
 })

@@ -27,7 +27,11 @@ export function Footer() {
                     {link.label}
                   </a>
                 ) : (
-                  <Link href={link.href} className={footerLink}>
+                  <Link
+                    href={link.href}
+                    prefetch={false}
+                    className={footerLink}
+                  >
                     {link.label}
                   </Link>
                 )}

@@ -12,6 +12,7 @@ export function TagLinks({ tags }: { tags: readonly string[] }) {
         <Link
           key={tag}
           href={`/log?tag=${encodeURIComponent(tag)}`}
+          prefetch={false}
           className="text-xs text-muted underline decoration-border underline-offset-4 hover:text-accent hover:decoration-accent"
         >
           #{tag}

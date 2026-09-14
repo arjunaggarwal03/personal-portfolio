@@ -103,6 +103,7 @@ export default async function WritingDetail({
         {older ? (
           <Link
             href={`/writing/${older.slug}`}
+            prefetch={false}
             className={`text-muted ${inlineLink}`}
           >
             ← {older.title}
@@ -113,6 +114,7 @@ export default async function WritingDetail({
         {newer ? (
           <Link
             href={`/writing/${newer.slug}`}
+            prefetch={false}
             className={`text-right text-muted ${inlineLink}`}
           >
             {newer.title} →
