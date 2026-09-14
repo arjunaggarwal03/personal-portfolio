@@ -26,9 +26,7 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   const currentWork = work.find((item) => item.current)
-  const featuredWriting = getFeaturedWriting(1).filter(
-    (post) => post.status === 'published',
-  )
+  const featuredWriting = getFeaturedWriting(1)
   const observations = getFeaturedLog(12)
     .filter(
       (entry, index, entries) =>

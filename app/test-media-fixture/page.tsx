@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import { PersonalImage } from 'app/components/personal-image'
 import { MuxVideo } from 'app/components/mux-video'
+import { ImageWithCaption } from 'app/components/prose'
 import { imageAssetSchema, videoAssetSchema } from 'lib/content/schemas/media'
 
 const image = imageAssetSchema.parse({
@@ -39,15 +40,22 @@ export default async function TestMediaPage({
   if (process.env.MEDIA_TEST_FIXTURES !== '1') notFound()
   const fixtureCase = (await searchParams).case
   return (
-    <main className="mx-auto max-w-3xl p-8">
+    <div className="mx-auto max-w-3xl p-8">
       {fixtureCase === 'video' ? (
         <MuxVideo asset={video} />
+      ) : fixtureCase === 'prose-image' ? (
+        <ImageWithCaption
+          src="/arjun-aggarwal.jpg"
+          alt="Dimensioned prose image fixture"
+          width={800}
+          height={800}
+        />
       ) : (
         <div data-gallery-layout>
           <PersonalImage asset={image} priority />
           <PersonalImage asset={image} />
         </div>
       )}
-    </main>
+    </div>
   )
 }

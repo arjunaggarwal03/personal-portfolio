@@ -52,7 +52,7 @@ test('page titles are unique', async ({ page }) => {
   }
 })
 
-test('Log filters are navigable without creating duplicate search results', async ({
+test('Log queries normalize canonical pages without creating duplicate search results', async ({
   page,
 }) => {
   await page.goto('/log?type=thought', { waitUntil: 'domcontentloaded' })
@@ -69,6 +69,12 @@ test('Log filters are navigable without creating duplicate search results', asyn
     'noindex, follow',
   )
   await expect(page).toHaveTitle(/Thoughts · Log/)
+
+  await page.goto('/log?page=999', { waitUntil: 'domcontentloaded' })
+  const outOfRange = new URL(
+    (await page.locator('link[rel="canonical"]').getAttribute('href'))!,
+  )
+  expect(outOfRange.searchParams.get('page')).not.toBe('999')
 })
 
 test('homepage emits Person + WebSite structured data', async ({ page }) => {

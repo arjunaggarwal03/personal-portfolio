@@ -1,6 +1,7 @@
 // Keep in sync with `baseUrl` in lib/site.ts (this file is plain CommonJS and
 // can't import the TS module).
 const BASE_URL = 'https://www.arjunaggarwal.dev'
+const { remoteImagePatterns } = require('./lib/media/image-sources')
 
 /**
  * RFC 8288 Link header advertising agent-facing resources (llms.txt + RSS) so
@@ -27,13 +28,7 @@ const nextConfig = {
     // /now tiles). A `**` wildcard turns the optimizer into an open proxy for
     // arbitrary remote images — a cost/abuse vector Next explicitly warns
     // against. Add a pattern here when introducing images from a new host.
-    remotePatterns: [
-      { protocol: 'https', hostname: 'res.cloudinary.com', pathname: '/**' },
-      { protocol: 'https', hostname: 'image.mux.com', pathname: '/**' },
-      { protocol: 'https', hostname: 'i.scdn.co' },
-      { protocol: 'https', hostname: '**.scdn.co' },
-      { protocol: 'https', hostname: '**.spotifycdn.com' },
-    ],
+    remotePatterns: remoteImagePatterns,
   },
   async headers() {
     return [

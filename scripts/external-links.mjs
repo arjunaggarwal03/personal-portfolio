@@ -1,5 +1,6 @@
 import { readFile, readdir } from 'node:fs/promises'
 import path from 'node:path'
+import { isExternalLinkFailure } from './external-link-status.mjs'
 
 const roots = ['content', 'lib/site.ts']
 const sources = []
@@ -44,15 +45,7 @@ async function worker() {
         signal: AbortSignal.timeout(15_000),
         headers: { 'User-Agent': 'personal-portfolio-link-check/1.0' },
       })
-      const botBlockedButReachable = [401, 403, 429, 999].includes(
-        response.status,
-      )
-      if (
-        !botBlockedButReachable &&
-        (response.status === 404 ||
-          response.status === 410 ||
-          response.status >= 500)
-      ) {
+      if (isExternalLinkFailure(response.status)) {
         failures.push(`${response.status} ${url}`)
       }
     } catch (error) {

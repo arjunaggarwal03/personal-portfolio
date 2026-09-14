@@ -1,6 +1,6 @@
 import { defineConfig, devices } from '@playwright/test'
 
-const PORT = 3100
+const PORT = Number.parseInt(process.env.PORT ?? '3100', 10)
 const baseURL = `http://localhost:${PORT}`
 
 /**
@@ -31,6 +31,6 @@ export default defineConfig({
     command: `MEDIA_TEST_FIXTURES=1 npm run start -- -p ${PORT}`,
     url: baseURL,
     timeout: 120_000,
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: false,
   },
 })

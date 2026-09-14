@@ -15,10 +15,14 @@ import sharp from 'sharp'
 import { stringify as stringifyYaml } from 'yaml'
 import { logFrontmatterSchema } from '../lib/content/schemas/log.ts'
 import { mediaCatalogSchema } from '../lib/content/schemas/media.ts'
-import { selectionManifestSchema } from '../lib/content/schemas/publishing.ts'
+import {
+  publishCheckpointsSchema,
+  selectionManifestSchema,
+} from '../lib/content/schemas/publishing.ts'
 import { publishingEnv } from '../lib/env/publishing.ts'
 import { uploadCloudinaryWithLookup } from '../lib/media/cloudinary-publish.ts'
-import { nextUploadedByte } from '../lib/media/mux-upload.ts'
+import { uploadResumableChunks } from '../lib/media/mux-upload.ts'
+import { loadPublishCheckpoints } from '../lib/media/publish-checkpoints.ts'
 import {
   assetIdFor,
   derivativePath,
@@ -81,10 +85,7 @@ for (const item of selected) {
   await access(item.sourcePath)
 }
 
-let checkpoints = {}
-try {
-  checkpoints = JSON.parse(await readFile(checkpointPath, 'utf8'))
-} catch {}
+const checkpoints = await loadPublishCheckpoints(checkpointPath)
 
 const catalog = mediaCatalogSchema.parse(
   JSON.parse(await readFile(catalogPath, 'utf8')),
@@ -237,7 +238,8 @@ const retryFetch = (operation) =>
 let checkpointWrite = Promise.resolve()
 const checkpoint = async (hash, record) => {
   checkpoints[hash] = record
-  const snapshot = `${JSON.stringify(checkpoints, null, 2)}\n`
+  const validated = publishCheckpointsSchema.parse(checkpoints)
+  const snapshot = `${JSON.stringify(validated, null, 2)}\n`
   checkpointWrite = checkpointWrite.then(() =>
     atomicWrite(checkpointPath, snapshot),
   )
@@ -333,32 +335,33 @@ async function publishVideo(item, id) {
     const fileSize = (await stat(derivative)).size
     const file = await open(derivative, 'r')
     const chunkSize = 20 * 1024 * 1024
-    let uploadedBytes = state.uploadedBytes ?? 0
     try {
-      while (uploadedBytes < fileSize) {
-        const length = Math.min(chunkSize, fileSize - uploadedBytes)
-        const bytes = Buffer.allocUnsafe(length)
-        await file.read(bytes, 0, length, uploadedBytes)
-        const response = await retryFetch(() =>
-          fetch(uploadUrl, {
-            method: 'PUT',
-            headers: {
-              'Content-Length': String(length),
-              'Content-Range': `bytes ${uploadedBytes}-${uploadedBytes + length - 1}/${fileSize}`,
-            },
-            body: bytes,
-          }),
-        )
-        if (response.status !== 308 && !response.ok) {
-          throw new Error(`Mux upload failed (${response.status})`)
-        }
-        uploadedBytes = nextUploadedByte(
-          response.headers.get('range'),
-          uploadedBytes + length,
-        )
-        state = { ...state, uploadedBytes }
-        await checkpoint(item.hash, state)
-      }
+      await uploadResumableChunks({
+        reader: file,
+        fileSize,
+        startByte: state.uploadedBytes ?? 0,
+        chunkSize,
+        send: async ({ bytes, start, end, total }) => {
+          const response = await retryFetch(() =>
+            fetch(uploadUrl, {
+              method: 'PUT',
+              headers: {
+                'Content-Length': String(bytes.length),
+                'Content-Range': `bytes ${start}-${end}/${total}`,
+              },
+              body: bytes,
+            }),
+          )
+          if (response.status !== 308 && !response.ok) {
+            throw new Error(`Mux upload failed (${response.status})`)
+          }
+          return response.headers.get('range')
+        },
+        onProgress: async (uploadedBytes) => {
+          state = { ...state, uploadedBytes }
+          await checkpoint(item.hash, state)
+        },
+      })
     } finally {
       await file.close()
     }

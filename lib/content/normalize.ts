@@ -1,6 +1,14 @@
 import readingTime from 'reading-time'
-import { logFrontmatterSchema, type LogEntry } from './schemas/log'
-import { writingFrontmatterSchema, type WritingPost } from './schemas/writing'
+import {
+  logFrontmatterSchema,
+  logEntrySchema,
+  type LogEntry,
+} from './schemas/log'
+import {
+  writingFrontmatterSchema,
+  writingPostSchema,
+  type WritingPost,
+} from './schemas/writing'
 import { parseSource, type RawContentEntry } from './load'
 
 const DETAIL_PAGE_MIN_PLAINTEXT = 280
@@ -18,14 +26,18 @@ function plainTextLength(body?: string): number {
 
 export function normalizeWriting(entry: RawContentEntry): WritingPost {
   const source = parseSource(writingFrontmatterSchema, entry.data, entry.source)
-  return {
-    ...source,
-    id: entry.id,
-    slug: source.slug ?? entry.id,
-    body: entry.body,
-    readingTime: entry.body ? readingTime(entry.body).text : undefined,
-    hasDetailPage: source.status !== 'forthcoming',
-  }
+  return parseSource(
+    writingPostSchema,
+    {
+      ...source,
+      id: entry.id,
+      slug: source.slug ?? entry.id,
+      body: entry.body,
+      readingTime: entry.body ? readingTime(entry.body).text : undefined,
+      hasDetailPage: source.status !== 'forthcoming',
+    },
+    entry.source,
+  )
 }
 
 export function normalizeLog(entry: RawContentEntry): LogEntry {
@@ -39,11 +51,15 @@ export function normalizeLog(entry: RawContentEntry): LogEntry {
       source.media?.length ||
       plainTextLength(body) > DETAIL_PAGE_MIN_PLAINTEXT,
   )
-  return {
-    ...source,
-    id: entry.id,
-    slug: source.slug ?? entry.id,
-    body,
-    hasDetailPage,
-  }
+  return parseSource(
+    logEntrySchema,
+    {
+      ...source,
+      id: entry.id,
+      slug: source.slug ?? entry.id,
+      body,
+      hasDetailPage,
+    },
+    entry.source,
+  )
 }

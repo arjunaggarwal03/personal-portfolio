@@ -102,7 +102,8 @@ showOnIndex: true     # let a forthcoming post appear on the index (title only)
 ---
 
 Body MDX. Components available: <Callout>, <Aside>, <Quote>, <SystemDiagram>,
-<ImageWithCaption>.
+and `<ImageWithCaption src="/image.jpg" alt="..." width={1600} height={900}>`.
+Markdown image syntax is rejected because it cannot provide stable dimensions.
 ```
 
 ### Add a log entry
@@ -118,7 +119,7 @@ type: "album"         # thought | link | album | film | restaurant | clip | ...
 date: "2026-06-07"
 title: "Mk.gee, Two Star & The Dream Police"
 summary: "A one-line opinion."
-rating: { value: 8.8, max: 10, label: "in rotation" }
+rating: { label: "in rotation" }
 media:
   - { kind: "spotify", url: "https://open.spotify.com/playlist/..." }
 location: { city: "Dubai", country: "UAE" }

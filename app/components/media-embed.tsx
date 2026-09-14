@@ -64,8 +64,8 @@ export function MediaEmbed({ item }: { item: LogEmbed }) {
             <Image
               src={item.url}
               alt={item.alt ?? ''}
-              width={0}
-              height={0}
+              width={item.width}
+              height={item.height}
               sizes={IMAGE_SIZES}
               className="h-auto w-full rounded-lg border border-border-soft"
             />

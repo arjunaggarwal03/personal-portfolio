@@ -1,7 +1,8 @@
 import { z } from 'zod'
 import { assetIdSchema } from './media'
-import { isoDateSchema } from './writing'
+import { isoDateSchema, routeSegmentSchema } from './shared'
 import { spotifyUri, youtubeEmbedUrl } from 'lib/media/embed-urls'
+import { isAllowedRemoteImageUrl } from 'lib/media/image-sources'
 
 const logTypeSchema = z.enum([
   'thought',
@@ -25,30 +26,16 @@ const logTypeSchema = z.enum([
   'note',
 ])
 
-const embedSchema = z
-  .object({
-    kind: z.enum([
-      'image',
-      'video',
-      'spotify',
-      'tweet',
-      'youtube',
-      'link-preview',
-    ]),
-    url: z.string().min(1),
-    alt: z.string().optional(),
-    caption: z.string().optional(),
-    aspectRatio: z.enum(['1:1', '4:3', '16:9', '3:4', 'auto']).optional(),
-  })
-  .strict()
-  .superRefine((embed, context) => {
+const httpsUrlSchema = z
+  .string()
+  .min(1)
+  .superRefine((value, context) => {
     let parsed: URL
     try {
-      parsed = new URL(embed.url)
+      parsed = new URL(value)
     } catch {
       context.addIssue({
         code: 'custom',
-        path: ['url'],
         message: 'must be a valid URL',
       })
       return
@@ -56,25 +43,61 @@ const embedSchema = z
     if (parsed.protocol !== 'https:') {
       context.addIssue({
         code: 'custom',
-        path: ['url'],
         message: 'must use HTTPS',
       })
     }
-    if (embed.kind === 'youtube' && !youtubeEmbedUrl(embed.url)) {
-      context.addIssue({
-        code: 'custom',
-        path: ['url'],
-        message: 'must use an exact YouTube host and video URL',
-      })
-    }
-    if (embed.kind === 'spotify' && !spotifyUri(embed.url)) {
-      context.addIssue({
-        code: 'custom',
-        path: ['url'],
-        message: 'must use an exact Spotify host and supported resource URL',
-      })
-    }
   })
+
+const embedFields = {
+  alt: z.string().optional(),
+  caption: z.string().optional(),
+  aspectRatio: z.enum(['1:1', '4:3', '16:9', '3:4', 'auto']).optional(),
+}
+
+const embedSchema = z.discriminatedUnion('kind', [
+  z
+    .object({
+      ...embedFields,
+      kind: z.literal('image'),
+      url: httpsUrlSchema.refine(isAllowedRemoteImageUrl, {
+        message: 'must use a configured remote image host',
+      }),
+      width: z.number().int().positive(),
+      height: z.number().int().positive(),
+    })
+    .strict(),
+  z
+    .object({ ...embedFields, kind: z.literal('video'), url: httpsUrlSchema })
+    .strict(),
+  z
+    .object({
+      ...embedFields,
+      kind: z.literal('spotify'),
+      url: httpsUrlSchema.refine((url) => spotifyUri(url) !== null, {
+        message: 'must use an exact Spotify host and supported resource URL',
+      }),
+    })
+    .strict(),
+  z
+    .object({ ...embedFields, kind: z.literal('tweet'), url: httpsUrlSchema })
+    .strict(),
+  z
+    .object({
+      ...embedFields,
+      kind: z.literal('youtube'),
+      url: httpsUrlSchema.refine((url) => youtubeEmbedUrl(url) !== null, {
+        message: 'must use an exact YouTube host and video URL',
+      }),
+    })
+    .strict(),
+  z
+    .object({
+      ...embedFields,
+      kind: z.literal('link-preview'),
+      url: httpsUrlSchema,
+    })
+    .strict(),
+])
 
 const ratingSchema = z
   .object({
@@ -111,7 +134,7 @@ export const galleryLayoutSchema = z.enum([
 
 export const logFrontmatterSchema = z
   .object({
-    slug: z.string().trim().min(1).optional(),
+    slug: routeSegmentSchema.optional(),
     title: z.string().optional(),
     date: isoDateSchema,
     updated: isoDateSchema.optional(),
@@ -133,8 +156,8 @@ export const logFrontmatterSchema = z
   .strict()
 
 export const logEntrySchema = logFrontmatterSchema.extend({
-  id: z.string().min(1),
-  slug: z.string().min(1),
+  id: routeSegmentSchema,
+  slug: routeSegmentSchema,
   body: z.string().optional(),
   hasDetailPage: z.boolean(),
 })

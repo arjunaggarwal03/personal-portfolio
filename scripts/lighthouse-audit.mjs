@@ -2,8 +2,9 @@ import { spawn } from 'node:child_process'
 import { chromium } from '@playwright/test'
 import { launch } from 'chrome-launcher'
 import lighthouse from 'lighthouse'
+import { findAvailablePort } from './test-port.mjs'
 
-const port = 3100
+const port = await findAvailablePort()
 const origin = `http://localhost:${port}`
 const full = process.argv.includes('--full')
 const routes = full
@@ -43,10 +44,20 @@ const server = spawn('npm', ['run', 'start', '--', '-p', String(port)], {
   stdio: 'inherit',
   env: { ...process.env, MEDIA_TEST_FIXTURES: '1' },
 })
+const serverExited = new Promise((_, reject) => {
+  server.once('error', reject)
+  server.once('exit', (code, signal) => {
+    reject(
+      new Error(
+        `Production server exited before the audit (${signal ?? `code ${code}`})`,
+      ),
+    )
+  })
+})
 
 let chrome
 try {
-  await waitForServer()
+  await Promise.race([waitForServer(), serverExited])
   chrome = await launch({
     chromePath: chromium.executablePath(),
     chromeFlags: ['--headless', '--no-sandbox', '--disable-dev-shm-usage'],
@@ -93,5 +104,5 @@ try {
   }
 } finally {
   if (chrome) await chrome.kill()
-  server.kill('SIGTERM')
+  if (!server.killed) server.kill('SIGTERM')
 }

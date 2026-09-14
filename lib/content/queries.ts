@@ -8,23 +8,32 @@ const visibleLog = (): readonly LogEntry[] =>
     (entry) => !isProd || entry.visibility !== 'private',
   )
 
-export const getWritingIndex = (): WritingPost[] =>
-  getSiteModel().writing.filter(
+export const writingIndexEntries = (
+  posts: readonly WritingPost[],
+): WritingPost[] =>
+  posts.filter(
     (post) =>
       post.status === 'published' ||
       (post.status === 'forthcoming' && post.showOnIndex),
   )
+export const getWritingIndex = (): WritingPost[] =>
+  writingIndexEntries(getSiteModel().writing)
 export const getPublishedWriting = (): WritingPost[] =>
   getSiteModel().writing.filter((post) =>
     isProd ? post.status === 'published' : post.status !== 'forthcoming',
   )
 export const getWritingBySlug = (slug: string): WritingPost | undefined =>
   getPublishedWriting().find((post) => post.slug === slug)
-export const getFeaturedWriting = (limit = 5): WritingPost[] => {
-  const posts = getWritingIndex()
-  const featured = posts.filter((post) => post.featured)
-  return (featured.length ? featured : posts).slice(0, limit)
+export const featuredWritingEntries = (
+  posts: readonly WritingPost[],
+  limit = 5,
+): WritingPost[] => {
+  const published = posts.filter((post) => post.status === 'published')
+  const featured = published.filter((post) => post.featured)
+  return (featured.length ? featured : published).slice(0, limit)
 }
+export const getFeaturedWriting = (limit = 5): WritingPost[] =>
+  featuredWritingEntries(getSiteModel().writing, limit)
 export const getLogFeed = (): LogEntry[] =>
   visibleLog().filter((entry) => entry.visibility !== 'unlisted')
 export const getLogBySlug = (slug: string): LogEntry | undefined =>
