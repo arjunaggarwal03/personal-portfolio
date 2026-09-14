@@ -45,18 +45,3 @@ export const getLogBySlugs = (slugs: readonly string[]): LogEntry[] => {
     return entry ? [entry] : []
   })
 }
-
-const LOG_PAGE_SIZE = 20
-
-export function paginateLogEntries<T>(
-  entries: readonly T[],
-  requestedPage: number,
-) {
-  const totalPages = Math.max(1, Math.ceil(entries.length / LOG_PAGE_SIZE))
-  const page = Math.min(Math.max(1, requestedPage), totalPages)
-  return {
-    entries: entries.slice((page - 1) * LOG_PAGE_SIZE, page * LOG_PAGE_SIZE),
-    page,
-    totalPages,
-  }
-}

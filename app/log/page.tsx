@@ -1,6 +1,6 @@
-import { getLogFeed, paginateLogEntries } from 'lib/content/queries'
+import { getLogFeed } from 'lib/content/queries'
 import { getSiteModel } from 'lib/content/model'
-import { applyLogFilter, activeFilterLabel, type LogQuery } from 'lib/filters'
+import { buildLogIndex, type LogSearchParams } from 'lib/log-index'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { pageMetadata } from 'lib/seo'
@@ -15,46 +15,37 @@ const description =
 export async function generateMetadata({
   searchParams,
 }: {
-  searchParams: Promise<LogQuery>
+  searchParams: Promise<LogSearchParams>
 }): Promise<Metadata> {
-  const query = await searchParams
-  const page = Math.max(1, Number.parseInt(query.page ?? '1', 10) || 1)
-  const path = page > 1 ? `/log?page=${page}` : '/log'
-  return pageMetadata({
-    title: page > 1 ? `Log · Page ${page}` : 'Log',
-    description,
-    path,
+  const model = getSiteModel()
+  const index = buildLogIndex({
+    entries: getLogFeed(),
+    inNowSlugs: model.now.rotation.selections.map(({ slug }) => slug),
+    searchParams: await searchParams,
   })
-}
-
-function pageHref(query: LogQuery, page: number): string {
-  const params = new URLSearchParams()
-  if (query.type) params.set('type', query.type)
-  if (query.view) params.set('view', query.view)
-  if (query.tag) params.set('tag', query.tag)
-  if (page > 1) params.set('page', String(page))
-  const value = params.toString()
-  return value ? `/log?${value}` : '/log'
+  return {
+    ...pageMetadata({
+      title: index.seo.title,
+      description,
+      path: index.seo.canonicalPath,
+    }),
+    robots: index.seo.allowIndexing
+      ? undefined
+      : { index: false, follow: true },
+  }
 }
 
 export default async function LogPage({
   searchParams,
 }: {
-  searchParams: Promise<LogQuery>
+  searchParams: Promise<LogSearchParams>
 }) {
-  const query = await searchParams
   const model = getSiteModel()
-  const feed = getLogFeed()
-  const filtered = applyLogFilter(feed, query)
-  const requestedPage = Math.max(1, Number.parseInt(query.page ?? '1', 10) || 1)
-  const onView = new Set(
-    model.now.rotation.selections.map((selection) => selection.slug),
-  )
-  const { entries, page, totalPages } = paginateLogEntries(
-    filtered,
-    requestedPage,
-  )
-  const label = activeFilterLabel(query)
+  const index = buildLogIndex({
+    entries: getLogFeed(),
+    inNowSlugs: model.now.rotation.selections.map(({ slug }) => slug),
+    searchParams: await searchParams,
+  })
 
   return (
     <section>
@@ -66,45 +57,42 @@ export default async function LogPage({
       </PageIntroduction>
 
       <div>
-        <FilterBar entries={feed} query={query} />
+        <FilterBar filters={index.filters} />
       </div>
 
-      {label !== 'All' ? (
+      {index.resultSummary ? (
         <p className={`${typeStyles.caption} mt-4 text-subtle`}>
-          {filtered.length} {filtered.length === 1 ? 'entry' : 'entries'} ·{' '}
-          {label}
+          {index.resultSummary.count}{' '}
+          {index.resultSummary.count === 1 ? 'entry' : 'entries'} ·{' '}
+          {index.resultSummary.label}
         </p>
       ) : null}
 
       <div className="mt-3">
-        {entries.length > 0 ? (
-          entries.map((entry) => (
-            <LogEntryCard
-              key={entry.id}
-              entry={entry}
-              onView={onView.has(entry.slug)}
-            />
+        {index.entries.length > 0 ? (
+          index.entries.map(({ entry, inNow }) => (
+            <LogEntryCard key={entry.id} entry={entry} inNow={inNow} />
           ))
         ) : (
           <p className="mt-6 text-muted">Nothing here yet.</p>
         )}
       </div>
 
-      {totalPages > 1 ? (
+      {index.pagination.totalPages > 1 ? (
         <nav
           aria-label="Log pagination"
           className={`${typeStyles.caption} mt-8 flex items-center justify-between border-t border-border pt-4`}
         >
-          {page > 1 ? (
-            <Link href={pageHref(query, page - 1)}>← Newer</Link>
+          {index.pagination.newerHref ? (
+            <Link href={index.pagination.newerHref}>← Newer</Link>
           ) : (
             <span />
           )}
           <span className="text-subtle">
-            Page {page} of {totalPages}
+            Page {index.pagination.page} of {index.pagination.totalPages}
           </span>
-          {page < totalPages ? (
-            <Link href={pageHref(query, page + 1)}>Older →</Link>
+          {index.pagination.olderHref ? (
+            <Link href={index.pagination.olderHref}>Older →</Link>
           ) : (
             <span />
           )}

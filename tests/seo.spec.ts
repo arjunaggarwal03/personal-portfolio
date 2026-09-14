@@ -52,6 +52,25 @@ test('page titles are unique', async ({ page }) => {
   }
 })
 
+test('Log filters are navigable without creating duplicate search results', async ({
+  page,
+}) => {
+  await page.goto('/log?type=thought', { waitUntil: 'domcontentloaded' })
+  const head = page.locator('head')
+  const canonicalHref = await head
+    .locator('link[rel="canonical"]')
+    .getAttribute('href')
+
+  expect(
+    new URL(canonicalHref!).pathname + new URL(canonicalHref!).search,
+  ).toBe('/log?type=thought')
+  await expect(head.locator('meta[name="robots"]')).toHaveAttribute(
+    'content',
+    'noindex, follow',
+  )
+  await expect(page).toHaveTitle(/Thoughts · Log/)
+})
+
 test('homepage emits Person + WebSite structured data', async ({ page }) => {
   await page.goto('/', { waitUntil: 'domcontentloaded' })
   const nodes = await collectJsonLd(page)
