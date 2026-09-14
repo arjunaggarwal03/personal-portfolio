@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { externalLinks, person, social } from 'lib/site'
+import { externalLinks, social } from 'lib/site'
 import { pageMetadata } from 'lib/seo'
 import { ExternalLink } from 'app/components/external-link'
 import { MetadataLine, PageIntroduction } from 'app/components/editorial'
@@ -26,10 +26,11 @@ export default function AboutPage() {
 
       <div className="grid gap-8 border-t border-border py-9 sm:grid-cols-[14rem_1fr]">
         <Image
-          src={person.image}
-          alt={person.name}
+          src="/arjun-aggarwal-croatia.png"
+          alt="Arjun Aggarwal in Croatia at sunset"
           width={224}
           height={224}
+          sizes="224px"
           priority
           className="aspect-square w-full max-w-56 rounded-lg border border-border object-cover"
         />
