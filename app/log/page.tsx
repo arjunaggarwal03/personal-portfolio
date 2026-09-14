@@ -10,7 +10,7 @@ import { PageIntroduction } from 'app/components/editorial'
 import { typeStyles } from 'lib/typography'
 
 const description =
-  'Notes from Arjun Aggarwal on building software, agent workflows, films, and music.'
+  'Notes from Arjun Aggarwal on what he is building, thinking about, watching, and listening to.'
 
 export async function generateMetadata({
   searchParams,
@@ -60,8 +60,8 @@ export default async function LogPage({
     <section>
       <PageIntroduction title="Log">
         <p>
-          Notes on software I&rsquo;m building, questions I&rsquo;m still
-          working through, and the films and music I keep returning to.
+          A running list of what I&rsquo;ve been working on, thinking about,
+          watching, and listening to.
         </p>
       </PageIntroduction>
 

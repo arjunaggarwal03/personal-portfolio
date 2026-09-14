@@ -1,20 +1,20 @@
 ---
 type: "thought"
 date: "2026-06-07"
-title: "Chat needs a workflow"
-summary: "A conversation can hold an incomplete request. Once that request becomes shared work, it needs an owner, a state, a history, and a way to undo it."
+title: "Where an agent's work should live"
+summary: "I've been thinking about where an agent's work should live once the chat ends. Right now, I want the task to have an owner, a status, and a history somewhere a person can inspect."
 tags: ["agents", "workflow", "product"]
 flags:
   featured: true
   detail: true
 ---
 
-Chat is good at catching a request before the person has worked out every
-detail. The transcript becomes a bad place to keep the durable record once that
-request turns into shared work.
+A request like “follow up with them next week” sounds clear until the product
+has to act on it. Who is “them”? Does “next week” mean Monday or seven days from
+now? Should the agent write a draft, send it, or create a reminder?
 
-The action should say what was proposed, who owns it, what state it is in, what
-it will change, and whether it can be reversed. The interface can hide most
-intermediate steps while still showing the parts that carry consequences.
+I still think chat is useful while the request is taking shape. Once the agent
+starts doing work, I want the task to live outside the transcript so someone can
+inspect, edit, or undo it.
 
 I wrote the longer version in [Chat needs a workflow](/writing/chat-is-not-the-workflow).

@@ -1,28 +1,19 @@
 ---
 type: "build"
 date: "2026-06-02"
-title: "Building Lightfield's public API and Python SDK"
-summary: "I helped turn Lightfield's product operations into a public API and Python SDK used by our own agent. The same object now has to make sense in the product, the SDK, and a reviewable agent action."
+title: "Building Lightfield's public API"
+summary: "I've been working on Lightfield's public API and Python SDK, which our own agent uses too. A lot of the work is deciding what each operation should mean outside our codebase."
 tags: ["lightfield", "api", "python", "agent workflows"]
 flags:
   detail: true
 ---
 
-I've been helping turn Lightfield's product operations into a public API and
-Python SDK. Both are used by our own agent, so the same object has to make sense
-in the product, the SDK, and an action a person may need to review.
+Recently, I've been working on a public API and Python SDK at Lightfield. Our
+own agent uses both.
 
-I keep returning to five questions:
+Making an internal operation public forces decisions that were easy to leave
+implicit. What is a task? Which fields can a developer depend on? What happens
+when an agent action needs approval or fails halfway through?
 
-- What can be created or edited?
-- Who owns the action?
-- Which state is durable?
-- What can be retried?
-- What can a person inspect or reverse?
-
-A public API cannot rely on knowledge that lives in the team. Names, states,
-examples, and error behavior all become part of the product once someone else
-builds against them.
-
-Documentation has been a useful test. If an operation is hard to name or show
-in an example, the boundary underneath it is probably still unclear.
+Writing the docs has been a good test. If an operation takes a paragraph to
+explain, I probably haven't found the right boundary yet.
