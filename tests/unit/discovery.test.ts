@@ -6,6 +6,10 @@ import { getSiteModel } from '../../lib/content/model'
 import { getPublicLogWithDetailPages } from '../../lib/content/queries'
 import { baseUrl } from '../../lib/site'
 
+test('the immutable content model is built once per server process', () => {
+  assert.strictEqual(getSiteModel(), getSiteModel())
+})
+
 test('every public Log entry has a canonical page and machine-readable copy', async () => {
   const publicLog = getSiteModel().log.filter(
     (entry) => entry.visibility === 'public',

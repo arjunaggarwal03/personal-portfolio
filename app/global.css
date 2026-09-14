@@ -169,7 +169,6 @@
     text-decoration: underline;
     text-decoration-color: var(--color-border);
     text-underline-offset: 3px;
-    transition: color 120ms ease, text-decoration-color 120ms ease;
   }
 
   a:hover {
